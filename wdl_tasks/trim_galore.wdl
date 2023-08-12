@@ -1,6 +1,6 @@
 version 1.0
 
-task fastqc {
+task fastqc_trim {
         input {
                 File fastq1
                 File fastq2
