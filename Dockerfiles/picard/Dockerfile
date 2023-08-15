@@ -1,5 +1,5 @@
 #############################################################
-# Dockerfile to build a tool container for samtools
+# Dockerfile to build a tool container for picard
 #############################################################
 
 # Set the base image to samtools
