@@ -5,13 +5,14 @@ task count_reads_single {
 		File bam
 		File GeneAnnotationFile		
 
-		String out_dir = "03.counts"
+		String out_dir
+		String sample_name
+
 		String AttributeType = "exon"
 		String GTFAttributeType = "gene_id"
 		String Stranded = "1"
 	}
-	prefix = basename(bam, ".bam")
-	out = "${out_dir}"+"/"+"${prefix}"+".counts"
+	out = "${out_dir}"+"/"+"${sample_name}"+".counts"
 	command {
 		featureCounts \	
 			-t ${AttributeType} \
@@ -32,15 +33,16 @@ task count_reads_single {
 task count_reads_paired {
         input {
                 File bam
-		File GeneAnnotationFile
+		File GeneAnnotationFile		
 
-                String out_dir = "03.counts"
-                String AttributeType = "exon"
-                String GTFAttributeType = "gene_id"
-                String Stranded = "1"
+		String out_dir
+		String sample_name
+
+		String AttributeType = "exon"
+		String GTFAttributeType = "gene_id"
+		String Stranded = "1"
         }
-	prefix = basename(bam, ".bam")
-        out = "${out_dir}"+"/"+"${prefix}"+".counts"
+        out = "${out_dir}"+"/"+"${sample_name}"+".counts"
         command {
 		featureCounts \
 			-p \
