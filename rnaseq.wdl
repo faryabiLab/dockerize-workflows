@@ -66,23 +66,24 @@ workflow rnaseq {
                         quality=qualityCutoff,
                         stringency=stringencyCutoff,
                         e=errorRate,
-                        length=lengthCutoff
+                        length=lengthCutoff,
+			out_dir=trim_out_dir
         }
         call starTasks.STAR {
                 input:
                         fastq1_trimmed=fastqc_trim.out_fqc1,
                         fastq2_trimmed=fastqc_trim.out_fqc2,
                         star_index=star_index,
-                        out_dir=out_dir,
+                        out_dir=star_out_dir,
                         sample_name=sampleName,
                         readFilesCommand=readFilesCommand,
-                        outSamAttrivutes=outSamAttributes,
+                        outSamAttributes=outSamAttributes,
                         outFilterIntronMotifs=outFilterIntronMotifs,
 			alignIntronMax=alignIntronMax,
 			outSamstrandField=outSamstrandField,
 			outSAMunmapped=outSAMunmapped,
 			chimSegmentMin=chimSegmentMin,
-			ChimJunctionOverhangMin=chimJunctionOverhangMin,
+			chimJunctionOverhangMin=chimJunctionOverhangMin,
 			outSAMtype=outSAMtype
 	}
 	call filterTasks.remove_scaffolds {
@@ -94,7 +95,7 @@ workflow rnaseq {
 	}
 	call filterTasks.remove_duplicates {
 		input:
-			bam=remove_scaffolds.bam_sorted,
+			bam=remove_scaffolds.bam_noScaffold,
 			out_dir=removeDuplicate_out_dir,
 			sample_name=sampleName,
 			PicardRemoveDuplicates=PicardRemoveDuplicates,
@@ -103,7 +104,7 @@ workflow rnaseq {
 	}
 	call filterTasks.remove_blacklist {
 		input:
-			bam=remove_duplicates.bam_noscaff,
+			bam=remove_duplicates.bam_noDuplicate,
 			blacklist=blacklist,
 			out_dir=removeBlacklist_out_dir,
 			sample_name=sampleName
@@ -127,7 +128,8 @@ workflow rnaseq {
 				GeneAnnotationFile=GeneAnnotationFile,
 				GTFAttributeType=GTFAttributeType,
 				Stranded=Stranded,
-				out_dir=counts_out_dir
+				out_dir=counts_out_dir,
+				sample_name=sampleName
 		}
 	}
 	if (!paired) {
@@ -137,7 +139,8 @@ workflow rnaseq {
                                 GeneAnnotationFile=GeneAnnotationFile,
                                 GTFAttributeType=GTFAttributeType,
                                 Stranded=Stranded,
-                                out_dir=counts_out_dir
+                                out_dir=counts_out_dir,
+				sample_name=sampleName
                 }
         }
 	call bwTasks.read_count {
