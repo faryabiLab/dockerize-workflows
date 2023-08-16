@@ -84,7 +84,7 @@ workflow batch_workflow {
 					removeScaffold_out_dir="${project_out_dir}/${removeScaffold_out_dir}",
 					removeDuplicate_out_dir="${project_out_dir}/${removeDuplicate_out_dir}",
 					PicardRemoveDuplicates=PicardRemoveDuplicates,
-					PicardValidateStringency=PicardValidateStingency,
+					PicardValidationStringency=PicardValidationStringency,
 					PicardMetricsFile=PicardMetricsFile,
 					removeBlacklist_out_dir="${project_out_dir}/${removeBlacklist_out_dir}",
 					sortBam_out_dir="${project_out_dir}/${sortBam_out_dir}",
@@ -95,57 +95,14 @@ workflow batch_workflow {
 					GTFAttributeType=GTFAttributeType,
 					Stranded=Stranded,
 					bw_out_dir="${project_out_dir}/${bw_out_dir}",
-					chromosome_sizes=chromosome_sizes
+					chromosome_sizes=chromosome_sizes,
+					blacklist=blacklist
 
                 	}
         	}	
 	}
 	
-	if (!paired) {
-		scatter (sample in samples) {
-                        call rnaseq.rnaseq {
-                                input:
-                                        paired=paired,
-                                        fastq1="${fastq_dir}"+"/"+sample[0]+"_R1.fastq.gz",
-                                        sampleName=sample[0],
-                                        trim_out_dir="${project_out_dir}/${trim_out_dir}",
-                                        qualityCutoff=qualityCutoff,
-                                        stringencyCutoff=stringencyCutoff,
-                                        errorRate=errorRate,
-                                        lengthCutoff=lengthCutoff,
-                                        star_index=star_index,
-                                        star_out_dir="${project_out_dir}/${star_out_dir}",
-                                        outFilterType=outFilterType,
-                                        readFilesCommand=readFilesCommand,
-                                        outSamAttributes=outSamAttributes,
-                                        outFilterIntronMotifs=outFilterIntronMotifs,
-                                        alignIntronMax=alignIntronMax,
-                                        outSamstrandField=outSamstrandField,
-                                        outSAMunmapped=outSAMunmapped,
-                                        chimSegmentMin=chimSegmentMin,
-                                        chimJunctionOverhangMin=chimJunctionOverhangMin,
-                                        outSAMtype=outSAMtype,
-                                        chromNoScaffold=chromNoScaffold,
-                                        removeScaffold_out_dir="${project_out_dir}/${removeScaffold_out_dir}",
-                                        removeDuplicate_out_dir="${project_out_dir}/${removeDuplicate_out_dir}",
-                                        PicardRemoveDuplicates=PicardRemoveDuplicates,
-                                        PicardValidateStringency=PicardValidateStingency,
-                                        PicardMetricsFile=PicardMetricsFile,
-                                        removeBlacklist_out_dir="${project_out_dir}/${removeBlacklist_out_dir}",
-                                        sortBam_out_dir="${project_out_dir}/${sortBam_out_dir}",
-                                        indexBam_out_dir="${project_out_dir}/${indexBam_out_dir}",
-                                        counts_out_dir="${project_out_dir}/${counts_out_dir}",
-                                        GeneAnnotationFile=GeneAnnotationFile,
-                                        AttributeType=AttributeType,
-                                        GTFAttributeType=GTFAttributeType,
-                                        Stranded=Stranded,
-                                        bw_out_dir="${project_out_dir}/${bw_out_dir}",
-                                        chromosome_sizes=chromosome_sizes
-
-                        }
-                }
-        }
-	
+		
 }
 	
 
