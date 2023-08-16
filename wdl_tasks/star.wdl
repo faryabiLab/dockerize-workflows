@@ -18,7 +18,7 @@ task STAR {
 		Int chimJunctionOverhangMin = 25
 		String outSAMtype = "BAM Unsorted"
 	}
-	String out="${out_dir}"+"/"+${sample_name}"
+	String out="${out_dir}"+"/"+"${sample_name}"
 	command {
 		STAR \
 		--genomeDir ${star_index} \
