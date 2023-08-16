@@ -69,7 +69,7 @@ task remove_blacklist {
 }
 
 task sort_bam {
-	input{
+	input {
 		File bam
 
 		String out_dir
