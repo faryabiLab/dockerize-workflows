@@ -25,7 +25,7 @@ task STAR {
 		--readFilesCommand ${readFilesCommand} \
 		--outFilterIntronMotifs ${outFilterIntronMotifs} \
 		--alignIntronMax ${alignIntronMax} \
-		--outSamstringField ${outSamstringField} \
+		--outSamstrandField ${outSamstrandField} \
 		--outSAMunmapped ${outSAMunmapped} \
 		--chimSegmentMin ${cimSegmentMin} \
 		--chimJunctionOverhangMin ${chimJunctionOverhangMin} \
