@@ -108,7 +108,7 @@ workflow se_rnaseq {
 			out_dir=removeBlacklist_out_dir,
 			sample_name=sampleName
 	}
-	call filterTasks.sort_bam{
+	call filterTasks.sort_bam {
 		input:
 			bam=remove_blacklist.bam_noBlacklist,
 			out_dir=sortBam_out_dir,
