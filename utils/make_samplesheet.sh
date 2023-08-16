@@ -11,7 +11,7 @@ done
 if [[ ! -f "samplesheet.csv" ]]; then
 	touch samplesheet.csv
 fi
-echo "samples" >> samplesheet.csv
+#echo "samples" >> samplesheet.csv
 if [[ $MODE == "single" ]]; then
 	echo "Making single-end samplesheet"
 	for i in $(ls "./00.fastq/"); do
