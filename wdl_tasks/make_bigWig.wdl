@@ -23,7 +23,7 @@ task calculate_factor {
 		echo "scale=10; 1000000/${rc}" | bc -l
 	}
 	output {
-		File factor = read_float(stdout())
+		Float factor = read_float(stdout())
 	}
 	runtime {
 		docker: 'faryabilab/bedtools:0.1.0'
