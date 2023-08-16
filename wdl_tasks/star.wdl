@@ -5,7 +5,8 @@ task STAR {
 		File fastq1_trimmed
 		File? fastq2_trimmed			
 		String star_index
-		String out_prefix = "star_aligned_sortedByCoordinate"
+		String out_dir
+		String sample_name
 		String outFilterType = "BySJout"
 		String readFilesCommand = "zcat"
 		String outSamAttributes = "Standard"
@@ -15,11 +16,13 @@ task STAR {
 		String outSAMunmapped = "Within"
 		Int chimSegmentMin = 25
 		Int chimJunctionOverhangMin = 25
-		String outSAMtype = "BAM SortedByCoordinate"
+		String outSAMtype = "BAM Unsorted"
 	}
+	String out="${out_dir}"+"/"+${sample_name}"
 	command {
 		STAR \
 		--genomeDir ${star_index} \
+		--outFileNamePrefix ${out}
 		--outFilterType ${outFilterType} \
 		--readFilesIn ${fastq1_trimmed} ${fastq2_trimmed} \
 		--readFilesCommand ${readFilesCommand} \
@@ -32,7 +35,7 @@ task STAR {
 		--outSAMtype ${outSAMtype}
 	}
 	output {
-		File bam = "02.alignment/${out_prefix}.bam"
+		File bam = "${out}.out.bam"
 	}
 	runtime {
 		docker: 'faryabilab/star:0.10'
