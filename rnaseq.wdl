@@ -7,7 +7,7 @@ import "tasks/filter_steps.wdl" as filterTasks
 import "tasks/feature_count.wdl" as quantifyTasks
 import "tasks/make_bigWig.wdl" as bwTasks
 
-workflow se_rnaseq {
+workflow rnaseq {
         input {
 		Boolean paired
                 File fastq1
