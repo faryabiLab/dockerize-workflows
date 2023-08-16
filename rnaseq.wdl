@@ -7,7 +7,7 @@ import "wdl_tasks/filter_steps.wdl" as filterTasks
 import "wdl_tasks/feature_count.wdl" as quantifyTasks
 import "wdl_tasks/make_bigWig.wdl" as bwTasks
 
-workflow se_rnaseq {
+workflow rnaseq {
         input {
 		Boolean paired
                 File fastq1
@@ -108,7 +108,7 @@ workflow se_rnaseq {
 			out_dir=removeBlacklist_out_dir,
 			sample_name=sampleName
 	}
-	call filterTasks.sort_bam{
+	call filterTasks.sort_bam {
 		input:
 			bam=remove_blacklist.bam_noBlacklist,
 			out_dir=sortBam_out_dir,
