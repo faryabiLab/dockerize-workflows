@@ -30,7 +30,7 @@ task STAR {
 		--alignIntronMax ${alignIntronMax} \
 		--outSamstrandField ${outSamstrandField} \
 		--outSAMunmapped ${outSAMunmapped} \
-		--chimSegmentMin ${cimSegmentMin} \
+		--chimSegmentMin ${chimSegmentMin} \
 		--chimJunctionOverhangMin ${chimJunctionOverhangMin} \
 		--outSAMtype ${outSAMtype}
 	}

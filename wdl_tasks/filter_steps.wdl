@@ -7,12 +7,12 @@ task remove_scaffolds {
 		String out_dir
 		String sample_name
 	}
-	out = "${out_dir}"+"/"+"${sample_name}"+".noScaffold.bam"
+	String out = "${out_dir}"+"/"+"${sample_name}"+".noScaffold.bam"
 	command {
 		samtools view -h -L ${chrom_no_scaff} ${bam} | samtools sort - -o ${out}
 	}
 	output {
-		File bam_sorted = ${out}
+		File j = ${out}
 	}
 	runtime {
 		docker: "faryabilab/samtools:0.1.0"
