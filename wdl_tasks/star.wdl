@@ -35,6 +35,6 @@ task STAR {
 		File bam = "02.alignment/${out_prefix}.bam"
 	}
 	runtime {
-		docker: 'faryabilab:star:0.10'
+		docker: 'faryabilab/star:0.10'
 	}
 }
