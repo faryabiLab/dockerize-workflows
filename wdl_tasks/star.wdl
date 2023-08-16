@@ -22,7 +22,7 @@ task STAR {
 	command {
 		STAR \
 		--genomeDir ${star_index} \
-		--outFileNamePrefix ${out}
+		--outFileNamePrefix ${out} \
 		--outFilterType ${outFilterType} \
 		--readFilesIn ${fastq1_trimmed} ${fastq2_trimmed} \
 		--readFilesCommand ${readFilesCommand} \
