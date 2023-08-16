@@ -4,12 +4,12 @@ task remove_scaffolds {
 	input {
 		File bam
 		File chrom_no_scaff
-		String out_dir = "02.alignment"
+		String out_dir
+		String sample_name
 	}
-	prefix = basename(bam, ".bam")
-	out = "${out_dir}"+"/"+"${prefix}"+".noScaffold.bam"
+	out = "${out_dir}"+"/"+"${sample_name}"+".noScaffold.bam"
 	command {
-		samtools view -h -L ${chrom_no_scaff} ${raw_bam} | samtools sort - -o ${out}
+		samtools view -h -L ${chrom_no_scaff} ${bam} | samtools sort - -o ${out}
 	}
 	output {
 		File bam_sorted = ${out}
