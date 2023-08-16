@@ -1,11 +1,11 @@
 version 1.0
 
 ## import all relevant tasks here
-import "tasks/trim_galore.wdl" as trimTasks
-import "tasks/star.wdl" as starTasks
-import "tasks/filter_steps.wdl" as filterTasks
-import "tasks/feature_count.wdl" as quantifyTasks
-import "tasks/make_bigWig.wdl" as bwTasks
+import "wdl_tasks/trim_galore.wdl" as trimTasks
+import "wdl_tasks/star.wdl" as starTasks
+import "wdl_tasks/filter_steps.wdl" as filterTasks
+import "wdl_tasks/feature_count.wdl" as quantifyTasks
+import "wdl_tasks/make_bigWig.wdl" as bwTasks
 
 workflow se_rnaseq {
         input {
@@ -76,7 +76,7 @@ workflow se_rnaseq {
                         out_dir=out_dir,
                         sample_name=sampleName,
                         readFilesCommand=readFilesCommand,
-                        outSamAttrivutes=outSamAttributes
+                        outSamAttrivutes=outSamAttributes,
                         outFilterIntronMotifs=outFilterIntronMotifs,
 			alignIntronMax=alignIntronMax,
 			outSamstrandField=outSamstrandField,
@@ -158,8 +158,8 @@ workflow se_rnaseq {
 	}
 	call bwTasks.bedgraph_to_bigwig {
 		input:
-			bedgraph=bam_to_bedgraph.bedgraph
-			chromosome_sizes=chromosome_sizes
+			bedgraph=bam_to_bedgraph.bedgraph,
+			chromosome_sizes=chromosome_sizes,
 			out_dir=bw_out_dir,
 			sample_name=sampleName
 	}
