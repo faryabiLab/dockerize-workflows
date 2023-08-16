@@ -4,21 +4,19 @@ task fastqc_trim {
         input {
                 File fastq1
                 File? fastq2
-                String fq_suffix
+		String sampleName
 		Int quality
 		Int stringency
 		Float e
 		Int length
         }
-        String fqc = basename(fastq1, "${fq_suffix}")
-        String fqc_full = basename(fastq1)
         command {
                 trim_galore -q ${quality} \
                 --paired \
                 --fastqc \
                 --phred33 \
                 --gzip \
-                --basename ${fqc} \
+                --basename ${sampleName} \
                 --stringency ${stringency} \
                 -e ${e} \
                 --length ${length} \
@@ -27,8 +25,8 @@ task fastqc_trim {
                 "${fastq2}"
         }
         output {
-                File out_fqc1 = "01.fastqc/"+"${fqc}"+"_val_1.fq.gz"
-                File? out_fqc2 = "01.fastqc/"+"${fqc}"+"_val_2.fq.gz"
+                File out_fqc1 = "01.fastqc/"+"${sampleName}"+"_val_1.fq.gz"
+                File? out_fqc2 = "01.fastqc/"+"${sampleName}"+"_val_2.fq.gz"
         }
         runtime {
                 cpu: 10
