@@ -3,7 +3,7 @@ version 1.0
 task fastqc_trim {
         input {
                 File fastq1
-                File fastq2
+                File? fastq2
                 String fq_suffix
 		Int quality
 		Int stringency
@@ -28,7 +28,7 @@ task fastqc_trim {
         }
         output {
                 File out_fqc1 = "01.fastqc/"+"${fqc}"+"_val_1.fq.gz"
-                File out_fqc2 = "01.fastqc/"+"${fqc}"+"_val_2.fq.gz"
+                File? out_fqc2 = "01.fastqc/"+"${fqc}"+"_val_2.fq.gz"
         }
         runtime {
                 cpu: 10
@@ -36,4 +36,3 @@ task fastqc_trim {
         }
 
 }
-
