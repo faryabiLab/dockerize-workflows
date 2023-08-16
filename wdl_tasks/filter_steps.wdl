@@ -56,7 +56,7 @@ task remove_blacklist {
 		String out_dir = "02.alignment"
         }
 	prefix = basename(bam, ".bam")
-	out = "${out_dir}"+"/"+"${prefix}+".noBlacklist.bam"
+	out = "${out_dir}"+"/"+"${prefix}"+".noBlacklist.bam"
         command {
 		bedtools intersect -abam ${bam} -b ${blacklist} -v > ${out}
         }
