@@ -22,15 +22,15 @@ task remove_scaffolds {
 task remove_duplicates {
 	input {
 		File bam
-		String out_dir = "02.alignment"
+		String out_dir
+		String sample_name
 
 		String PicardRemoveDuplicates = "false"
-		String Picard CalidationStrignency = "SILENT"
+		String PicardValidationStrignency = "SILENT"
 		String PicardMetricsFile = "removeDuplicate_metrics.txt"
         }
-	prefix = basename(bam_noScaffold, ".bam")
-	out = "${out_dir}"+"/"+"${out_prefix}"+".noDuplicate.bam"
-	metricsFile = prefix+"_"+"${PicardMetricsFile}"
+	out = "${out_dir}"+"/"+"${sample_name}"+".noDuplicate.bam"
+	metricsFile = "${sample_name}"+"_"+"${PicardMetricsFile}"
         command {
 		picard MarkDuplicates \
 		M=${metricsFile} \
@@ -53,10 +53,10 @@ task remove_blacklist {
 		File bam
 		File blacklist
 	
-		String out_dir = "02.alignment"
+		String out_dir
+		String sample_name
         }
-	prefix = basename(bam, ".bam")
-	out = "${out_dir}"+"/"+"${prefix}"+".noBlacklist.bam"
+	out = "${out_dir}"+"/"+"${sample_name}"+".noBlacklist.bam"
         command {
 		bedtools intersect -abam ${bam} -b ${blacklist} -v > ${out}
         }
@@ -73,9 +73,9 @@ task sort_bam {
 		File bam
 
 		String out_dir
+		String sample_name
         }
-	prefix = basename(bam, ".bam")
-	out = ${out_dir}+"/"+"${prefix}"+".sorted.bam"
+	out = ${out_dir}+"/"+"${sample_name}"+".sorted.bam"
         command {
 		samtools sort ${bam} -o ${out}
         }
@@ -93,9 +93,9 @@ task index_bam {
 		File bam
 
 		String out_dir
+		String sample_name
 	}
-	prefix = basename(bam, ".bam")
-	out = "${out+dir}"+"/"+"${prefix}"+"_index.bai"
+	out = "${out+dir}"+"/"+"${sample_name}"+"_index.bai"
 	command {
 		samtools index -b ${bam} ${out}
 	}
