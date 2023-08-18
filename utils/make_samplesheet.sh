@@ -1,32 +1,36 @@
 #!/bin/bash
+if [[ -f "samplesheet.tsv" ]]; then
+	rm samplesheet.tsv
+fi
 MODE="single"
-while getopts ":p" FLAG; do
-	case $FLAG in
-		p)
-			echo "Paired-end mode"
-			MODE="paired"
-			;;
+while true; do
+	case "$1" in
+		-p | --paired ) MODE="paired"; shift ;;
+		-d | --directory ) dir="$2"; shift ;;
+		* ) break ;;
 	esac
 done
-if [[ ! -f "samplesheet.csv" ]]; then
-	touch samplesheet.csv
+
+if [[ ! -f "samplesheet.tsv" ]]; then
+	touch samplesheet.tsv
 fi
 #echo "samples" >> samplesheet.csv
 if [[ $MODE == "single" ]]; then
 	echo "Making single-end samplesheet"
-	for i in $(ls "./00.fastq/"); do
+	for i in $(ls ${dir}); do
 		i="${i##*/}"
 		i="${i%%.*}"
-		echo $i >> samplesheet.csv
+		echo $i >> samplesheet.tsv
 	done
 elif [[ $MODE == "paired" ]]; then
 	echo "Making paired-end samplesheet"
-	for i in $(ls "./00.fastq/"); do
+	for i in $(ls ${dir}); do
 		i="${i##*/}"
-		if [[ $i =~ "R2" ]]; then
+		echo $i
+		if [[ $i =~ "_R2" ]]; then
 			continue
 		fi
-		i="${i%%_R1*}"
-		echo $i >> samplesheet.csv
+		i=${i%%_R1*}
+		echo $i >> samplesheet.tsv
 	done
 fi
