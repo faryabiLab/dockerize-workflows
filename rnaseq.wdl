@@ -10,19 +10,17 @@ import "wdl_tasks/make_bigWig.wdl" as bwTasks
 workflow rnaseq {
         input {
 		Boolean paired
-                File fastq1
-                File? fastq2
-
+                String fastq_dir
+		
+		String sample_out_dir
                 String sampleName
                 # trim_galore args
-                String trim_out_dir
                 Int qualityCutoff
                 Int stringencyCutoff
                 Float errorRate
                 Int lengthCutoff
                 # STAR args             
                 String star_index
-                String star_out_dir
                 String outFilterType
                 String readFilesCommand 
                 String outSamAttributes 
@@ -35,47 +33,39 @@ workflow rnaseq {
                 String outSAMtype 
                 # Remove scaffold args
                 File chromNoScaffold
-		String removeScaffold_out_dir
 		# Remove duplicates args
-		String removeDuplicate_out_dir
 		String PicardRemoveDuplicates
 		String PicardValidationStringency
 		String PicardMetricsFile
 		# Remove blacklist args
-		String removeBlacklist_out_dir
 		File blacklist
 		# Sort bam args
-		String sortBam_out_dir
 		# Index bam args
-		String indexBam_out_dir
 		# Quantify args
-		String counts_out_dir
 		File GeneAnnotationFile
 		String AttributeType
 		String GTFAttributeType
 		String Stranded
 		# Make BigWig args
-		String bw_out_dir
 		File chromosome_sizes
         }
         call trimTasks.fastqc_trim {
                 input:
-                        fastq1=fastq1,
-                        fastq2=fastq2,
-                        sampleName=sampleName,
+                        fastq1=fastq_dir+"/"+sampleName+"_R1.fastq.gz",
+                        fastq2=fastq_dir+"/"+sampleName+"_R2.fastq.gz",
+                        sample_out_dir=sample_out_dir,
                         quality=qualityCutoff,
+			sampleName=sampleName,
                         stringency=stringencyCutoff,
                         e=errorRate,
-                        length=lengthCutoff,
-			out_dir=trim_out_dir
+                        length=lengthCutoff
         }
         call starTasks.STAR {
                 input:
                         fastq1_trimmed=fastqc_trim.out_fqc1,
                         fastq2_trimmed=fastqc_trim.out_fqc2,
                         star_index=star_index,
-                        out_dir=star_out_dir,
-                        sample_name=sampleName,
+                        sample_name=sample_out_dir+"/"+sampleName+".",
                         readFilesCommand=readFilesCommand,
                         outSamAttributes=outSamAttributes,
                         outFilterIntronMotifs=outFilterIntronMotifs,
@@ -90,14 +80,12 @@ workflow rnaseq {
 		input:
 			bam=STAR.bam,
 			chrom_no_scaff=chromNoScaffold,
-			out_dir=removeScaffold_out_dir,
-			sample_name=sampleName
+			sample_name=sample_out_dir+"/"+sampleName
 	}
 	call filterTasks.remove_duplicates {
 		input:
 			bam=remove_scaffolds.bam_noScaffold,
-			out_dir=removeDuplicate_out_dir,
-			sample_name=sampleName,
+			sample_name=sample_out_dir+"/"+sampleName,
 			PicardRemoveDuplicates=PicardRemoveDuplicates,
 			PicardValidationStringency=PicardValidationStringency,
 			PicardMetricsFile=PicardMetricsFile
@@ -106,20 +94,17 @@ workflow rnaseq {
 		input:
 			bam=remove_duplicates.bam_noDuplicate,
 			blacklist=blacklist,
-			out_dir=removeBlacklist_out_dir,
-			sample_name=sampleName
+			sample_name=sample_out_dir+"/"+sampleName
 	}
 	call filterTasks.sort_bam {
 		input:
 			bam=remove_blacklist.bam_noBlacklist,
-			out_dir=sortBam_out_dir,
-			sample_name=sampleName
+			sample_name=sample_out_dir+"/"+sampleName
 	}
 	call filterTasks.index_bam {
 		input:
 			bam=sort_bam.bam_sorted,
-			out_dir=indexBam_out_dir,
-			sample_name=sampleName
+			sample_name=sample_out_dir+"/"+sampleName
 	}
 	if (paired) {
 		call quantifyTasks.count_reads_paired {
@@ -128,8 +113,7 @@ workflow rnaseq {
 				GeneAnnotationFile=GeneAnnotationFile,
 				GTFAttributeType=GTFAttributeType,
 				Stranded=Stranded,
-				out_dir=counts_out_dir,
-				sample_name=sampleName
+				sample_name=sample_out_dir+"/"+sampleName
 		}
 	}
 	if (!paired) {
@@ -139,8 +123,7 @@ workflow rnaseq {
                                 GeneAnnotationFile=GeneAnnotationFile,
                                 GTFAttributeType=GTFAttributeType,
                                 Stranded=Stranded,
-                                out_dir=counts_out_dir,
-				sample_name=sampleName
+				sample_name=sample_out_dir+"/"+sampleName
                 }
         }
 	call bwTasks.read_count {
@@ -156,15 +139,13 @@ workflow rnaseq {
 			bam=sort_bam.bam_sorted,
 			chromosome_sizes=chromosome_sizes,
 			factor=calculate_factor.factor,
-			out_dir=bw_out_dir,
-			sample_name=sampleName
+			sample_name=sample_out_dir+"/"+sampleName
 	}
 	call bwTasks.bedgraph_to_bigwig {
 		input:
 			bedgraph=bam_to_bedgraph.bedgraph,
 			chromosome_sizes=chromosome_sizes,
-			out_dir=bw_out_dir,
-			sample_name=sampleName
+			sample_name=sample_out_dir+"/"+sampleName
 	}
 	output {
 		File finalBam = sort_bam.bam_sorted

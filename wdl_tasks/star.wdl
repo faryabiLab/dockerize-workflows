@@ -2,10 +2,9 @@ version 1.0
 
 task STAR {
 	input {
-		File fastq1_trimmed
-		File? fastq2_trimmed			
+		String fastq1_trimmed
+		String? fastq2_trimmed			
 		String star_index
-		String out_dir
 		String sample_name
 		String outFilterType = "BySJout"
 		String readFilesCommand = "zcat"
@@ -18,25 +17,22 @@ task STAR {
 		Int chimJunctionOverhangMin = 25
 		String outSAMtype = "BAM Unsorted"
 	}
-	String out="${out_dir}"+"/"+"${sample_name}"
 	command {
 		STAR \
 		--genomeDir ${star_index} \
-		--outFileNamePrefix ${out} \
-		--outFilterType ${outFilterType} \
 		--readFilesIn ${fastq1_trimmed} ${fastq2_trimmed} \
+		--outFileNamePrefix ${sample_name} \
 		--readFilesCommand ${readFilesCommand} \
+		--outSAMattributes ${outSamAttributes} \
 		--outFilterIntronMotifs ${outFilterIntronMotifs} \
+		--outFilterType ${outFilterType} \
 		--alignIntronMax ${alignIntronMax} \
-		--outSamstrandField ${outSamstrandField} \
+		--outSAMstrandField ${outSamstrandField} \
 		--outSAMunmapped ${outSAMunmapped} \
 		--chimSegmentMin ${chimSegmentMin} \
-		--chimJunctionOverhangMin ${chimJunctionOverhangMin} \
 		--outSAMtype ${outSAMtype}
 	}
-	output {
-		File bam = "${out}.out.bam"
-	}
+	output {File bam = "${sample_name}Aligned.out.bam"}
 	runtime {
 		docker: 'faryabilab/star:0.10'
 	}
