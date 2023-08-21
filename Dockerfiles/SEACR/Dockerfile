@@ -12,5 +12,5 @@ RUN ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && echo $CONT
 # Setup packages
 RUN apt-get update && apt-get -y install wget bedtools r-base r-base-dev
 RUN wget https://github.com/FredHutch/SEACR/archive/refs/tags/v1.3.tar.gz -O seacr.tar.gz && \
-	tar zxvf seacr.tar.gz && rm seacr.tar.gz
+	tar zxvf seacr.tar.gz && rm seacr.tar.gz && cd SEACR-1.3 && cp SEACR_1.3.sh /bin
 
