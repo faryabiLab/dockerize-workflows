@@ -1,11 +1,11 @@
 version 1.0
 
 ## import all relevant tasks here
-import "wdl_tasks/trim_galore.wdl" as trimTasks
-import "wdl_tasks/star.wdl" as starTasks
-import "wdl_tasks/filter_steps.wdl" as filterTasks
-import "wdl_tasks/feature_count.wdl" as quantifyTasks
-import "wdl_tasks/make_bigWig.wdl" as bwTasks
+import "../../wdl_tasks/trim_galore.wdl" as trimTasks
+import "../../wdl_tasks/star.wdl" as starTasks
+import "../../wdl_tasks/filter_steps.wdl" as filterTasks
+import "../../wdl_tasks/feature_count.wdl" as quantifyTasks
+import "../../wdl_tasks/make_bigWig.wdl" as bwTasks
 
 workflow rnaseq {
         input {
