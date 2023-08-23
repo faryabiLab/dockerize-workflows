@@ -3,7 +3,7 @@
 #############################################################
 
 # Set the base image to ubuntu
-FROM ubuntu:22.04
+FROM faryabilab/samtools:0.1.0
 LABEL maintainer="jamiesheng0306@gmail.com"
 WORKDIR /tmp
 # Setup packages
