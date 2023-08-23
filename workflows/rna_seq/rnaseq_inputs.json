@@ -2,7 +2,7 @@
   "batch_workflow.AttributeType": "exon",
   "batch_workflow.outSAMtype": "BAM Unsorted",
   "batch_workflow.outSAMunmapped": "Within",
-  "batch_workflow.project_out_dir": "/mnt/data0/noah/wdl_workflows/test_full_rnaseq",
+  "batch_workflow.project_out_dir": "/mnt/data0/noah/wdl_workflows/dockerize-workflows",
   "batch_workflow.GeneAnnotationFile": "/mnt/data0/noah/references/hg38/gtf/Homo_sapiens.GRCh38.109.gtf",
   "batch_workflow.outSamstrandField": "intronMotif",
   "batch_workflow.PicardValidationStringency": "SILENT",
