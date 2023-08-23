@@ -49,4 +49,7 @@ task BWA_paired {
 	output {
 		String rawBam = "${sample_out_dir}/"+"${sampleName}.raw.bam"
 	}
+	runtime {
+		docker: 'faryabilab/bwa:0.1.0'
+	}
 }
