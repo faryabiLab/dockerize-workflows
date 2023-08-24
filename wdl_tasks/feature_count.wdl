@@ -56,3 +56,36 @@ task count_reads_paired {
                 docker: "faryabilab/subread:0.1.0"
         }
 }
+
+task quantifyCoverage {
+	input {
+		String bam
+		String peaks
+		String chromSizes
+		String sample_name
+	}
+	command {
+		bedtools coverage \
+		-a ${peaks} -b ${bam} \
+		-g ${chromSizes} \
+		> "${sample_name}.coverage.counts"
+	}
+	output {
+		File out_counts = "${sample_name}.coverage.counts"
+	}
+	runtime {
+		docker: "faryabilab/bedtools:0.1.0"
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
