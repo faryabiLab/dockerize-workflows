@@ -1,5 +1,9 @@
 version 1.0
 
+####
+# ALL arguments are REQUIRED
+####
+
 task read_count {
 	input {
 		String bam

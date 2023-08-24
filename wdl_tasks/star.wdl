@@ -2,10 +2,13 @@ version 1.0
 
 task STAR {
 	input {
+		#### REQUIRED
 		String fastq1_trimmed
 		String? fastq2_trimmed			
 		String star_index
 		String sample_name
+		####
+		
 		String outFilterType = "BySJout"
 		String readFilesCommand = "zcat"
 		String outSamAttributes = "Standard"

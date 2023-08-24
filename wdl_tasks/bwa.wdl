@@ -2,12 +2,13 @@ version 1.0
 
 task BWA_paired {
 	input {
+		#### REQUIRED
 		String sampleName
 		String sample_out_dir
-
 		String fastq1_trimmed
 		String fastq2_trimmed
 		String BWAIndex
+		####
 
 		Int subsequence_seed = 32
 		Int seed_max_edit_distance = 2
@@ -18,7 +19,6 @@ task BWA_paired {
 		Int MaxAlignmentsForXATag = 3
 		Int MaxAlignmentsForXATag_DiscordanantPairs = 10
 	}
-	String readGroup = "@RG\tID:${sampleName}\tSM:${sampleName}"
 	command {
 		bwa aln \
 		-q "${read_trimming}" \
@@ -39,7 +39,7 @@ task BWA_paired {
 		-a "${MaximumInsertSize}" \
 		-n "${MaxAlignmentsForXATag}" \
 		-N "${MaxAlignmentsForXATag_DiscordanantPairs}" \
-		-r "${readGroup}" \
+		-r "@RG\tID:${sampleName}\tSM:${sampleName}" \
 		"${sample_out_dir}/"+sampleName+".1.sai" \
 		"${sample_out_dir}/"+sampleName+".2.sai" \
 		> "${sample_out_dir}/"+"${sampleName}.raw.bam"
