@@ -2,9 +2,11 @@ version 1.0
 
 task remove_scaffolds {
 	input {
+		#### REQUIRED
 		String bam
 		String chrom_no_scaff
 		String sample_name
+		####
 	}
 	command {
 		samtools view -h -L ${chrom_no_scaff} ${bam} | samtools sort - -o "${sample_name}.noScaffold.bam"
@@ -19,8 +21,10 @@ task remove_scaffolds {
 
 task remove_duplicates {
 	input {
+		#### REQUIRED
 		String bam
 		String sample_name
+		####
 
 		String PicardRemoveDuplicates = "false"
 		String PicardValidationStringency = "SILENT"
@@ -46,10 +50,11 @@ task remove_duplicates {
 
 task remove_blacklist {
 	input {
+		#### REQUIRED
 		String bam
 		String blacklist
-	
 		String sample_name
+		####
         }
         command {
 		bedtools intersect -abam ${bam} -b ${blacklist} -v > "${sample_name}.noBlacklist.bam"

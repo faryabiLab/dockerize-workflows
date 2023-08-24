@@ -2,10 +2,11 @@ version 1.0
 
 task count_reads_single {
 	input {
+		#### REQUIRED
 		String bam
 		String GeneAnnotationFile		
-
 		String sample_name
+		####
 
 		String AttributeType = "exon"
 		String GTFAttributeType = "gene_id"
@@ -30,10 +31,11 @@ task count_reads_single {
 
 task count_reads_paired {
         input {
+		#### REQUIRED
                 String bam
 		String GeneAnnotationFile		
-
 		String sample_name
+		####
 
 		String AttributeType = "exon"
 		String GTFAttributeType = "gene_id"
@@ -59,10 +61,12 @@ task count_reads_paired {
 
 task quantifyCoverage {
 	input {
+		#### REQUIRED
 		String bam
 		String peaks
 		String chromSizes
 		String sample_name
+		####
 	}
 	command {
 		bedtools coverage \

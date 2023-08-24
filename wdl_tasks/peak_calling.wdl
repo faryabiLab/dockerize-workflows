@@ -2,12 +2,13 @@ version 1.0
 
 task macs2_control {
 	input {
+		#### REQUIRED
 		String sampleName
 		String sample_out_dir
-
 		String bam
 		String control_bam		
-		
+		####		
+
 		String GenomeSize = 'hs'
 		Int Shift = 0		
 		Int ExtensionSize = 20
@@ -33,20 +34,6 @@ task macs2_control {
 		String? CutoffAnalysis
 		String? CallSummits
 	}
-	String sampleOutDirWithPrefix = "${sample_out_dir}/"+"${sampleName}"
-
-	String CallSummits = ${default="" CallSummits}
-	String FixBimodal = ${default="" FixBimodal}
-	String NoModel = ${default="" NoModel}
-	String SaveFragPileup = ${default="" SaveFragPileup}
-	String TagSize = ${default="" TagSize}
-	String Qvalue = ${default="" Qvalue}
-	String Pvalue = ${default="" Pvalue}
-	String DownSample = ${default="" DownSample}
-	String NoLambda = ${default="" NoLambda}
-	String BroadPeaks = ${default="" BroadPeaks}
-	String BroadCutoff = ${default="" BroadCutoff}
-	String CutoffAnalysis = ${default="" CutoffAnalysis} 
 	command {
 		macs2 callpeaks \
 		-t ${bam} \
@@ -89,11 +76,12 @@ task macs2_control {
 
 task macs2_noControl {
 	input {
+		#### REQUIRED
                 String sampleName
                 String sample_out_dir
-
                 String bam
-                
+		####               
+
                 String GenomeSize = 'hs'
                 Int Shift = 0
                 Int ExtensionSize = 20
