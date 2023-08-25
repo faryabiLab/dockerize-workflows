@@ -1,76 +1,56 @@
 version 1.0
 
-task fastqc_trim_paired {
-        input {
+task fastqc_trim {
+	input {
 		#### REQUIRED
-                String fastq_dir
+		String fastq_dir
 		String sample_out_dir
 		String sampleName
+		Boolean paired
 		####
 
 		Int quality = 15
 		Int stringency = 5
 		Float e = 0.1
 		Int length = 20
-        }
-        command {
-                trim_galore \
-                -q ${quality} \
-                --paired \
-                --fastqc \
-                --phred33 \
-                --gzip \
-                --stringency ${stringency} \
-                -e ${e} \
-                --basename ${sampleName} \
-                --length ${length} \
-                -o ${sample_out_dir} \
-                "${fastq_dir}/${sampleName}_R1.fastq.gz" \
-		"${fastq_dir}/${sampleName}_R2.fastq.gz"
-        }
-        output {
-                File out_fqc1 = "${sample_out_dir}/${sampleName}"+"_val_1.fq.gz"
-                File out_fqc2 = "${sample_out_dir}/${sampleName}"+"_val_2.fq.gz"
-        }
-        runtime {
-                docker: "faryabilab/trim_galore:0.10"
-        }
+	}
+	command {
+		if [ "~{paired}" ]; then
+			trim_galore \
+			-q ${quality} \
+			--paired \
+			--fastqc \
+			--phred33 \
+			--gzip \
+			--stringency ${stringency} \
+			-e ${e} \
+			--basename ${sampleName} \
+			--length ${length} \
+			-o ${sample_out_dir} \
+			"${fastq_dir}/${sampleName}_R1.fastq.gz" \
+			"${fastq_dir}/${sampleName}_R2.fastq.gz"
+		else
+			trim_galore \
+			-q ${quality} \
+			--fastqc \
+			--phred33 \
+			--gzip \
+			--stringency ${stringency} \
+			-e ${e} \
+			--basename ${sampleName} \
+			--length ${length} \
+			-o ${sample_out_dir} \
+			"${fastq_dir}/${sampleName}.fastq.gz"
+		fi
 
-}
-
-task fastqc_trim_single {
-	 input {
-                #### REQUIRED
-                String fastq_dir
-                String sample_out_dir
-                String sampleName
-                ####
-
-                Int quality = 15
-                Int stringency = 5
-                Float e = 0.1
-                Int length = 20
-        }
-        command {
-                trim_galore \
-                -q ${quality} \
-                --paired \
-                --fastqc \
-                --phred33 \
-                --gzip \
-                --stringency ${stringency} \
-                -e ${e} \
-                --basename ${sampleName} \
-                --length ${length} \
-                -o ${sample_out_dir} \
-                "${fastq_dir}/${sampleName}.fastq.gz"
-        }
-        output {
-                File out_fqc1 = "${sample_out_dir}/${sampleName}"+"_trimmed.fq.gz"
-        }
-        runtime {
-                docker: "faryabilab/trim_galore:0.10"
-        }
-
+	}
+	output {
+		File? out_fqc = "${sample_out_dir}/${sampleName}"+"_trimmed.fq.gz"
+		File? out_fqc1 = "${sample_out_dir}/${sampleName}"+"_val_1.fq.gz"
+		File? out_fqc2 = "${sample_out_dir}/${sampleName}"+"_val_2.fq.gz"
+	}
+	runtime {
+		docker: "faryabilab/trim_galore:0.10"
+	}
 
 }

@@ -19,19 +19,24 @@ workflow rnaseq {
 		String GeneAnnotationFile
 		String chromosome_sizes
         }
-        call trimTasks.fastqc_trim {
-                input: 
-                        fastq_dir=fastq_dir,
-                        sample_out_dir=sample_out_dir,
-			sampleName=sampleName
-        }
-        call starTasks.STAR {
-                input:
-                        fastq1_trimmed=fastqc_trim.out_fqc1,
-                        fastq2_trimmed=fastqc_trim.out_fqc2,
-                        star_index=star_index,
-                        sample_name=sample_out_dir+"/"+sampleName+".",
+
+	call trimTasks.fastqc_trim {
+		input:
+			fastq_dir=fastq_dir,
+			sample_out_dir=sample_out_dir,
+			sampleName=sampleName,
+			paired=paired
 	}
+	call starTasks.STAR {
+		input:
+			fastq_trimmed_single = fastqc_trim.out_fqc,
+			fastq1_trimmed = fastqc_trim.out_fqc1,
+			fastq2_trimmed = fastqc_trim.out_fqc2,
+			star_index=star_index,
+			sample_name=sampleName,
+			paired=paired
+	}
+		
 	call filterTasks.remove_scaffolds {
 		input:
 			bam=STAR.bam,
