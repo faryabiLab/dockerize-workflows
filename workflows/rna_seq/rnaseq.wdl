@@ -11,54 +11,19 @@ workflow rnaseq {
         input {
 		Boolean paired
                 String fastq_dir
-		
 		String sample_out_dir
-                String sampleName
-                # trim_galore args
-                Int qualityCutoff
-                Int stringencyCutoff
-                Float errorRate
-                Int lengthCutoff
-                # STAR args             
+                String sampleName       
                 String star_index
-                String outFilterType
-                String readFilesCommand 
-                String outSamAttributes 
-                String outFilterIntronMotifs 
-                Int alignIntronMax
-                String outSamstrandField 
-                String outSAMunmapped
-                Int chimSegmentMin 
-                Int chimJunctionOverhangMin 
-                String outSAMtype 
-                # Remove scaffold args
-                File chromNoScaffold
-		# Remove duplicates args
-		String PicardRemoveDuplicates
-		String PicardValidationStringency
-		String PicardMetricsFile
-		# Remove blacklist args
-		File blacklist
-		# Sort bam args
-		# Index bam args
-		# Quantify args
-		File GeneAnnotationFile
-		String AttributeType
-		String GTFAttributeType
-		String Stranded
-		# Make BigWig args
-		File chromosome_sizes
+                String chromNoScaffold
+		String blacklist
+		String GeneAnnotationFile
+		String chromosome_sizes
         }
         call trimTasks.fastqc_trim {
-                input:
-                        fastq1=fastq_dir+"/"+sampleName+"_R1.fastq.gz",
-                        fastq2=fastq_dir+"/"+sampleName+"_R2.fastq.gz",
+                input: 
+                        fastq_dir=fastq_dir,
                         sample_out_dir=sample_out_dir,
-                        quality=qualityCutoff,
-			sampleName=sampleName,
-                        stringency=stringencyCutoff,
-                        e=errorRate,
-                        length=lengthCutoff
+			sampleName=sampleName
         }
         call starTasks.STAR {
                 input:
@@ -66,15 +31,6 @@ workflow rnaseq {
                         fastq2_trimmed=fastqc_trim.out_fqc2,
                         star_index=star_index,
                         sample_name=sample_out_dir+"/"+sampleName+".",
-                        readFilesCommand=readFilesCommand,
-                        outSamAttributes=outSamAttributes,
-                        outFilterIntronMotifs=outFilterIntronMotifs,
-			alignIntronMax=alignIntronMax,
-			outSamstrandField=outSamstrandField,
-			outSAMunmapped=outSAMunmapped,
-			chimSegmentMin=chimSegmentMin,
-			chimJunctionOverhangMin=chimJunctionOverhangMin,
-			outSAMtype=outSAMtype
 	}
 	call filterTasks.remove_scaffolds {
 		input:
@@ -86,9 +42,6 @@ workflow rnaseq {
 		input:
 			bam=remove_scaffolds.bam_noScaffold,
 			sample_name=sample_out_dir+"/"+sampleName,
-			PicardRemoveDuplicates=PicardRemoveDuplicates,
-			PicardValidationStringency=PicardValidationStringency,
-			PicardMetricsFile=PicardMetricsFile
 	}
 	call filterTasks.remove_blacklist {
 		input:
@@ -111,8 +64,6 @@ workflow rnaseq {
 			input:
 				bam=sort_bam.bam_sorted,
 				GeneAnnotationFile=GeneAnnotationFile,
-				GTFAttributeType=GTFAttributeType,
-				Stranded=Stranded,
 				sample_name=sample_out_dir+"/"+sampleName
 		}
 	}
@@ -121,8 +72,6 @@ workflow rnaseq {
                         input:
                                 bam=sort_bam.bam_sorted,
                                 GeneAnnotationFile=GeneAnnotationFile,
-                                GTFAttributeType=GTFAttributeType,
-                                Stranded=Stranded,
 				sample_name=sample_out_dir+"/"+sampleName
                 }
         }
