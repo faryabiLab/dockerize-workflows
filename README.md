@@ -1,5 +1,5 @@
 # Dockerized Genomic Processing Pipelines in WDL
-Genomic data processing pipelines written in WDL making use of Docker containers to ensure stability.
+Genomic data processing pipelines written in WDL making use of Docker containers to ensure stability. The Docker containers used are curated for usage in the Faryabi Lab processing pipelines, and can be found on [Dockerhub](https://hub.docker.com/u/faryabilab).
 
 ## Setup
 `git clone` the repository to your local machine. Ensure that the latest `cromwell` engine is installed from their [GitHub repository](https://github.com/broadinstitute/cromwell).
