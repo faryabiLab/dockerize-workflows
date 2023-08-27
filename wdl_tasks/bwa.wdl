@@ -84,7 +84,7 @@ task BWA {
 			
 	}
 	output {
-		String rawBam = "${sample_out_dir}/"+"${sampleName}.raw.sam"
+		String rawSam = "${sample_out_dir}/"+"${sampleName}.raw.sam"
 	}
 	runtime {
 		docker: 'faryabilab/bwa:0.1.0'
