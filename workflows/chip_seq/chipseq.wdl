@@ -9,7 +9,21 @@ import "../../wdl_tasks/make_bigWig.wdl" as bwtasks
 workflow chipseq {
 	input {
 		Boolean paired
-		String fastq_dir
-		
+                String fastq_dir
+		String sample_out_dir
+                String sampleName       
+                String bwa_index
+                String chromNoScaffold
+		String blacklist
+		String GeneAnnotationFile
+		String chromosome_sizes
+	}
+
+	call trimTasks.fastqc_trim {
+		input:
+			fastq_dir=fastq_dir,
+			sample_out_dir=sample_out_dir,
+			sampleName=sampleName,
+			paired=paired
 	}
 }
