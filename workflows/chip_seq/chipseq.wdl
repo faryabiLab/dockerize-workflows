@@ -5,7 +5,7 @@ import "../../wdl_tasks/bwa.wdl" as bwaTasks
 import "../../wdl_tasks/filter_steps.wdl" as filterTasks
 import "../../wdl_tasks/peak_calling.wdl" as pcTasks
 import "../../wdl_tasks/feature_count.wdl" as quantTasks
-import "../../wdl_tasks/make_bigWig.wdl" as bwtasks
+import "../../wdl_tasks/make_bigWig.wdl" as bwTasks
 
 workflow chipseq {
 	input {
@@ -69,9 +69,37 @@ workflow chipseq {
 			sample_name=sample_out_dir+"/"+sampleName
 	}
 	call pcTasks.macs2 {
-		sampleName=sampleName,
-		sample_out_dir=sample_out_dir,
-		bam=sort_bam.bam_sorted,
-		control_bam=PeakcallingControl
+		input:
+			sampleName=sampleName,
+			sample_out_dir=sample_out_dir,
+			bam=sort_bam.bam_sorted,
+			control_bam=PeakcallingControl
+	}
+	call bwTasks.read_count {
+		input:
+			bam=sort_bam.bam_sorted
+	}
+	call bwTasks.calculate_factor {
+		input:
+			count=read_count.count
+	}
+	call bwTasks.bam_to_bedgraph {
+		input:
+			bam=sort_bam.bam_sorted,
+			chromosome_sizes=chromosome_sizes,
+			factor=calculate_factor.factor,
+			sample_name=sample_out_dir+"/"+sampleName
+	}
+	call bwTasks.bedgraph_to_bigwig {
+		input:
+			bedgraph=bam_to_bedgraph.bedgraph,
+			chromosome_sizes=chromosome_sizes,
+			sample_name=sample_out_dir+"/"+sampleName
+	}
+	output {
+		File finalBam = sort_bam.bam_sorted,
+		File finalBamIndex = index_bam.bam_index,
+		File peaks = macs2.narrowPeak,
+		File bw = bedgraph_to_bigwig.bw
 	}
 }
