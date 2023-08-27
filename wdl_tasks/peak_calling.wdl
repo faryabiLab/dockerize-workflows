@@ -66,8 +66,8 @@ task macs2 {
 		${CutoffAnalysis}
 	}
 	output {
-		File narrowPeak = "${sampleOutDirWithPrefix}_peaks.narrowPeak"
-		File summits = "${sampleOutDirWithPrefix}_summits.bed"
+		File narrowPeak = "${sample_out_dir}_peaks.narrowPeak"
+		File summits = "${sample_out_dir}_summits.bed"
 	}
 	runtime {
 		docker: 'faryabilab/macs2:0.1.0'
@@ -95,7 +95,7 @@ task SEACR {
 		${sampleOutDirWithPrefix}
 	}
 	output {
-		File seacr_out = "${sampleOutDirWithPrefix}.${RunMode}.bed"
+		File seacr_out = "${sample_out_dir}.${RunMode}.bed"
 	}
 	runtime {
 		docker: 'faryabiLab/seacr:0.1.0'

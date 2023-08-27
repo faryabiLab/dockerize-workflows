@@ -155,7 +155,7 @@ task size_filter_bam {
 		fi
 	}
 	output {
-		File? low = "${sample_name}.lowThreshold_${threshold_low}bp.bam",
+		File? low = "${sample_name}.lowThreshold_${threshold_low}bp.bam"
 		File? hi = "${sample_name}.hiThreshold_${threshold_hi}bp.bam"
 	}
 	runtime {
