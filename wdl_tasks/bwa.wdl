@@ -80,6 +80,7 @@ task BWA {
 			"${BWAIndex}" \
 			"${fastq_trimmed_single}" \
 			> "${sample_out_dir}/${sampleName}.raw.sam"
+		fi
 			
 	}
 	output {
