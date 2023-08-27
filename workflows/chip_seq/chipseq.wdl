@@ -71,7 +71,7 @@ workflow chipseq {
 	call pcTasks.macs2 {
 		input:
 			sampleName=sampleName,
-			sample_out_dir=sample_out_dir,
+			sample_out_dir=sample_out_dir+"/"+sampleName,
 			bam=sort_bam.bam_sorted,
 			control_bam=PeakcallingControl
 	}
@@ -97,9 +97,9 @@ workflow chipseq {
 			sample_name=sample_out_dir+"/"+sampleName
 	}
 	output {
-		File finalBam = sort_bam.bam_sorted,
-		File finalBamIndex = index_bam.bam_index,
-		File peaks = macs2.narrowPeak,
+		File finalBam = sort_bam.bam_sorted
+		File finalBamIndex = index_bam.bam_index
+		File peaks = macs2.narrowPeak
 		File bw = bedgraph_to_bigwig.bw
 	}
 }
