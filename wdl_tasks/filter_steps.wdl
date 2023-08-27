@@ -8,6 +8,12 @@ task sam_to_bam {
 	command {
 		samtools view -h -b ${sam} > "${sample_name}.bam"
 	}
+	output {
+		File bam = "${sample_name}.bam"
+	}
+	runtime {
+		docker: "faryabilab/samtools:0.1.0"
+	}
 }
 
 task remove_scaffolds {
