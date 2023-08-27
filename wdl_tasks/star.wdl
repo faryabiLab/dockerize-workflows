@@ -23,7 +23,7 @@ task STAR {
 		String outSAMtype = "BAM Unsorted"
 	}
 	command {
-		if [ "~{paired}" ]; then
+		if [[ "~{paired}" == "true" ]]; then
 			STAR \
 			--genomeDir ${star_index} \
 			--readFilesIn ${fastq1_trimmed} ${fastq2_trimmed} \
