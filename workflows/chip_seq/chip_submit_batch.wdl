@@ -24,6 +24,14 @@ workflow batch_workflow {
 	scatter (sample in samples) {
 		call chipseq.chipseq {
 			input:
+				paired=paired,
+				fastq_dir=fastq_dir,
+				sample_out_dir=project_out_dir+"/"+sample[0]+"/",
+				samplename=sample[0],
+				bwa_index=BWAIndex,
+				chromNoScaffold=ChromNoScaffold,
+				blacklist=Blacklist,
+				chromosome_sizes=ChromosomeSizes
 		}
 	}
 }
