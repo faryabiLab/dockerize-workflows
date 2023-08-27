@@ -102,4 +102,47 @@ task index_bam {
 	}
 }
 
-
+task size_filter_bam {
+	input {
+		String bam
+		String sample_name
+		
+		Int? threshold_low = 120
+		Int? threshold_hi = 150
+	}
+	command {
+		if [ ! -z "${threshold_low}" ] && [ ! -z "${threshold_hi}" ]; then
+			samtools view \
+			-e 'length(seq)<${threshold_hi}' 
+			-O BAM \
+			-o "${sample_name}.hiThreshold_${threshold_hi}bp.bam" \
+			${bam}
+			samtools view \
+			-e 'length(seq)>${threshold_low}' \
+			-O BAM \
+			-o "${sample_name}.lowThreshold_${threshold_low}bp.bam" \
+			${bam}
+		elif [ ! -z "${threshold_low}" ] && [ -z "${threshold_hi}" ]; then
+			samtools view \
+			-e 'length(seq)>${threshold_low}' \
+			-O BAM \
+			-o "${sample_name}.lowThreshold_${threshold_low}bp.bam" \
+			${bam}
+		elif [ -z "${threshold_low}" ] && [ ! -z "${threshold_hi}" ]; then
+			samtools view \
+			-e 'length(seq)<${threshold_hi}' \
+			-O BAM \
+			-o "${sample_name}.hiThreshold_${threshold_hi}bp.bam" \
+			${bam}
+		else
+			echo ""
+		fi
+	}
+	output {
+		File? low = "${sample_name}.lowThreshold_${threshold_low}bp.bam",
+		File? hi = "${sample_name}.hiThreshold_${threshold_hi}bp.bam"
+	}
+	runtime {
+		docker: 'faryabilab/samtools:0.1.0'
+	}
+}
