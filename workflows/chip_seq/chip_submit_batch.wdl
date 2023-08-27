@@ -16,7 +16,7 @@ workflow batch_workflow {
 		Boolean paired
 		String BWAIndex
 		String ChromNoScaffold
-		Stirng Blacklist
+		String Blacklist
 		String ChromosomeSizes
 	}
 	
