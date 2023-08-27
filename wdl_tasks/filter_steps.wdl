@@ -1,5 +1,15 @@
 version 1.0
 
+task sam_to_bam {
+	input {
+		String sam
+		String sample_name
+	}
+	command {
+		samtools view -h -b ${sam} > "${sample_name}.bam"
+	}
+}
+
 task remove_scaffolds {
 	input {
 		#### REQUIRED
