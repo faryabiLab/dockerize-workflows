@@ -15,7 +15,6 @@ workflow chipseq {
                 String bwa_index
                 String chromNoScaffold
 		String blacklist
-		String GeneAnnotationFile
 		String chromosome_sizes
 	}
 
