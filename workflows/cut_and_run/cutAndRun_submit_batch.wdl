@@ -31,7 +31,8 @@ workflow batch_workflow {
 			input:
 				sampleList=sampleList,
 				fastq_dir=fastq_dir,
-				project_out_dir=project_out_dir,
+				sample_out_dir=project_out_dir+"/"+sample[0],
+				sampleName=sample[0],
 				paired=paired,
 				Aligner=Aligner,
 				BWAIndex=BWAIndex,
