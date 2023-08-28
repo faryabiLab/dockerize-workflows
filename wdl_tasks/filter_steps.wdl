@@ -42,7 +42,7 @@ task remove_duplicates {
 		String sample_name
 		####
 
-		String PicardRemoveDuplicates = "false"
+		String PicardRemoveDuplicates = "true"
 		String PicardValidationStringency = "SILENT"
 		String PicardMetricsFile = "removeDuplicate_metrics.txt"
         }
