@@ -37,9 +37,9 @@ task macs2 {
 	command {
 		macs2 callpeak \
 		-t ${bam} \
-		~{if defined(Pvalue) then "-p"+ Pvalue else ""} \
-		~{if defined(Qvalue) then "-q"+ Qvalue else ""} \
-		~{if defined(control_bam) then "-c"+ control_bam else ""} \
+		~{if defined(Pvalue) then "-p "+ Pvalue else ""} \
+		~{if defined(Qvalue) then "-q "+ Qvalue else ""} \
+		~{if defined(control_bam) then "-c "+ control_bam else ""} \
 		-g ${GenomeSize} \
 		--outdir ${sample_out_dir} \
 		-n ${sampleName} \
