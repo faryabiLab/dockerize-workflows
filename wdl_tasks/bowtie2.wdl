@@ -53,8 +53,8 @@ task bowtie2 {
 		${NoDiscordant} \
 		${DoveTail} \
 		${NoContain} \
-		${NoOverlap} 
-		samtols view -b "${sample_out_dir}/${sampleName}.out.tmp.sam" > "${sample_out_dir}/${sampleName}.raw.bam"
+		${NoOverlap} \
+		| samtools view -b "${sample_out_dir}/${sampleName}.out.tmp.sam" > "${sample_out_dir}/${sampleName}.raw.bam"
 	
 		rm "${sample_out_dir}/${sampleName}.out.tmp.sam"	
 	}
