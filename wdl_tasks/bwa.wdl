@@ -36,7 +36,7 @@ task BWA {
 		Int? cpu = 8
 	}
 	command {
-		if [[ "~{paired} == "true" ]]; then 
+		if [[ "${paired}" == "true" ]]; then 
 			bwa aln \
 			-q "${read_trimming}" \
 			-l "${subsequence_seed}" \
@@ -66,7 +66,7 @@ task BWA {
 		else
 			bwa mem \
 			-t ${cpu} \
-			-k ${MinSeedLength}
+			-k ${MinSeedLength} \
 			-w ${Bandwidth} \
 			-d ${ZDropoff} \
 			-r ${TriggerReSeed} \

@@ -2,10 +2,10 @@
   "batch_workflow.ChromNoScaffold": "/mnt/data0/noah/references/hg38/Chrom_NoPatch_hg38.txt",
   "batch_workflow.ChromosomeSizes": "/mnt/data0/noah/references/hg38/ChromSizes_hg38_ordered.txt",
   "batch_workflow.project_out_dir": "/mnt/data0/noah/wdl_workflows/dockerize-workflows/workflows/chip_seq",
-  "batch_workflow.fastq_dir": "/mnt/data0/noah/data/sra/chip/sub",
+  "batch_workflow.fastq_dir": "/mnt/data0/noah/analysis/singlecell_multiome/sorelle_crispATAC/chip_datasets",
   "batch_workflow.sampleList": "/mnt/data0/noah/wdl_workflows/dockerize-workflows/workflows/chip_seq/samplesheet.tsv",
   "batch_workflow.BWAIndex": "/mnt/data0/fdb/igenome/Homo_sapiens/NCBI/GRCh38/Sequence/BWAIndex/genome.fa",
-  "batch_workflow.PeakcallingControl": "",
+  "batch_workflow.PeakcallingControl": "/mnt/data0/noah/wdl_workflows/dockerize-workflows/workflows/chip_seq/GM12878_IgG_control_ChIPseq/GM12878_IgG_control_ChIPseq.noDuplicate.bam",
   "batch_workflow.paired": false,
   "batch_workflow.Blacklist": "/mnt/data0/noah/references/hg38/blacklist/hg38-blacklist.v2.coordOnly.bed"
 }
