@@ -19,7 +19,7 @@ task macs2 {
                 Int SmallLocal = 1000
                 Int LargeLocal = 10000		
 		String ScaleTo = "small"
-		String BroadCutoff = 0.1			
+		Float BroadCutoff = 0.1			
 		String BufferSize = 100000
 
 		String? FixBimodal
@@ -35,13 +35,13 @@ task macs2 {
 		String? CallSummits
 	}
 	command {
-		macs2 callpeaks \
+		macs2 callpeak \
 		-t ${bam} \
 		~{if defined(Pvalue) then "-p"+ Pvalue else ""} \
 		~{if defined(Qvalue) then "-q"+ Qvalue else ""} \
 		~{if defined(control_bam) then "-c"+ control_bam else ""} \
 		-g ${GenomeSize} \
-		--outdir ${sample_out_dir}
+		--outdir ${sample_out_dir} \
 		-n ${sampleName} \
 		--shift ${Shift} \
 		--extsize ${ExtensionSize} \
@@ -54,6 +54,7 @@ task macs2 {
 		--scale-to ${ScaleTo} \
 		--buffer-size ${BufferSize} \
 		--broad-cutoff ${BroadCutoff} \
+		--outdir ${sample_out_dir} \
 		${CallSummits} \
 		${FixBimodal} \
 		${NoModel} \
@@ -62,12 +63,11 @@ task macs2 {
 		${DownSample} \
 		${NoLambda} \
 		${BroadPeaks} \
-		${BroadCutoff} \
 		${CutoffAnalysis}
 	}
 	output {
-		File narrowPeak = "${sample_out_dir}_peaks.narrowPeak"
-		File summits = "${sample_out_dir}_summits.bed"
+		File narrowPeak = "${sample_out_dir}/${sampleName}_peaks.narrowPeak"
+		File summits = "${sample_out_dir}/${sampleName}_summits.bed"
 	}
 	runtime {
 		docker: 'faryabilab/macs2:0.1.0'

@@ -47,14 +47,9 @@ workflow chipseq {
 			chrom_no_scaff=chromNoScaffold,
 			sample_name=sample_out_dir+"/"+sampleName
 	}
-	call filterTasks.remove_duplicates {
-		input:
-			bam=remove_scaffolds.bam_noScaffold,
-			sample_name=sample_out_dir+"/"+sampleName,
-	}
 	call filterTasks.remove_blacklist {
 		input:
-			bam=remove_duplicates.bam_noDuplicate,
+			bam=remove_scaffolds.bam_noScaffold,
 			blacklist=blacklist,
 			sample_name=sample_out_dir+"/"+sampleName
 	}
@@ -63,21 +58,26 @@ workflow chipseq {
 			bam=remove_blacklist.bam_noBlacklist,
 			sample_name=sample_out_dir+"/"+sampleName
 	}
-	call filterTasks.index_bam {
+	call filterTasks.remove_duplicates {
 		input:
 			bam=sort_bam.bam_sorted,
+			sample_name=sample_out_dir+"/"+sampleName
+	}
+	call filterTasks.index_bam {
+		input:
+			bam=remove_duplicates.bam_noDuplicate,
 			sample_name=sample_out_dir+"/"+sampleName
 	}
 	call pcTasks.macs2 {
 		input:
 			sampleName=sampleName,
-			sample_out_dir=sample_out_dir+"/"+sampleName,
-			bam=sort_bam.bam_sorted,
+			sample_out_dir=sample_out_dir,
+			bam=remove_duplicates.bam_noDuplicate,
 			control_bam=PeakcallingControl
 	}
 	call bwTasks.read_count {
 		input:
-			bam=sort_bam.bam_sorted
+			bam=remove_duplicates.bam_noDuplicate
 	}
 	call bwTasks.calculate_factor {
 		input:
