@@ -15,10 +15,10 @@ workflow batch_workflow {
 		String fastq_dir
 		String project_out_dir
 		Boolean paired
-		String? Aligner 
+		String Aligner 
 		String? BWAIndex
 		String? BowtieIndex
-		String? PeakCaller
+		String PeakCaller
 		String? PeakCallingControl
 		String ChromNoScaffold
 		String Blacklist
