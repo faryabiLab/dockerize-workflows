@@ -15,7 +15,7 @@ task fastqc_trim {
 		Int length = 20
 	}
 	command {
-		if [ "~{paired}" ]; then
+		if [[ "${paired}" == "true" ]]; then
 			trim_galore \
 			-q ${quality} \
 			--paired \
