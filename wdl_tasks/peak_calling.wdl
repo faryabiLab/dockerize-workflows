@@ -80,7 +80,8 @@ task SEACR {
                 String sample_out_dir
 
                 String bedgraph
-		String control_bedgraph
+		String? control_bedgraph
+		Float? top_peak_fraction
 
 		String Normalization = "norm"
 		String RunMode = "stringent"
@@ -90,7 +91,7 @@ task SEACR {
 	command {
 		bash "SEACR-1.3/SEACR_1.3.sh" \
 		${bedgraph} \
-		${control_bedgraph} \
+		~{if defined(control_bedgraph) then control_bedgraph else top_peak_fraction} \
 		${Normalization} \
 		${sampleOutDirWithPrefix}
 	}
