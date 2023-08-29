@@ -115,7 +115,7 @@ task bamToBedgraph {
 		> "${sampleName}.seacr.bg"
 	}
 	output {
-		File seacr_bg = "${sampleName.seacr.bg}"
+		File seacr_bg = "${sampleName}.seacr.bg"
 	}
 	runtime {
 		docker: "faryabilab/bedtools:0.1.0"
