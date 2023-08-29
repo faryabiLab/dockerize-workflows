@@ -102,3 +102,22 @@ task SEACR {
 		docker: 'faryabiLab/seacr:0.1.0'
 	}
 }
+
+task bamToBedgraph {
+	input {
+		String bam
+		String sampleName
+	}
+	command {
+		bedtools genomecov \
+		-ibam "${bam}" \
+		-bg \
+		> "${sampleName}.seacr.bg"
+	}
+	output {
+		File seacr_bg = "${sampleName.seacr.bg}"
+	}
+	runtime {
+		docker: "faryabilab/bedtools:0.1.0"
+	}
+}
