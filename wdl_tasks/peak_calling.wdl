@@ -87,13 +87,12 @@ task SEACR {
 		String RunMode = "stringent"
 
 	}
-	String sampleOutDirWithPrefix = "${sample_out_dir}/${sampleName}"
 	command {
 		bash "SEACR-1.3/SEACR_1.3.sh" \
 		${bedgraph} \
 		~{if defined(control_bedgraph) then control_bedgraph else top_peak_fraction} \
 		${Normalization} \
-		${sampleOutDirWithPrefix}
+		"${sample_out_dir}/${sampleName}"
 	}
 	output {
 		File seacr_out = "${sample_out_dir}.${RunMode}.bed"
