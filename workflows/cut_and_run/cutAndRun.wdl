@@ -18,8 +18,8 @@ workflow cut_and_run {
 		String Aligner 
 		String? BWAIndex
 		String? BowtieIndex
-		String? PeakCaller
-		String PeakCallingControl
+		String PeakCaller
+		String? PeakCallingControl
 		String ChromNoScaffold
 		String Blacklist
 		String ChromosomeSizes
@@ -95,6 +95,6 @@ workflow cut_and_run {
 			threshold_low=size_low,
 			threshold_hi=size_high
 	}
-	
+	if ()	
 	
 }
