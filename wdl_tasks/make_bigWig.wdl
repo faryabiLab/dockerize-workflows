@@ -71,3 +71,32 @@ task bedgraph_to_bigwig {
                 docker: 'faryabilab/bedtools:0.1.0'
         }
 }
+
+workflow makeBigWig {
+	input {
+		String bam
+		String chromosome_sizes
+		String sampleName
+	}
+	call read_count {
+		input:
+			bam=bam
+	}
+	call calculate_factor {
+		input:
+			count=read_count.count
+	}
+	call bam_to_bedgraph {
+		input:
+			bam=bam,
+			chromsome_sizes=chromosome_sizes,
+			factor=calculate_factor.factor,
+			sample_name=sampleName
+	}
+	call bedgraph_to_bigwig {
+		input:
+			bedgraph=bam_to_bedgraph.bedgraph,
+			chromosoe_sizes=chromosome_sizes,
+			sample_name=sampleName
+	}
+}
