@@ -23,6 +23,8 @@ workflow batch_workflow {
 		String ChromNoScaffold
 		String Blacklist
 		String ChromosomeSizes
+		Int? BamSizeFilterUpperThreshold = 120
+		Int? BamSizeFilterLowerThreshold = 150
 	}
 
 	Array[Array[String]] samples = read_tsv(sampleList)
@@ -41,7 +43,9 @@ workflow batch_workflow {
 				PeakCallingControl=PeakCallingControl,
 				ChromNoScaffold=ChromNoScaffold,
 				Blacklist=Blacklist,
-				ChromosomeSizes=ChromosomeSizes
+				ChromosomeSizes=ChromosomeSizes,
+				size_low=BamSizeFilterLowerThreshold,
+				size_high=BamSizeFilterUpperThreshold
 		}	
 	}
 }	
