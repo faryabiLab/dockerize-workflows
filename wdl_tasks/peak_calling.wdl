@@ -91,7 +91,8 @@ task SEACR {
 		bash "SEACR-1.3/SEACR_1.3.sh" \
 		${bedgraph} \
 		~{if defined(control_bedgraph) then control_bedgraph else top_peak_fraction} \
-		${Normalization} \
+		"${Normalization}" \
+		"${RunMode}" \
 		"${sample_out_dir}/${sampleName}"
 	}
 	output {
