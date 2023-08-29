@@ -9,7 +9,7 @@ task sam_to_bam {
 		samtools view -h -b ${sam} > "${sample_name}.bam"
 	}
 	output {
-		String bam = "${sample_name}.bam"
+		File bam = "${sample_name}.bam"
 	}
 	runtime {
 		docker: "faryabilab/samtools:0.1.0"
@@ -28,7 +28,7 @@ task remove_scaffolds {
 		samtools view -h -L ${chrom_no_scaff} ${bam} | samtools sort - -o "${sample_name}.noScaffold.bam"
 	}
 	output {
-		String bam_noScaffold = "${sample_name}.noScaffold.bam"
+		File bam_noScaffold = "${sample_name}.noScaffold.bam"
 	}
 	runtime {
 		docker: "faryabilab/samtools:0.1.0"
@@ -57,7 +57,7 @@ task remove_duplicates {
 		VALIDATION_STRINGENCY=${PicardValidationStringency}
         }
         output {
- 		String bam_noDuplicate = "${sample_name}.noDuplicate.bam"
+ 		File bam_noDuplicate = "${sample_name}.noDuplicate.bam"
         }
         runtime {
 		# Picard docker image w/ samtools base
@@ -86,7 +86,7 @@ task remove_blacklist {
 		fi
         }
         output {
-		String bam_noBlacklist = "${sample_name}.noBlacklist.bam"
+		File bam_noBlacklist = "${sample_name}.noBlacklist.bam"
         }
         runtime {
                 docker: "faryabilab/bedtools:0.1.0"
@@ -103,7 +103,7 @@ task sort_bam {
 		samtools sort ${bam} -o "${sample_name}.sorted.bam"
         }
         output {
-		String bam_sorted = "${sample_name}.sorted.bam"
+		File bam_sorted = "${sample_name}.sorted.bam"
         }
         runtime {
                 docker: "faryabilab/samtools:0.1.0"
@@ -121,7 +121,7 @@ task index_bam {
 		samtools index -b ${bam} "${sample_name}_index.bai"
 	}
 	output {
-		String bam_index = "${sample_name}_index.bai"
+		File bam_index = "${sample_name}_index.bai"
 	}
 	runtime {
 		docker: "faryabilab/samtools:0.1.0"
