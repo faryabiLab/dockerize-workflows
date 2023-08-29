@@ -5,8 +5,8 @@ task bowtie2 {
 		#### REQUIRED
 		String sampleName
 		String sample_out_dir
-		String fastq1_trimmed
-		String fastq2_trimmed
+		String? fastq1_trimmed
+		String? fastq2_trimmed
 		String BowtieIndex
 		####
 		

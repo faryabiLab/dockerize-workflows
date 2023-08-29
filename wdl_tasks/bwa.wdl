@@ -9,7 +9,7 @@ task BWA {
 		String? fastq1_trimmed
 		String? fastq2_trimmed
 		String? fastq_trimmed_single
-		String BWAIndex
+		String? BWAIndex
 		####
 
 		Int? subsequence_seed = 32
