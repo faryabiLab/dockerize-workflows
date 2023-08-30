@@ -27,7 +27,7 @@ First, navigate to the workflow you want to use, located the in `./workflows` di
 * `ChromNoScaffold` - BED-style file with enire chromosome intervals to keep in the resulting BAM.
 * `ChromosomeSizes` - BEDtools-style chromosome sizes fille.
 * `Blacklist` - A BED-style file containing regions to be removed from the resulting BAM, typically known problematic regions.
-Once the configuration is complete, one can run a workflow as such: \
+Once the configuration is complete, one can run a workflow as such: 
 ```
 java -Dconfig.file=/path/to/cromwell_config -jar /path/to/cromwell.jar run batch_workflow.wdl -i workflow_input.json
 ``` 
