@@ -1,7 +1,6 @@
 version 1.0
 
 import "../../wdl_tasks/trim_galore.wdl" as trimTasks
-import "../../wdl_tasks/bowtie2.wdl" as bowtieTasks
 import "../../wdl_tasks/bwa.wdl" as bwaTasks
 import "../../wdl_tasks/filter_steps.wdl" as filterTasks
 import "../../wdl_tasks/feature_count.wdl" as quantTasks
@@ -16,8 +15,7 @@ workflow cut_and_run {
 		String sampleName
 		Boolean paired
 		String Aligner 
-		String? BWAIndex
-		String? BowtieIndex
+		String BWAIndex
 		String PeakCaller
 		String? PeakCallingControl
 		Float? TopPeakFraction
@@ -34,27 +32,24 @@ workflow cut_and_run {
 			sampleName=sampleName,
 			paired=paired
 	}	
-	if ("${Aligner}" == "bwa") {
-		call bwaTasks.BWA {
-			input:
-				paired=paired,
-				sampleName=sampleName,
-				sample_out_dir=sample_out_dir,
-				fastq1_trimmed=fastqc_trim.out_fqc1,
-				fastq2_trimmed=fastqc_trim.out_fqc2,
-				fastq_trimmed_single=fastqc_trim.out_fqc,
-				BWAIndex=BWAIndex
-		}
-		call filterTasks.sam_to_bam {
-			input:
-				sam=BWA.rawSam,
-				sample_name="${sample_out_dir}"+"/"+"${sampleName}"+".raw"
-		}
+	call bwaTasks.BWA {
+		input:
+			paired=paired,
+			sampleName=sampleName,
+			sample_out_dir=sample_out_dir,
+			fastq1_trimmed=fastqc_trim.out_fqc1,
+			fastq2_trimmed=fastqc_trim.out_fqc2,
+			fastq_trimmed_single=fastqc_trim.out_fqc,
+			BWAIndex=BWAIndex
+	}
+	call filterTasks.sam_to_bam {
+		input:
+			sam=BWA.rawSam,
+			sample_name="${sample_out_dir}"+"/"+"${sampleName}"+".raw"
 	}
 	call filterTasks.remove_scaffolds {
 		input:
 			bam=sam_to_bam.bam,
-			bam2=bowtie2.bam,
 			chrom_no_scaff=ChromNoScaffold,
 			sample_name=sampleName
 	}
