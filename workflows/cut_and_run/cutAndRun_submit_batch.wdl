@@ -20,11 +20,12 @@ workflow batch_workflow {
 		String? BowtieIndex
 		String PeakCaller
 		String? PeakCallingControl
+		Float? TopPeakFraction
 		String ChromNoScaffold
 		String Blacklist
 		String ChromosomeSizes
-		Int? BamSizeFilterUpperThreshold = 120
-		Int? BamSizeFilterLowerThreshold = 150
+		Int? BamSizeFilterUpperThreshold
+		Int? BamSizeFilterLowerThreshold
 	}
 
 	Array[Array[String]] samples = read_tsv(sampleList)
@@ -41,6 +42,7 @@ workflow batch_workflow {
 				BowtieIndex=BowtieIndex,
 				PeakCaller=PeakCaller,
 				PeakCallingControl=PeakCallingControl,
+				TopPeakFraction=TopPeakFraction,
 				ChromNoScaffold=ChromNoScaffold,
 				Blacklist=Blacklist,
 				ChromosomeSizes=ChromosomeSizes,
