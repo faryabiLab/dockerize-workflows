@@ -6,7 +6,7 @@ version 1.0
 
 task read_count {
 	input {
-		String bam
+		String? bam
 	}	
 	command {
 		samtools view -c ${bam}
@@ -36,7 +36,7 @@ task calculate_factor {
 
 task bam_to_bedgraph {
 	input {
-		String bam
+		String? bam
 		String chromosome_sizes
 		Float factor
 		String sample_name
@@ -63,6 +63,7 @@ task bedgraph_to_bigwig {
         }
         command {
 		bedGraphToBigWig ${bedgraph} ${chromosome_sizes} "${sample_name}.bw"
+		rm ${bedgraph}
         }
         output {
                 File bw = "${sample_name}.bw"
@@ -74,10 +75,12 @@ task bedgraph_to_bigwig {
 
 workflow makeBigWig {
 	input {
-		String bam
+		String? bam
 		String chromosome_sizes
 		String sampleName
 	}
+
+
 	call read_count {
 		input:
 			bam=bam
@@ -89,14 +92,18 @@ workflow makeBigWig {
 	call bam_to_bedgraph {
 		input:
 			bam=bam,
-			chromsome_sizes=chromosome_sizes,
+			chromosome_sizes=chromosome_sizes,
 			factor=calculate_factor.factor,
 			sample_name=sampleName
 	}
 	call bedgraph_to_bigwig {
 		input:
 			bedgraph=bam_to_bedgraph.bedgraph,
-			chromosoe_sizes=chromosome_sizes,
+			chromosome_sizes=chromosome_sizes,
 			sample_name=sampleName
 	}
+	output {
+		File bw = bedgraph_to_bigwig.bw
+	}
+
 }
