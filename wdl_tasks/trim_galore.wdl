@@ -45,9 +45,9 @@ task fastqc_trim {
 
 	}
 	output {
-		File? out_fqc = "${sample_out_dir}/${sampleName}"+"_trimmed.fq.gz"
-		File? out_fqc1 = "${sample_out_dir}/${sampleName}"+"_val_1.fq.gz"
-		File? out_fqc2 = "${sample_out_dir}/${sampleName}"+"_val_2.fq.gz"
+		String? out_fqc = "${sample_out_dir}/${sampleName}"+"_trimmed.fq.gz"
+		String? out_fqc1 = "${sample_out_dir}/${sampleName}"+"_val_1.fq.gz"
+		String? out_fqc2 = "${sample_out_dir}/${sampleName}"+"_val_2.fq.gz"
 	}
 	runtime {
 		docker: "faryabilab/trim_galore:0.10"
