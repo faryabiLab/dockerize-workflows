@@ -42,14 +42,14 @@ task BWA {
 			-l "${subsequence_seed}" \
 			-k "${seed_max_edit_distance}" \
 			"${BWAIndex}" \
-			"${fastq1_trimmed}" > "${sample_out_dir}/"+sampleName+".1.sai"
+			"${fastq1_trimmed}" > "${sample_out_dir}/${sampleName}.1.sai"
 
 			bwa aln \
 			-q "${read_trimming}" \
 			-l "${subsequence_seed}" \
 			-k "${seed_max_edit_distance}" \
 			"${BWAIndex}" \
-			"${fastq2_trimmed}" > "${sample_out_dir}/"+sampleName+".2.sai"
+			"${fastq2_trimmed}" > "${sample_out_dir}/${sampleName}.2.sai"
 
 			bwa sampe \
 			-o "${MaximumReadOccurences}" \
@@ -57,12 +57,12 @@ task BWA {
 			-n "${MaxAlignmentsForXATag}" \
 			-N "${MaxAlignmentsForXATag_DiscordanantPairs}" \
 			-r "@RG\tID:${sampleName}\tSM:${sampleName}" \
-			"${sample_out_dir}/"+sampleName+".1.sai" \
-			"${sample_out_dir}/"+sampleName+".2.sai" \
+			"${sample_out_dir}/${sampleName}.1.sai" \
+			"${sample_out_dir}/${sampleName}.2.sai" \
 			"${fastq1_trimmed}" "${fastq2_trimmed}" \
-			> "${sample_out_dir}/"+"${sampleName}.raw.sam"
+			> "${sample_out_dir}/${sampleName}.raw.sam"
 
-			rm "${sample_out_dir}/"+sampleName+".1.sai" "${sample_out_dir}/"+sampleName+".2.sai"
+			rm "${sample_out_dir}/${sampleName}.1.sai" "${sample_out_dir}/${sampleName}.2.sai"
 		else
 			bwa mem \
 			-t ${cpu} \
@@ -84,7 +84,7 @@ task BWA {
 			
 	}
 	output {
-		String rawSam = "${sample_out_dir}/"+"${sampleName}.raw.sam"
+		String rawSam = "${sample_out_dir}/${sampleName}.raw.sam"
 	}
 	runtime {
 		docker: 'faryabilab/bwa:0.1.0'
