@@ -19,13 +19,18 @@ task sam_to_bam {
 task remove_scaffolds {
 	input {
 		#### REQUIRED
-		String bam
+		String? bam
+		String? bam2
 		String chrom_no_scaff
 		String sample_name
 		####
 	}
 	command {
-		samtools view -h -L ${chrom_no_scaff} ${bam} | samtools sort - -o "${sample_name}.noScaffold.bam"
+		if [ ! -z "${bam}" ]; then 
+			samtools view -h -L ${chrom_no_scaff} ${bam} | samtools sort - -o "${sample_name}.noScaffold.bam"
+		else
+			samtools view -h -L ${chrom_no_scaff} ${bam2} | samtools sort - -o "${sample_name}.noScaffold.bam"
+		fi
 	}
 	output {
 		File bam_noScaffold = "${sample_name}.noScaffold.bam"
@@ -71,19 +76,11 @@ task remove_blacklist {
 		String bam
 		String? bam2
 		String blacklist
-		String sample_name
-		Boolean? aligner
+		String sample_name	
 		####
         }
         command {
-		if [ "${aligner}" == "bowtie2" ]; then
-			bedtools intersect -abam ${bam} -b ${blacklist} -v > "${sample_name}.noBlacklist.bam"
-		elif [ "${aligner}" == "bwa" ]; then
-			bedtools intersect -abam ${bam2} -b ${blacklist} -v > "${sample_name}.noBlacklist.bam"
-			
-		else
-			bedtools intersect -abam ${bam} -b ${blacklist} -v > "${sample_name}.noBlacklist.bam"
-		fi
+		bedtools intersect -abam ${bam} -b ${blacklist} -v > "${sample_name}.noBlacklist.bam"	
         }
         output {
 		File bam_noBlacklist = "${sample_name}.noBlacklist.bam"
@@ -133,13 +130,13 @@ task size_filter_bam {
 		String bam
 		String sample_name
 		
-		Int? threshold_low = 120
-		Int? threshold_hi = 150
+		Int? threshold_low
+		Int? threshold_hi
 	}
 	command {
 		if [ ! -z "${threshold_low}" ] && [ ! -z "${threshold_hi}" ]; then
 			samtools view \
-			-e 'length(seq)<=${threshold_hi}' 
+			-e 'length(seq)<=${threshold_hi}' \
 			-O BAM \
 			-o "${sample_name}.hiThreshold_LessThan${threshold_hi}bp.bam" \
 			${bam}
@@ -165,8 +162,8 @@ task size_filter_bam {
 		fi
 	}
 	output {
-		File? low = "${sample_name}.lowThreshold_${threshold_low}bp.bam"
-		File? hi = "${sample_name}.hiThreshold_${threshold_hi}bp.bam"
+		File? low = "${sample_name}.lowThreshold_GreaterThan${threshold_low}bp.bam"
+		File? hi = "${sample_name}.hiThreshold_LessThan${threshold_hi}bp.bam"
 	}
 	runtime {
 		docker: 'faryabilab/samtools:0.1.0'
