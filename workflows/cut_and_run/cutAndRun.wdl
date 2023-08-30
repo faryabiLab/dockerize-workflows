@@ -53,7 +53,6 @@ workflow cut_and_run {
 	call filterTasks.remove_scaffolds {
 		input:
 			bam=sam_to_bam.bam,
-			bam2=bowtie2.bam,
 			chrom_no_scaff=ChromNoScaffold,
 			sample_name=sampleName
 	}
