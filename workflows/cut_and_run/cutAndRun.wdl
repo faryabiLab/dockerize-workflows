@@ -17,7 +17,6 @@ workflow cut_and_run {
 		Boolean paired
 		String Aligner 
 		String? BWAIndex
-		String? BowtieIndex
 		String PeakCaller
 		String? PeakCallingControl
 		Float? TopPeakFraction
