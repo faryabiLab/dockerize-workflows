@@ -16,7 +16,7 @@ workflow batch_workflow {
 		String project_out_dir
 		Boolean paired
 		String Aligner 
-		String? BWAIndex
+		String BWAIndex
 		String PeakCaller
 		String? PeakCallingControl
 		Float? TopPeakFraction
@@ -38,7 +38,6 @@ workflow batch_workflow {
 				paired=paired,
 				Aligner=Aligner,
 				BWAIndex=BWAIndex,
-				BowtieIndex=BowtieIndex,
 				PeakCaller=PeakCaller,
 				PeakCallingControl=PeakCallingControl,
 				TopPeakFraction=TopPeakFraction,
