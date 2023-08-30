@@ -4,7 +4,7 @@ Genomic data processing pipelines written in WDL making use of Docker containers
 ## Setup
 #### Dependencies
 Ensure that the latest `cromwell` engine is installed from their [GitHub repository](https://github.com/broadinstitute/cromwell). \
-Have [Docker](https://www.docker.com/products/personal/) installed on your machine. \
+Have [Docker](https://www.docker.com/products/personal/) installed on your machine.
 #### Workflows
 `git clone` this repository to your local machine. **Be aware** that workflows use relative imports for tasks and sample-level workflows that are dependent on the directory structure of this repository. If you choose to move there workflow and/or task files to another location, please make sure to change the imports within the workflow source files directly, if needed.
 #### Sample Sheet
