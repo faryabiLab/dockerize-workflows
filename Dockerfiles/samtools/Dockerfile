@@ -9,7 +9,7 @@ WORKDIR /tmp
 
 # Setup packages
 RUN apt-get update && apt-get -y install wget make bzip2 autoconf automake gcc perl zlib1g-dev libbz2-dev liblzma-dev libcurl4-gnutls-dev libssl-dev libncurses5-dev
-RUN wget https://github.com/samtools/samtools/releases/download/1.3.1/samtools-1.3.1.tar.bz2 -O samtools.tar.bz2
+RUN wget https://github.com/samtools/samtools/releases/download/1.18/samtools-1.18.tar.bz2 -O samtools.tar.bz2
 RUN tar -xjvf samtools.tar.bz2
-RUN cd samtools-1.3.1 && make && make prefix=/usr/local/bin install
+RUN cd samtools-1.18 && make && make prefix=/usr/local/bin install
 RUN ln -s /usr/local/bin/bin/samtools /usr/bin/samtools
