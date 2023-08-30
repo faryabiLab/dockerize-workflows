@@ -5,7 +5,7 @@ task macs2 {
 		#### REQUIRED
 		String sampleName
 		String sample_out_dir
-		String bam
+		String? bam
 		String? control_bam		
 		####		
 
@@ -88,7 +88,7 @@ task SEACR {
 
 	}
 	command {
-		bash "SEACR-1.3/SEACR_1.3.sh" \
+		bash "/tmp/SEACR-1.3/SEACR_1.3.sh" \
 		${bedgraph} \
 		~{if defined(control_bedgraph) then control_bedgraph else top_peak_fraction} \
 		"${Normalization}" \
@@ -99,13 +99,13 @@ task SEACR {
 		File seacr_out = "${sample_out_dir}.${RunMode}.bed"
 	}
 	runtime {
-		docker: 'faryabiLab/seacr:0.1.0'
+		docker: 'faryabilab/seacr:0.1.1'
 	}
 }
 
 task bamToBedgraph {
 	input {
-		String bam
+		String? bam
 		String sampleName
 	}
 	command {
