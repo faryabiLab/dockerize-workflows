@@ -17,7 +17,6 @@ workflow batch_workflow {
 		Boolean paired
 		String Aligner 
 		String? BWAIndex
-		String? BowtieIndex
 		String PeakCaller
 		String? PeakCallingControl
 		Float? TopPeakFraction
