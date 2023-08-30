@@ -12,6 +12,10 @@ First, navigate to the workflow you want to use, located the in `./workflows` di
 * `project_out_dir` - Main output directory, where by-sample directories will be created for by-cample output files.
 * `fastq_dir` - Path to one directiry with **all** Fastq files to be processed.
 * `sampleList` - Samplesheet with one column of sample names. Can be created with utility script `utils/make_samplesheet.sh`.
+* `paired` - Boolean, `true` for paired-end experiemnts, `false` otherwise.
+* `ChromNoScaffold` - BED-style file with enire chromosome intervals to keep in the resulting BAM.
+* `ChromosomeSizes` - BEDtools-style chromosome sizes fille.
+* `Blacklist` - A BED-style file containing regions to be removed from the resulting BAM, typically known problematic regions.
 
 Once the `inputs.json` file has been properly configured, the workflow can be run as such:
 ```
