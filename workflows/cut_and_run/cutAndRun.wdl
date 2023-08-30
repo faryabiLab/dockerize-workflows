@@ -33,17 +33,7 @@ workflow cut_and_run {
 			sample_out_dir=sample_out_dir,
 			sampleName=sampleName,
 			paired=paired
-	}
-	if ("${Aligner}" == "bowtie2") {
-		call bowtieTasks.bowtie2 {
-			input:
-				sampleName=sampleName,
-				sample_out_dir=sample_out_dir,
-				fastq1_trimmed=fastqc_trim.out_fqc1,
-				fastq2_trimmed=fastqc_trim.out_fqc2,
-				BowtieIndex=BowtieIndex
-		}	
-	}
+	}	
 	if ("${Aligner}" == "bwa") {
 		call bwaTasks.BWA {
 			input:
