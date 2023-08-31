@@ -32,8 +32,6 @@ task BWA {
 		Int? ClippingPenality = 5
 		Int? ScoreCutoff = 30
 		String? HardClipping	
-
-		Int? cpu = 8
 	}
 	command {
 		if [[ "${paired}" == "true" ]]; then 
@@ -65,7 +63,6 @@ task BWA {
 			rm "${sample_out_dir}/${sampleName}.1.sai" "${sample_out_dir}/${sampleName}.2.sai"
 		else
 			bwa mem \
-			-t ${cpu} \
 			-k ${MinSeedLength} \
 			-w ${Bandwidth} \
 			-d ${ZDropoff} \
