@@ -9,7 +9,7 @@ task BWA {
 		String? fastq1_trimmed
 		String? fastq2_trimmed
 		String? fastq_trimmed_single
-		String? BWAIndex
+		String BWAIndex
 		####
 
 		Int? subsequence_seed = 32
@@ -32,8 +32,6 @@ task BWA {
 		Int? ClippingPenality = 5
 		Int? ScoreCutoff = 30
 		String? HardClipping	
-
-		Int? cpu = 8
 	}
 	command {
 		if [[ "${paired}" == "true" ]]; then 
