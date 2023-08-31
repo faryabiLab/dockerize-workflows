@@ -40,7 +40,7 @@ task BWA {
 			-l "${subsequence_seed}" \
 			-k "${seed_max_edit_distance}" \
 			"${BWAIndex}" \
-			"${fastq1_trimmed}" > "${sample_out_dir}/${sampleName}.1.sai"
+			"${fastq1_trimmed}" > "${sample_out_dir}/${sampleName}.1.sai" &
 
 			bwa aln \
 			-q "${read_trimming}" \
