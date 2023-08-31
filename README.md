@@ -12,7 +12,9 @@ Each run of a workflow must be accompanied by a `samplesheet.tsv` - a single-col
 **A note on fastq naming** - Ensure that your paired-end `fastq` files follow the naming convention `XYZ_R1.fastq.gz`, where `XYZ` represents this file's sample name. Single-end `fastq`s must be named as `XYZ.fastq.gz`.
 To make a sample sheet, simply run `make_samplesheet.sh` found in `utils/`: 
 * Paired-end: `./make_samplesheet.sh -p -d /path/to/fastq_dir`
-* Single-end: `./make_samplesheet.sh -d /path/to/fastq_dir`
+* Single-end: `./make_samplesheet.sh -d /path/to/fastq_dir` \
+
+This will create a `samplesheet.tsv` in your current working directory.
 ## Cromwell Configuration
 Within the `cromwell_configs` directory is a Cromwell config file which instructs the engine to use Docker as backend. Here, you can tweak the limit on the number of running jobs, cores, and memory per core. These variables are:
 * `concurrent-job-limit` - Default = 10, most amount of jobs that can be run at once.
