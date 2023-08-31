@@ -52,6 +52,8 @@ task fastqc_trim {
 	}
 	runtime {
 		docker: "faryabilab/trim_galore:0.10"
+		cpu: 8
+		memory: 8
 	}
 
 }
