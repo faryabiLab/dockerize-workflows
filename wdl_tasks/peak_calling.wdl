@@ -99,7 +99,7 @@ task SEACR {
 		File seacr_out = "${sample_out_dir}.${RunMode}.bed"
 	}
 	runtime {
-		docker: 'faryabilab/seacr:0.1.1'
+		docker: 'faryabilab/seacr:0.1.0'
 	}
 }
 
