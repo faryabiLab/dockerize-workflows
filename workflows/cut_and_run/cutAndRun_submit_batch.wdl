@@ -23,6 +23,7 @@ workflow batch_workflow {
 		String ChromNoScaffold
 		String Blacklist
 		String ChromosomeSizes
+		String? FastqSuffix
 		Int? BamSizeFilterUpperThreshold
 		Int? BamSizeFilterLowerThreshold
 	}

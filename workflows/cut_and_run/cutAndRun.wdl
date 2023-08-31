@@ -22,6 +22,7 @@ workflow cut_and_run {
 		String ChromNoScaffold
 		String Blacklist
 		String ChromosomeSizes
+		String? FastqSuffix
 		Int? size_low
 		Int? size_high
 	}
@@ -30,6 +31,7 @@ workflow cut_and_run {
 			fastq_dir=fastq_dir,
 			sample_out_dir=sample_out_dir,
 			sampleName=sampleName,
+			fastq_suffix=FastqSuffix,
 			paired=paired
 	}	
 	call bwaTasks.BWA {

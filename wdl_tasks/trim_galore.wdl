@@ -6,6 +6,7 @@ task fastqc_trim {
 		String fastq_dir
 		String sample_out_dir
 		String sampleName
+		String? fastq_suffix
 		Boolean paired
 		####
 
@@ -27,8 +28,8 @@ task fastqc_trim {
 			--basename ${sampleName} \
 			--length ${length} \
 			-o ${sample_out_dir} \
-			"${fastq_dir}/${sampleName}_R1.fastq.gz" \
-			"${fastq_dir}/${sampleName}_R2.fastq.gz"
+			"${fastq_dir}/${sampleName}_R1${fastq_suffix}.fastq.gz" \
+			"${fastq_dir}/${sampleName}_R2${fastq_suffix}.fastq.gz"
 		else
 			trim_galore \
 			-q ${quality} \
