@@ -35,35 +35,25 @@ task BWA {
 	}
 	command {
 		if [[ "${paired}" == "true" ]]; then 
-			bwa aln \
-			-q "${read_trimming}" \
-			-l "${subsequence_seed}" \
-			-k "${seed_max_edit_distance}" \
-			"${BWAIndex}" \
-			"${fastq1_trimmed}" > "${sample_out_dir}/${sampleName}.1.sai" &
+                        bwa mem \
+                        -k ${MinSeedLength} \
+                        -w ${Bandwidth} \
+                        -d ${ZDropoff} \
+                        -r ${TriggerReSeed} \
+                        -A ${MatchingScore} \
+                        -B ${MismatchPenalty} \
+                        -O ${GapOpenPenalty} \
+                        -E ${GapExtensionPenalty} \
+                        -L ${ClippingPenality} \
+                        -R "@RG\tID:${sampleName}\tSM:${sampleName}" \
+                        -T ${ScoreCutoff} \
+                        "${BWAIndex}" \
+                        "${fastq1_trimmed}" "${fastq2_trimmed}" \
+                        > "${sample_out_dir}/${sampleName}.raw.sam"
 
-			bwa aln \
-			-q "${read_trimming}" \
-			-l "${subsequence_seed}" \
-			-k "${seed_max_edit_distance}" \
-			"${BWAIndex}" \
-			"${fastq2_trimmed}" > "${sample_out_dir}/${sampleName}.2.sai"
-
-			bwa sampe \
-			-o "${MaximumReadOccurences}" \
-			-a "${MaximumInsertSize}" \
-			-n "${MaxAlignmentsForXATag}" \
-			-N "${MaxAlignmentsForXATag_DiscordanantPairs}" \
-			-r "@RG\tID:${sampleName}\tSM:${sampleName}" \
-			"${sample_out_dir}/${sampleName}.1.sai" \
-			"${sample_out_dir}/${sampleName}.2.sai" \
-			"${fastq1_trimmed}" "${fastq2_trimmed}" \
-			> "${sample_out_dir}/${sampleName}.raw.sam"
-
-			rm "${sample_out_dir}/${sampleName}.1.sai" "${sample_out_dir}/${sampleName}.2.sai"
+			
 		else
 			bwa mem \
-			-t ${cpu} \
 			-k ${MinSeedLength} \
 			-w ${Bandwidth} \
 			-d ${ZDropoff} \
@@ -86,5 +76,7 @@ task BWA {
 	}
 	runtime {
 		docker: 'faryabilab/bwa:0.1.0'
+		cpu: 10
+		memory: 10
 	}
 }
