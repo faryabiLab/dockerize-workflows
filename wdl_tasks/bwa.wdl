@@ -1,5 +1,4 @@
 version 1.0
-
 task BWA {
 	input {
 		#### REQUIRED
@@ -9,7 +8,7 @@ task BWA {
 		String? fastq1_trimmed
 		String? fastq2_trimmed
 		String? fastq_trimmed_single
-		String? BWAIndex
+		String BWAIndex
 		####
 
 		Int? subsequence_seed = 32
@@ -35,21 +34,23 @@ task BWA {
 	}
 	command {
 		if [[ "${paired}" == "true" ]]; then 
-                        bwa mem \
-                        -k ${MinSeedLength} \
-                        -w ${Bandwidth} \
-                        -d ${ZDropoff} \
-                        -r ${TriggerReSeed} \
-                        -A ${MatchingScore} \
-                        -B ${MismatchPenalty} \
-                        -O ${GapOpenPenalty} \
-                        -E ${GapExtensionPenalty} \
-                        -L ${ClippingPenality} \
-                        -R "@RG\tID:${sampleName}\tSM:${sampleName}" \
-                        -T ${ScoreCutoff} \
-                        "${BWAIndex}" \
-                        "${fastq1_trimmed}" "${fastq2_trimmed}" \
-                        > "${sample_out_dir}/${sampleName}.raw.sam"	
+			bwa mem \
+			-k ${MinSeedLength} \
+			-w ${Bandwidth} \
+			-d ${ZDropoff} \
+			-r ${TriggerReSeed} \
+			-A ${MatchingScore} \
+			-B ${MismatchPenalty} \
+			-O ${GapOpenPenalty} \
+			-E ${GapExtensionPenalty} \
+			-L ${ClippingPenality} \
+			-R "@RG\tID:${sampleName}\tSM:${sampleName}" \
+			-T ${ScoreCutoff} \
+			"${BWAIndex}" \
+			"${fastq1_trimmed}" "${fastq2_trimmed}" \
+			> "${sample_out_dir}/${sampleName}.raw.sam"	
+
+
 		else
 			bwa mem \
 			-k ${MinSeedLength} \
@@ -66,6 +67,7 @@ task BWA {
 			"${BWAIndex}" \
 			"${fastq_trimmed_single}" \
 			> "${sample_out_dir}/${sampleName}.raw.sam"
+
 		fi
 			
 	}
@@ -74,5 +76,7 @@ task BWA {
 	}
 	runtime {
 		docker: 'faryabilab/bwa:0.1.0'
+		cpu: 10
+		memory: 10
 	}
 }
