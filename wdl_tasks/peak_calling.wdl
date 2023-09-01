@@ -33,6 +33,9 @@ task macs2 {
 		String? BroadPeaks
 		String? CutoffAnalysis
 		String? CallSummits
+		
+		Int cpu = 12
+		Int mem = 25
 	}
 	command {
 		macs2 callpeak \
@@ -71,6 +74,8 @@ task macs2 {
 	}
 	runtime {
 		docker: 'faryabilab/macs2:0.1.0'
+		cpu: ${cpu}
+		memory: ${mem}
 	}	
 }
 
@@ -86,6 +91,9 @@ task SEACR {
 		String Normalization = "norm"
 		String RunMode = "stringent"
 
+		Int cpu = 12
+		Int mem = 25
+
 	}
 	command {
 		bash "/tmp/SEACR-1.3/SEACR_1.3.sh" \
@@ -100,6 +108,8 @@ task SEACR {
 	}
 	runtime {
 		docker: 'faryabilab/seacr:0.1.0'
+		cpu: ${cpu}
+		memory: ${mem}
 	}
 }
 
@@ -107,6 +117,9 @@ task bamToBedgraph {
 	input {
 		String? bam
 		String sampleName
+
+		Int cpu = 12
+		Int mem = 25
 	}
 	command {
 		bedtools genomecov \
@@ -119,5 +132,7 @@ task bamToBedgraph {
 	}
 	runtime {
 		docker: "faryabilab/bedtools:0.1.0"
+		cpu: ${cpu}
+		memory: ${mem}
 	}
 }

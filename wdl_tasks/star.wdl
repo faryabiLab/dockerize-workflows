@@ -21,10 +21,14 @@ task STAR {
 		Int chimSegmentMin = 25
 		Int chimJunctionOverhangMin = 25
 		String outSAMtype = "BAM Unsorted"
+
+		Int cpu = 16
+		Int mem = 50
 	}
 	command {
 		if [[ "~{paired}" == "true" ]]; then
 			STAR \
+			--runThreadN ${cpu} \
 			--genomeDir ${star_index} \
 			--readFilesIn ${fastq1_trimmed} ${fastq2_trimmed} \
 			--outFileNamePrefix ${sample_name} \
@@ -39,6 +43,7 @@ task STAR {
 			--outSAMtype ${outSAMtype}
 		else
 			STAR \
+			--runThreadN ${cpu} \
 			--genomeDir ${star_index} \
 			--readFilesIn ${fastq_trimmed_single} \
 			--outFileNamePrefix ${sample_name} \
@@ -56,5 +61,7 @@ task STAR {
 	output {File bam = "${sample_name}Aligned.out.bam"}
 	runtime {
 		docker: 'faryabilab/star:0.10'
+		cpu: ${cpu}
+		memory: ${mem}
 	}
 }
