@@ -11,9 +11,12 @@ task count_reads_single {
 		String AttributeType = "exon"
 		String GTFAttributeType = "gene_id"
 		String Stranded = "1"
+
+		Int cpu = 8
 	}
 	command {
-		featureCounts \	
+		featureCounts \
+			-T ${cpu} \
 			-t ${AttributeType} \
 			-g ${GTFAttributeType} \
 			-s ${Stranded} \
@@ -26,6 +29,8 @@ task count_reads_single {
 	}
 	runtime {
 		docker: "faryabilab/subread:0.1.0"
+		cpu: ${cpu}
+		memory: 8
 	}
 }
 
@@ -40,9 +45,12 @@ task count_reads_paired {
 		String AttributeType = "exon"
 		String GTFAttributeType = "gene_id"
 		String Stranded = "1"
+
+		Int cpu = 8
         }
         command {
 		featureCounts \
+		-T ${cpu} \
 		-p \
 		-t ${AttributeType} \
 		-g ${GTFAttributeType} \
@@ -56,6 +64,8 @@ task count_reads_paired {
         }
         runtime {
                 docker: "faryabilab/subread:0.1.0"
+		cpu: ${cpu}
+		memory: 8
         }
 }
 
@@ -81,15 +91,3 @@ task quantifyCoverage {
 		docker: "faryabilab/bedtools:0.1.0"
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
