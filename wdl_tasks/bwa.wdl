@@ -81,7 +81,7 @@ task BWA {
 	}
 	runtime {
 		docker: 'faryabilab/bwa:0.1.0'
-		cpu: ${cpu}
-		memory: ${mem}
+		cpu: "${cpu}"
+		#memory: "${mem}"
 	}
 }
