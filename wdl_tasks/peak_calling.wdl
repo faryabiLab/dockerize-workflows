@@ -96,7 +96,7 @@ task SEACR {
 		"${sample_out_dir}/${sampleName}"
 	}
 	output {
-		File seacr_out = "${sample_out_dir}.${RunMode}.bed"
+		File seacr_out = "${sample_out_dir}/${sampleName}.${RunMode}.bed"
 	}
 	runtime {
 		docker: 'faryabilab/seacr:0.1.0'
