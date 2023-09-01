@@ -30,11 +30,15 @@ task BWA {
 		Int? GapExtensionPenalty = 1
 		Int? ClippingPenality = 5
 		Int? ScoreCutoff = 30
-		String? HardClipping	
+		String? HardClipping
+
+		Int cpu = 16
+		Int mem = 16	
 	}
 	command {
 		if [[ "${paired}" == "true" ]]; then 
 			bwa mem \
+			-t ${cpu} \
 			-k ${MinSeedLength} \
 			-w ${Bandwidth} \
 			-d ${ZDropoff} \
@@ -53,6 +57,7 @@ task BWA {
 
 		else
 			bwa mem \
+			-t ${cpu} \
 			-k ${MinSeedLength} \
 			-w ${Bandwidth} \
 			-d ${ZDropoff} \
@@ -76,7 +81,7 @@ task BWA {
 	}
 	runtime {
 		docker: 'faryabilab/bwa:0.1.0'
-		cpu: 10
-		memory: 10
+		cpu: ${cpu}
+		memory: ${mem}
 	}
 }

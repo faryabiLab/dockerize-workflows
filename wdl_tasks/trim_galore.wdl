@@ -14,10 +14,14 @@ task fastqc_trim {
 		Int stringency = 5
 		Float e = 0.1
 		Int length = 20
+
+		Int? cpu = 8
+		Int? mem = 8
 	}
 	command {
 		if [[ "${paired}" == "true" ]]; then
 			trim_galore \
+			-j ${cpu} \
 			-q ${quality} \
 			--paired \
 			--fastqc \
@@ -32,6 +36,7 @@ task fastqc_trim {
 			"${fastq_dir}/${sampleName}_R2${fastq_suffix}.fastq.gz"
 		else
 			trim_galore \
+			-j ${cpu} \
 			-q ${quality} \
 			--fastqc \
 			--phred33 \
@@ -52,8 +57,8 @@ task fastqc_trim {
 	}
 	runtime {
 		docker: "faryabilab/trim_galore:0.10"
-		cpu: 8
-		memory: 10
+		cpu: ${cpu}
+		memory: ${mem}
 	}
 
 }
