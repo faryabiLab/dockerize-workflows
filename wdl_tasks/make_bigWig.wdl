@@ -7,6 +7,9 @@ version 1.0
 task read_count {
 	input {
 		String? bam
+		
+		Int cpu = 1
+		Int mem = 5
 	}	
 	command {
 		samtools view -c ${bam}
@@ -16,12 +19,17 @@ task read_count {
 	}
 	runtime {
 		docker: 'faryabilab/samtools:0.1.0'
+		cpu: "${cpu}"
+		#memory: "${mem}"
 	}
 }
 
 task calculate_factor {
 	input {
 		Int count
+
+		Int cpu = 1
+		Int mem = 5
 	}
 	command {
 		echo "scale=10; 1000000/${count}" | bc -l
@@ -31,6 +39,8 @@ task calculate_factor {
 	}
 	runtime {
 		docker: 'faryabilab/bedtools:0.1.0'
+                cpu: "${cpu}"
+                #memory: "${mem}"
 	}
 }
 
@@ -40,6 +50,9 @@ task bam_to_bedgraph {
 		String chromosome_sizes
 		Float factor
 		String sample_name
+		
+		Int cpu = 8
+		Int mem = 16
 	}
 	command {
 		bamToBed -i "${bam}" -bed12 \
@@ -52,6 +65,8 @@ task bam_to_bedgraph {
 	}
 	runtime {
 		docker: 'faryabilab/bedtools:0.1.0'
+                cpu: "${cpu}"
+                #memory: "${mem}"
 	}
 }
 
@@ -60,6 +75,9 @@ task bedgraph_to_bigwig {
                 String bedgraph
 		String chromosome_sizes
                 String sample_name
+		
+		Int cpu = 12
+		Int mem = 16
         }
         command {
 		bedGraphToBigWig ${bedgraph} ${chromosome_sizes} "${sample_name}.bw"
@@ -70,6 +88,8 @@ task bedgraph_to_bigwig {
         }
         runtime {
                 docker: 'faryabilab/bedtools:0.1.0'
+                cpu: "${cpu}"
+                #memory: "${mem}"
         }
 }
 
@@ -79,8 +99,6 @@ workflow makeBigWig {
 		String chromosome_sizes
 		String sampleName
 	}
-
-
 	call read_count {
 		input:
 			bam=bam
@@ -104,6 +122,6 @@ workflow makeBigWig {
 	}
 	output {
 		File bw = bedgraph_to_bigwig.bw
+      
 	}
-
 }

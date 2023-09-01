@@ -74,8 +74,8 @@ task macs2 {
 	}
 	runtime {
 		docker: 'faryabilab/macs2:0.1.0'
-		cpu: ${cpu}
-		memory: ${mem}
+		cpu: "${cpu}"
+		#memory: "${mem}"
 	}	
 }
 
@@ -108,8 +108,8 @@ task SEACR {
 	}
 	runtime {
 		docker: 'faryabilab/seacr:0.1.0'
-		cpu: ${cpu}
-		memory: ${mem}
+		cpu: "${cpu}"
+		#memory: "${mem}"
 	}
 }
 
@@ -132,7 +132,7 @@ task bamToBedgraph {
 	}
 	runtime {
 		docker: "faryabilab/bedtools:0.1.0"
-		cpu: ${cpu}
-		memory: ${mem}
+		cpu: "${cpu}"
+		#memory: "${mem}"
 	}
 }

@@ -61,7 +61,7 @@ task STAR {
 	output {File bam = "${sample_name}Aligned.out.bam"}
 	runtime {
 		docker: 'faryabilab/star:0.10'
-		cpu: ${cpu}
-		memory: ${mem}
+		cpu: "${cpu}"
+		#memory: "${mem}"
 	}
 }
