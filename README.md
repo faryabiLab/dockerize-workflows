@@ -6,7 +6,7 @@ Genomic data processing pipelines written in WDL making use of Docker containers
 Ensure that the latest `cromwell` engine is installed from their [GitHub repository](https://github.com/broadinstitute/cromwell). \
 Have [Docker](https://www.docker.com/products/personal/) installed on your machine.
 #### Workflows
-`git clone` this repository to your local machine. **Be aware** that workflows use relative imports for tasks and sample-level workflows that are dependent on the directory structure of this repository. If you choose to move there workflow and/or task files to another location, please make sure to change the imports within the workflow source files directly, if needed.
+`git clone` this repository to your local machine. **Be aware** that workflows use relative imports for tasks and sample-level workflows that are dependent on the directory structure of this repository. If you choose to move a workflow and/or task files to another location, please make sure to change the imports within the workflow source files directly, if needed.
 #### Sample Sheet
 Each run of a workflow must be accompanied by a `samplesheet.tsv` - a single-column tab-separated file that specifies the prefixes ('sample names') of each `fastq` file to be processed. \
 **A note on fastq naming** - Ensure that your paired-end `fastq` files follow the naming convention `XYZ_R1.fastq.gz`, where `XYZ` represents this file's sample name. Single-end `fastq`s must be named as `XYZ.fastq.gz`.
