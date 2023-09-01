@@ -9,12 +9,11 @@ task fastqc_trim {
 		String? fastq_suffix
 		Boolean paired
 		####
-
 		Int quality = 15
 		Int stringency = 5
 		Float e = 0.1
 		Int length = 20
-
+		
 		Int? cpu = 8
 		Int? mem = 8
 	}
@@ -48,7 +47,6 @@ task fastqc_trim {
 			-o ${sample_out_dir} \
 			"${fastq_dir}/${sampleName}.fastq.gz"
 		fi
-
 	}
 	output {
 		String? out_fqc = "${sample_out_dir}/${sampleName}"+"_trimmed.fq.gz"
@@ -57,8 +55,7 @@ task fastqc_trim {
 	}
 	runtime {
 		docker: "faryabilab/trim_galore:0.10"
-		cpu: ${cpu}
-		memory: ${mem}
+		cpu: "${cpu}"
+		#memory: "${mem}"
 	}
-
 }

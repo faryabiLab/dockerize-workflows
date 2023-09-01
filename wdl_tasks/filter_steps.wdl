@@ -16,8 +16,8 @@ task sam_to_bam {
 	}
 	runtime {
 		docker: "faryabilab/samtools:0.1.0"
-		cpu: ${cpu}
-		memory: ${mem}
+		cpu: "${cpu}"
+		#memory: "${mem}"
 	}
 }
 
@@ -45,8 +45,8 @@ task remove_scaffolds {
 	}
 	runtime {
 		docker: "faryabilab/samtools:0.1.0"
-		cpu: ${cpu}
-		memory: ${mem}
+		cpu: "${cpu}"
+		#memory: "${mem}"
 	}
 }
 
@@ -60,6 +60,9 @@ task remove_duplicates {
 		String PicardRemoveDuplicates = "true"
 		String PicardValidationStringency = "SILENT"
 		String PicardMetricsFile = "removeDuplicate_metrics.txt"
+
+		Int cpu = 12
+		Int mem = 25
         }
 	String metricsFile = "${sample_name}"+"_"+"${PicardMetricsFile}"
         command {
@@ -77,6 +80,8 @@ task remove_duplicates {
         runtime {
 		# Picard docker image w/ samtools base
                 docker: "faryabilab/picard:0.1.0"
+		cpu: "${cpu}"
+		#memory: "${mem}"
         }
 }
 
@@ -88,6 +93,9 @@ task remove_blacklist {
 		String blacklist
 		String sample_name	
 		####
+
+		Int cpu = 12
+		Int mem = 25
         }
         command {
 		bedtools intersect -abam ${bam} -b ${blacklist} -v > "${sample_name}.noBlacklist.bam"	
@@ -97,6 +105,8 @@ task remove_blacklist {
         }
         runtime {
                 docker: "faryabilab/bedtools:0.1.0"
+		cpu: "${cpu}"
+		memory: "${mem}"
         }
 }
 
@@ -106,7 +116,7 @@ task sort_bam {
 		String sample_name
 
 		Int cpu = 12
-		Int memory = 100
+		Int mem = 100
         }
         command {
 		samtools sort -@ ${cpu} -m "${mem}G" ${bam} -o "${sample_name}.sorted.bam"
@@ -116,8 +126,8 @@ task sort_bam {
         }
         runtime {
                 docker: "faryabilab/samtools:0.1.0"
-		cpu: ${cpu}
-		memory: ${mem}
+		cpu: "${cpu}"
+		#memory: "${mem}"
         }
 }
 
@@ -127,6 +137,7 @@ task index_bam {
 		String sample_name
 		
 		Int cpu = 12
+		Int mem = 25
 	}
 	command {
 		samtools index -@ ${cpu} -b ${bam} "${sample_name}_index.bai"
@@ -136,8 +147,8 @@ task index_bam {
 	}
 	runtime {
 		docker: "faryabilab/samtools:0.1.0"
-		cpu: ${cpu}
-		memory: 8
+		cpu: "{cpu}"
+		#memory: "${mem}"
 	}
 }
 
@@ -150,6 +161,7 @@ task size_filter_bam {
 		Int? threshold_hi
 		
 		Int cpu = 12
+		Int mem = 25
 	}
 	command {
 		if [ ! -z "${threshold_low}" ] && [ ! -z "${threshold_hi}" ]; then
@@ -189,7 +201,7 @@ task size_filter_bam {
 	}
 	runtime {
 		docker: 'faryabilab/samtools:0.1.0'
-		cpu: ${cpu}
-		memory: 8
+		cpu: "${cpu}"
+		#memory: "${mem}"
 	}
 }

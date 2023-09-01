@@ -12,7 +12,8 @@ task count_reads_single {
 		String GTFAttributeType = "gene_id"
 		String Stranded = "1"
 
-		Int cpu = 8
+		Int cpu = 12
+		Int mem = 25
 	}
 	command {
 		featureCounts \
@@ -29,8 +30,8 @@ task count_reads_single {
 	}
 	runtime {
 		docker: "faryabilab/subread:0.1.0"
-		cpu: ${cpu}
-		memory: 8
+		cpu: "${cpu}"
+		#memory: "${mem}"
 	}
 }
 
@@ -46,7 +47,8 @@ task count_reads_paired {
 		String GTFAttributeType = "gene_id"
 		String Stranded = "1"
 
-		Int cpu = 8
+		Int cpu = 12
+		Int mem = 25
         }
         command {
 		featureCounts \
@@ -64,8 +66,8 @@ task count_reads_paired {
         }
         runtime {
                 docker: "faryabilab/subread:0.1.0"
-		cpu: ${cpu}
-		memory: 8
+		cpu: "${cpu}"
+		#memory: "${mem}"
         }
 }
 
@@ -77,6 +79,9 @@ task quantifyCoverage {
 		String chromSizes
 		String sample_name
 		####
+
+		Int cpu = 12
+		Int mem = 25
 	}
 	command {
 		bedtools coverage \
@@ -89,5 +94,7 @@ task quantifyCoverage {
 	}
 	runtime {
 		docker: "faryabilab/bedtools:0.1.0"
+		cpu: "${cpu}"
+		#memory: "${mem}"
 	}
 }
