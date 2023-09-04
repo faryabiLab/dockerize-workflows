@@ -25,6 +25,24 @@ workflow cut_and_run {
 		String? FastqSuffix
 		Int? size_low
 		Int? size_high
+
+		Int? trimgalore_cpu 
+                Int? trimgalore_mem 
+                Int? bwa_cpu
+                Int? bwa_mem
+                Int? sam_to_bam_cpu
+                Int? sam_to_bam_mem
+                Int? rmScaffold_cpu
+                Int? rmScaffold_mem
+                Int? rmBlacklist_cpu
+                Int? rmBlacklist_mem
+                Int? sortbam_cpu
+                Int? sortBam_mem
+                Int? rmDuplicate_cpu
+                Int? rmDuplicate_mem
+                Int? sizeFilter_cpu
+                Int? sizeFilter_mem
+                Int? peakCalling_cpu
 	}
 	call trimTasks.fastqc_trim {
 		input:
@@ -32,7 +50,9 @@ workflow cut_and_run {
 			sample_out_dir=sample_out_dir,
 			sampleName=sampleName,
 			fastq_suffix=FastqSuffix,
-			paired=paired
+			paired=paired,
+			cpu=trimgalore_cpu,
+			mem=trimgalore_mem
 	}	
 	call bwaTasks.BWA {
 		input:
@@ -42,41 +62,55 @@ workflow cut_and_run {
 			fastq1_trimmed=fastqc_trim.out_fqc1,
 			fastq2_trimmed=fastqc_trim.out_fqc2,
 			fastq_trimmed_single=fastqc_trim.out_fqc,
-			BWAIndex=BWAIndex
+			BWAIndex=BWAIndex,
+			cpu = bwa_cpu,
+			mem = bwa_mem
 	}
 	call filterTasks.sam_to_bam {
 		input:
 			sam=BWA.rawSam,
-			sample_name="${sample_out_dir}"+"/"+"${sampleName}"+".raw"
+			sample_name="${sample_out_dir}"+"/"+"${sampleName}"+".raw",
+			cpu=sam_to_bam_cpu,
+			mem=sam_to_bam_cpu
 	}
 	call filterTasks.remove_scaffolds {
 		input:
 			bam=sam_to_bam.bam,
 			chrom_no_scaff=ChromNoScaffold,
-			sample_name=sampleName
+			sample_name=sampleName,
+			cpu=rmScaffold_cpu,
+			mem=rmScaffold_mem
 	}
 	call filterTasks.remove_blacklist {
 		input:
 			bam=remove_scaffolds.bam_noScaffold,
 			blacklist=Blacklist,
-			sample_name="${sample_out_dir}"+"/"+"${sampleName}"
+			sample_name="${sample_out_dir}"+"/"+"${sampleName}",
+			cpu=rmBlacklist_cpu,
+			mem=rmBlacklist_mem
 	}
 	call filterTasks.sort_bam {
 		input:
 			bam=remove_blacklist.bam_noBlacklist,
-			sample_name="${sample_out_dir}"+"/"+"${sampleName}"
+			sample_name="${sample_out_dir}"+"/"+"${sampleName}",
+			cpu=sortbam_cpu,
+			mem=sortBam_mem
 	}
 	call filterTasks.remove_duplicates {
 		input:
 			bam=sort_bam.bam_sorted,
-			sample_name="${sample_out_dir}"+"/"+"${sampleName}"
+			sample_name="${sample_out_dir}"+"/"+"${sampleName}",
+			cpu=rmDuplicate_cpu,
+			mem=rmDuplicate_mem
 	}
 	call filterTasks.size_filter_bam {
 		input:
 			bam=remove_duplicates.bam_noDuplicate,
 			sample_name="${sample_out_dir}"+"/"+"${sampleName}",
 			threshold_low=size_low,
-			threshold_hi=size_high
+			threshold_hi=size_high,
+			cpu=sizeFilter_cpu,
+			mem=sizeFilter_mem
 	}
 	if ("${PeakCaller}" == "macs2") {
 		call pcTasks.macs2 {
@@ -84,7 +118,8 @@ workflow cut_and_run {
 				sampleName=sampleName,
 				sample_out_dir=sample_out_dir,
 				bam=size_filter_bam.hi,
-				control_bam=PeakCallingControl
+				control_bam=PeakCallingControl,
+				cpu=peakCalling_cpu
 		}
 		
 	}
