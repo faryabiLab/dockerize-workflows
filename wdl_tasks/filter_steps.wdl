@@ -166,32 +166,28 @@ task size_filter_bam {
 	command {
 		if [ ! -z "${threshold_low}" ] && [ ! -z "${threshold_hi}" ]; then
 			samtools view \
-			-e 'tlen<=${threshold_hi} || tlen>=-${threshold_hi}' \
+			-e 'tlen <= ${threshold_hi} && tlen >= -${threshold_hi}' \
 			-@ ${cpu} \
-			-e 'length(seq)<=${threshold_hi}' \
 			-O BAM \
 			-o "${sample_name}.hiThreshold_LessThan${threshold_hi}bp.bam" \
 			${bam}
 			samtools view \
-			-e 'tlen>=${threshold_low} || tlen<=-${threshold_low}' \
+			-e 'tlen >= ${threshold_low} && tlen <= -${threshold_low}' \
 			-@ ${cpu} \
-			-e 'length(seq)>${threshold_low}' \
 			-O BAM \
 			-o "${sample_name}.lowThreshold_GreaterThan${threshold_low}bp.bam" \
 			${bam}
 		elif [ ! -z "${threshold_low}" ] && [ -z "${threshold_hi}" ]; then
 			samtools view \
-			-e 'tlen>=${threshold_low} || tlen<=-${threshold_low}' \
+			-e 'tlen >= ${threshold_low} && tlen <= -${threshold_low}' \
 			-@ ${cpu} \
-			-e 'length(seq)>=${threshold_low}' \
 			-O BAM \
 			-o "${sample_name}.lowThreshold_GreaterThan${threshold_low}bp.bam" \
 			${bam}
 		elif [ -z "${threshold_low}" ] && [ ! -z "${threshold_hi}" ]; then
 			samtools view \
-			-e 'tlen<=${threshold_hi} || tlen>=-${threshold_hi}' \
+			-e 'tlen <= ${threshold_hi} && tlen >= -${threshold_hi}' \
 			-@ ${cpu} \
-			-e 'length(seq)<=${threshold_hi}' \
 			-O BAM \
 			-o "${sample_name}.hiThreshold_LessThan${threshold_hi}bp.bam" \
 			${bam}
