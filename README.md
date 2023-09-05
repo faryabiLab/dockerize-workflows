@@ -32,7 +32,8 @@ Once the configuration is complete, one can run a workflow as such:
 java -Dconfig.file=/path/to/cromwell_config -jar /path/to/cromwell.jar run batch_workflow.wdl -i workflow_input.json
 ```
 ## Scalability 
-** better implementation TBI **
+Currently, the pipeline's scalable features are implemented as `cpu` and `mem` input options in `<workflow>_inputs.json`. Each memory/compute-heavy tasks is given its own version of the variable, with `cpu` representing cores and `mem` representing memory in gigabytes. \
+The aforementioned `concurrent-job-limit` variable within the Cromwell config file sets the upper limit on how many samples that can be processed at once.
 
 
 
