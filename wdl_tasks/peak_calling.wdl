@@ -22,6 +22,7 @@ task macs2 {
 		Float BroadCutoff = 0.1			
 		String BufferSize = 100000
 
+		Int? pcBam
 		String? FixBimodal
 		String? NoModel
 		String? SaveFragPileup
@@ -39,7 +40,7 @@ task macs2 {
 	}
 	command {
 		macs2 callpeak \
-		-t ${bam} \
+		-t  ${bam} \
 		~{if defined(Pvalue) then "-p "+ Pvalue else ""} \
 		~{if defined(Qvalue) then "-q "+ Qvalue else ""} \
 		~{if defined(control_bam) then "-c "+ control_bam else ""} \
