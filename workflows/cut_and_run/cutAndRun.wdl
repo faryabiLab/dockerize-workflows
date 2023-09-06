@@ -89,9 +89,16 @@ workflow cut_and_run {
 			cpu=rmBlacklist_cpu,
 			mem=rmBlacklist_mem
 	}
-	call filterTasks.sort_bam {
+	call filterTasks.filter_discordant_pairs {
 		input:
 			bam=remove_blacklist.bam_noBlacklist,
+			sample_name="${sample_out_dir}"+"/"+"${sampleName}",
+			cpu = rmBlacklist_cpu,
+			mem = rmBlacklist_mem
+	}
+	call filterTasks.sort_bam {
+		input:
+			bam=filter_discordant_pairs.bam_pairedReads,
 			sample_name="${sample_out_dir}"+"/"+"${sampleName}",
 			cpu=sortbam_cpu,
 			mem=sortBam_mem
@@ -113,11 +120,27 @@ workflow cut_and_run {
 			mem=sizeFilter_mem
 	}
 	if ("${PeakCaller}" == "macs2") {
-		call pcTasks.macs2 {
+		call pcTasks.macs2 as allReadsPeak {
+			input:
+				sampleName=sampleName,
+				sample_out_dir=sample_out_dir,
+				bam=remove_duplicates.bam_noDuplicate,
+				control_bam=PeakCallingControl,
+				cpu=peakCalling_cpu
+		}
+		call pcTasks.macs2 as lowReadsPeak {
 			input:
 				sampleName=sampleName,
 				sample_out_dir=sample_out_dir,
 				bam=size_filter_bam.hi,
+				control_bam=PeakCallingControl,
+				cpu=peakCalling_cpu
+		}
+		call pcTasks.macs2 as highReadsPeak {
+			input:
+				sampleName=sampleName,
+				sample_out_dir=sample_out_dir,
+				bam=size_filter_bam.low,
 				control_bam=PeakCallingControl,
 				cpu=peakCalling_cpu
 		}
@@ -126,8 +149,8 @@ workflow cut_and_run {
 	if ("${PeakCaller}" == "seacr") {
 		call pcTasks.bamToBedgraph {
 			input:
-				bam=size_filter_bam.hi,
-				sampleName="${sample_out_dir}"+"/"+"${sampleName}"
+				bam=remove_duplicates.bam_noDuplicate,
+				sampleName="${sample_out_dir}/${sampleName}"
 		}
 		call pcTasks.SEACR {
 			input:
@@ -159,6 +182,9 @@ workflow cut_and_run {
 	output {
 		File bam = remove_duplicates.bam_noDuplicate
 		File bw = BW_allReads.bw
+		File? AllReadsPeaks = allReadsPeak.narrowPeak
+		File? LowReadsPeaks = lowReadsPeak.narrowPeak
+		File? HighReadsPeaks = highReadsPeak.narrowPeak
 		File? bam_low = size_filter_bam.low
 		File? bam_hi = size_filter_bam.hi
 		File? bw_hiThresh = BW_hiThresh.bw
