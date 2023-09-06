@@ -147,16 +147,42 @@ workflow cut_and_run {
 		
 	}
 	if ("${PeakCaller}" == "seacr") {
-		call pcTasks.bamToBedgraph {
+		call pcTasks.bamToBedgraph as allPeakBG{
 			input:
 				bam=remove_duplicates.bam_noDuplicate,
 				sampleName="${sample_out_dir}/${sampleName}"
 		}
-		call pcTasks.SEACR {
+		call pcTasks.bamToBedgraph as lowPeakBG {
+			input:
+				bam=size_filter_bam.hi,
+				sampleName="${sample_out_dir}/${sampleName}"
+		}
+		call pcTasks.bamToBedgraph as highPeakBG {
+			input:
+				bam=size_filter_bam.low,
+				sampleName="${sample_out_dir}/${sampleName}"
+		}
+		call pcTasks.SEACR as allPeakCall{
 			input:
 				sampleName=sampleName,
 				sample_out_dir=sample_out_dir,
-				bedgraph=bamToBedgraph.seacr_bg,
+				bedgraph=allPeakBG.seacr_bg,
+				control_bedgraph=PeakCallingControl,
+				top_peak_fraction=TopPeakFraction
+		}
+		call pcTasks.SEACR as lowPeakCall {
+			input:
+				sampleName=sampleName,
+				sample_out_dir=sample_out_dir,
+				bedgraph=lowPeakBG.seacr_bg,
+				control_bedgraph=PeakCallingControl,
+				top_peak_fraction=TopPeakFraction
+		}
+		call pcTasks.SEACR as highPeakCall {
+			input:
+				sampleName=sampleName,
+				sample_out_dir=sample_out_dir,
+				bedgraph=highPeakBG.seacr_bg,
 				control_bedgraph=PeakCallingControl,
 				top_peak_fraction=TopPeakFraction
 		}
@@ -182,6 +208,9 @@ workflow cut_and_run {
 	output {
 		File bam = remove_duplicates.bam_noDuplicate
 		File bw = BW_allReads.bw
+		File? SeacrAllReadsPeaks = allPeakCall.seacr_out
+		File? SeacrLowReads = lowPeakCall.seacr_out
+		File? SeacrHighReads = highPeakCall.seacr_out
 		File? AllReadsPeaks = allReadsPeak.narrowPeak
 		File? LowReadsPeaks = lowReadsPeak.narrowPeak
 		File? HighReadsPeaks = highReadsPeak.narrowPeak
