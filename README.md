@@ -18,6 +18,8 @@ This will create a `samplesheet.tsv` in your current working directory.
 ## Cromwell Configuration
 Within the `cromwell_configs` directory is a Cromwell config file which instructs the engine to use Docker as backend. Right now, **the only option you should change** is `concurrent-job-limit`.
 * `concurrent-job-limit` - Default = 10, most amount of jobs that can be run at once.
+#### Call-Caching
+A desirable feature for many workflows is the ability to identify steps, or "jobs", that have already been run and essentially "skip" that step, saving both time and computing resources. In this reporisoty, Cromwell is configured to use a local MySQL database (which runs from a Docker container) called `PipelineDatabase`. If you want to use a different SQL, or any, database, the `database` block must be edited accordingly, else, the config will attempt to log in to the MySQL server specified. 
 ## Usage
 First, navigate to the workflow you want to use, located the in `./workflows` directory. Each subdirectory contains the batch and sample-level workflows, as well as the config file. The `*_inputs.config` file must be configured for the workflow to run properly. Many of these options will be parameters for the command-line tools used in the workflow, but the important ones are: 
 * `project_out_dir` - Main output directory, where by-sample directories will be created for by-cample output files.
@@ -33,7 +35,7 @@ java -Dconfig.file=/path/to/cromwell_config -jar /path/to/cromwell.jar run batch
 ```
 ## Scalability 
 Currently, the pipeline's scalable features are implemented as `cpu` and `mem` input options in `<workflow>_inputs.json`. Each memory/compute-heavy tasks is given its own version of the variable, with `cpu` representing cores and `mem` representing memory in gigabytes. \
-The aforementioned `concurrent-job-limit` variable within the Cromwell config file sets the upper limit on how many samples that can be processed at once.
+The aforementioned `concurrent-job-limit` variable within the Cromwell config file sets the upper limit on how many jobs, or samples, that can be processed at once.
 
 
 
