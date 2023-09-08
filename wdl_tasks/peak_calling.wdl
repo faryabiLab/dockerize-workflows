@@ -70,8 +70,8 @@ task macs2 {
 		${CutoffAnalysis}
 	}
 	output {
-		File narrowPeak = "${sample_out_dir}/${sampleName}_peaks.narrowPeak"
-		File summits = "${sample_out_dir}/${sampleName}_summits.bed"
+		String narrowPeak = "${sample_out_dir}/${sampleName}_peaks.narrowPeak"
+		String summits = "${sample_out_dir}/${sampleName}_summits.bed"
 	}
 	runtime {
 		docker: 'faryabilab/macs2:0.1.0'

@@ -77,7 +77,7 @@ workflow cut_and_run {
 		input:
 			bam=sam_to_bam.bam,
 			chrom_no_scaff=ChromNoScaffold,
-			sample_name=sampleName,
+			sample_name="${sample_out_dir}"+"/"+"${sampleName}",
 			cpu=rmScaffold_cpu,
 			mem=rmScaffold_mem
 	}
@@ -128,21 +128,25 @@ workflow cut_and_run {
 				control_bam=PeakCallingControl,
 				cpu=peakCalling_cpu
 		}
-		call pcTasks.macs2 as lowReadsPeak {
-			input:
-				sampleName=sampleName,
-				sample_out_dir=sample_out_dir,
-				bam=size_filter_bam.hi,
-				control_bam=PeakCallingControl,
-				cpu=peakCalling_cpu
+		if ("${size_high}" != "") {
+			call pcTasks.macs2 as lowReadsPeak {
+				input:
+					sampleName=sampleName,
+					sample_out_dir=sample_out_dir,
+					bam=size_filter_bam.hi,
+					control_bam=PeakCallingControl,
+					cpu=peakCalling_cpu
+			}
 		}
-		call pcTasks.macs2 as highReadsPeak {
-			input:
-				sampleName=sampleName,
-				sample_out_dir=sample_out_dir,
-				bam=size_filter_bam.low,
-				control_bam=PeakCallingControl,
-				cpu=peakCalling_cpu
+		if ("${size_low}" != "") {
+			call pcTasks.macs2 as highReadsPeak {
+				input:
+					sampleName=sampleName,
+					sample_out_dir=sample_out_dir,
+					bam=size_filter_bam.low,
+					control_bam=PeakCallingControl,
+					cpu=peakCalling_cpu
+			}
 		}
 		
 	}
@@ -151,17 +155,7 @@ workflow cut_and_run {
 			input:
 				bam=remove_duplicates.bam_noDuplicate,
 				sampleName="${sample_out_dir}/${sampleName}"
-		}
-		call pcTasks.bamToBedgraph as lowPeakBG {
-			input:
-				bam=size_filter_bam.hi,
-				sampleName="${sample_out_dir}/${sampleName}"
-		}
-		call pcTasks.bamToBedgraph as highPeakBG {
-			input:
-				bam=size_filter_bam.low,
-				sampleName="${sample_out_dir}/${sampleName}"
-		}
+		}	
 		call pcTasks.SEACR as allPeakCall{
 			input:
 				sampleName=sampleName,
@@ -170,21 +164,35 @@ workflow cut_and_run {
 				control_bedgraph=PeakCallingControl,
 				top_peak_fraction=TopPeakFraction
 		}
-		call pcTasks.SEACR as lowPeakCall {
-			input:
-				sampleName=sampleName,
-				sample_out_dir=sample_out_dir,
-				bedgraph=lowPeakBG.seacr_bg,
-				control_bedgraph=PeakCallingControl,
-				top_peak_fraction=TopPeakFraction
+		if ("${size_high}" != "") {
+			call pcTasks.bamToBedgraph as lowPeakBG {
+				input:
+					bam=size_filter_bam.hi,
+					sampleName="${sample_out_dir}/${sampleName}"
+                	}
+			call pcTasks.SEACR as lowPeakCall {
+				input:
+					sampleName=sampleName,
+					sample_out_dir=sample_out_dir,
+					bedgraph=lowPeakBG.seacr_bg,
+					control_bedgraph=PeakCallingControl,
+					top_peak_fraction=TopPeakFraction
+			}
 		}
-		call pcTasks.SEACR as highPeakCall {
-			input:
-				sampleName=sampleName,
-				sample_out_dir=sample_out_dir,
-				bedgraph=highPeakBG.seacr_bg,
-				control_bedgraph=PeakCallingControl,
-				top_peak_fraction=TopPeakFraction
+		if ("${size_low}" != "") {
+			call pcTasks.bamToBedgraph as highPeakBG {
+				input:
+					bam=size_filter_bam.low,
+					sampleName="${sample_out_dir}/${sampleName}"
+                	}
+			call pcTasks.SEACR as highPeakCall {
+				input:
+					sampleName=sampleName,
+					sample_out_dir=sample_out_dir,
+					bedgraph=highPeakBG.seacr_bg,
+					control_bedgraph=PeakCallingControl,
+					top_peak_fraction=TopPeakFraction
+			}
 		}
 	}
 	call makeBWWorkflow.makeBigWig as BW_allReads {
@@ -199,12 +207,6 @@ workflow cut_and_run {
 			chromosome_sizes=ChromosomeSizes,
 			sampleName="${sample_out_dir}"+"/"+"${sampleName}.HighThreshold"
 	}
-	#call makeBWWorkflow.makeBigWig as BW_lowThresh {
-        #        input:
-        #                bam=size_filter_bam.low,
-        #                chromosome_sizes=ChromosomeSizes,
-        #                sampleName="${sample_out_dir}"+"/"+"${sampleName}.LowThreshold"
-        #}	
 	output {
 		File bam = remove_duplicates.bam_noDuplicate
 		File bw = BW_allReads.bw
