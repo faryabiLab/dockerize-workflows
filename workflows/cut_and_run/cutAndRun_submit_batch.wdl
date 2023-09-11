@@ -66,6 +66,7 @@ workflow batch_workflow {
 				sizeFilter_cpu = sizeFilter_cpu,
 				sizeFilter_mem = sizeFilter_mem,
 				peakCalling_cpu = peakCalling_cpu,
+				FastqSuffix=FastqSuffix,
 
 				sampleList=sampleList,
 				fastq_dir=fastq_dir,
