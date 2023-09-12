@@ -31,13 +31,13 @@ task remove_scaffolds {
 		####
 		
 		Int cpu = 12
-		Int mem = 100
+		Int mem = 25
 	}
 	command {
 		if [ ! -z "${bam}" ]; then 
-			samtools view -@ ${cpu} -h -L ${chrom_no_scaff} ${bam} | samtools sort -@ ${cpu} -m "${mem}G" - -o "${sample_name}.noScaffold.bam"
+			samtools view -@ ${cpu} -h -L ${chrom_no_scaff} ${bam} | samtools sort -@ ${cpu} -m "${mem}G" -O bam -o "${sample_name}.noScaffold.bam" -
 		else
-			samtools view -@ ${cpu} -h -L ${chrom_no_scaff} ${bam2} | samtools sort -@ ${cpu} -m "${mem}G" - -o "${sample_name}.noScaffold.bam"
+			samtools view -@ ${cpu} -h -L ${chrom_no_scaff} ${bam2} | samtools sort -@ ${cpu} -m "${mem}G" -O bam -o "${sample_name}.noScaffold.bam" -
 		fi
 	}
 	output {
@@ -106,7 +106,7 @@ task remove_blacklist {
         runtime {
                 docker: "faryabilab/bedtools:0.1.0"
 		cpu: "${cpu}"
-		memory: "${mem}"
+		#memory: "${mem}"
         }
 }
 
