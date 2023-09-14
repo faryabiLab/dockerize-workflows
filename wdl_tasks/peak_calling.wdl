@@ -95,17 +95,19 @@ task SEACR {
 		Int cpu = 12
 		Int mem = 25
 
+		String type
+
 	}
 	command {
 		bash "/tmp/SEACR-1.3/SEACR_1.3.sh" \
-		${bedgraph} \
+		"${bedgraph}.${type}" \
 		~{if defined(control_bedgraph) then control_bedgraph else top_peak_fraction} \
 		"${Normalization}" \
 		"${RunMode}" \
-		"${sample_out_dir}/${sampleName}"
+		"${sample_out_dir}/${sampleName}.${type}"
 	}
 	output {
-		File seacr_out = "${sample_out_dir}/${sampleName}.${RunMode}.bed"
+		String seacr_out = "${sample_out_dir}/${sampleName}.${type}.${RunMode}.bed"
 	}
 	runtime {
 		docker: 'faryabilab/seacr:0.1.0'
@@ -118,6 +120,7 @@ task bamToBedgraph {
 	input {
 		String? bam
 		String sampleName
+		String type
 
 		Int cpu = 12
 		Int mem = 25
@@ -126,10 +129,10 @@ task bamToBedgraph {
 		bedtools genomecov \
 		-ibam "${bam}" \
 		-bg \
-		> "${sampleName}.seacr.bg"
+		> "${sampleName}.seacr.bg.${type}"
 	}
 	output {
-		File seacr_bg = "${sampleName}.seacr.bg"
+		String seacr_bg = "${sampleName}.seacr.bg"
 	}
 	runtime {
 		docker: "faryabilab/bedtools:0.1.0"

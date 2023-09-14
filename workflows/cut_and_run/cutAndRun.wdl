@@ -154,7 +154,8 @@ workflow cut_and_run {
 		call pcTasks.bamToBedgraph as allPeakBG{
 			input:
 				bam=remove_duplicates.bam_noDuplicate,
-				sampleName="${sample_out_dir}/${sampleName}"
+				sampleName="${sample_out_dir}/${sampleName}",
+				type="all"
 		}	
 		call pcTasks.SEACR as allPeakCall{
 			input:
@@ -162,13 +163,15 @@ workflow cut_and_run {
 				sample_out_dir=sample_out_dir,
 				bedgraph=allPeakBG.seacr_bg,
 				control_bedgraph=PeakCallingControl,
-				top_peak_fraction=TopPeakFraction
+				top_peak_fraction=TopPeakFraction,
+				type="all"
 		}
 		if ("${size_high}" != "") {
 			call pcTasks.bamToBedgraph as lowPeakBG {
 				input:
 					bam=size_filter_bam.hi,
-					sampleName="${sample_out_dir}/${sampleName}"
+					sampleName="${sample_out_dir}/${sampleName}",
+					type="low"
                 	}
 			call pcTasks.SEACR as lowPeakCall {
 				input:
@@ -176,14 +179,16 @@ workflow cut_and_run {
 					sample_out_dir=sample_out_dir,
 					bedgraph=lowPeakBG.seacr_bg,
 					control_bedgraph=PeakCallingControl,
-					top_peak_fraction=TopPeakFraction
+					top_peak_fraction=TopPeakFraction,
+					type="low"
 			}
 		}
 		if ("${size_low}" != "") {
 			call pcTasks.bamToBedgraph as highPeakBG {
 				input:
 					bam=size_filter_bam.low,
-					sampleName="${sample_out_dir}/${sampleName}"
+					sampleName="${sample_out_dir}/${sampleName}",
+					type="high"
                 	}
 			call pcTasks.SEACR as highPeakCall {
 				input:
@@ -191,7 +196,8 @@ workflow cut_and_run {
 					sample_out_dir=sample_out_dir,
 					bedgraph=highPeakBG.seacr_bg,
 					control_bedgraph=PeakCallingControl,
-					top_peak_fraction=TopPeakFraction
+					top_peak_fraction=TopPeakFraction,
+					type="high"
 			}
 		}
 	}
@@ -201,11 +207,13 @@ workflow cut_and_run {
 			chromosome_sizes=ChromosomeSizes,
 			sampleName="${sample_out_dir}"+"/"+"${sampleName}.AllReads"
 	}
-	call makeBWWorkflow.makeBigWig as BW_hiThresh {
-		input:
-			bam=size_filter_bam.hi,
-			chromosome_sizes=ChromosomeSizes,
-			sampleName="${sample_out_dir}"+"/"+"${sampleName}.HighThreshold"
+	if ("${size_high}" != "") {
+		call makeBWWorkflow.makeBigWig as BW_hiThresh {
+			input:
+				bam=size_filter_bam.hi,
+				chromosome_sizes=ChromosomeSizes,
+				sampleName="${sample_out_dir}"+"/"+"${sampleName}.HighThreshold"
+		}
 	}
 	output {
 		File bam = remove_duplicates.bam_noDuplicate
