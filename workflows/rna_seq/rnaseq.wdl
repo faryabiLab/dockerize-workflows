@@ -1,11 +1,11 @@
 version 1.0
 
 ## import all relevant tasks here
-import "../../wdl_tasks/trim_galore.wdl" as trimTasks
-import "../../wdl_tasks/star.wdl" as starTasks
-import "../../wdl_tasks/filter_steps.wdl" as filterTasks
-import "../../wdl_tasks/feature_count.wdl" as quantifyTasks
-import "../../wdl_tasks/make_bigWig.wdl" as bwTasks
+import "wdl_tasks/trim_galore.wdl" as trimTasks
+import "wdl_tasks/star.wdl" as starTasks
+import "wdl_tasks/filter_steps.wdl" as filterTasks
+import "wdl_tasks/feature_count.wdl" as quantifyTasks
+import "wdl_tasks/make_bigWig.wdl" as bwTasks
 
 workflow rnaseq {
         input {
@@ -48,15 +48,19 @@ workflow rnaseq {
 			bam=remove_scaffolds.bam_noScaffold,
 			sample_name=sample_out_dir+"/"+sampleName,
 	}
-	call filterTasks.remove_blacklist {
-		input:
-			bam=remove_duplicates.bam_noDuplicate,
-			blacklist=blacklist,
-			sample_name=sample_out_dir+"/"+sampleName
+	String next = remove_duplicates.bam_noDuplicate
+	if (defined(blacklist)) {
+		call filterTasks.remove_blacklist {
+			input:
+				bam=remove_duplicates.bam_noDuplicate,
+				blacklist=blacklist,
+				sample_name=sample_out_dir+"/"+sampleName
+		}
+		String next = remove_blacklist.bam_noBlacklist
 	}
 	call filterTasks.sort_bam {
 		input:
-			bam=remove_blacklist.bam_noBlacklist,
+			bam=next,
 			sample_name=sample_out_dir+"/"+sampleName
 	}
 	call filterTasks.index_bam {
@@ -109,6 +113,3 @@ workflow rnaseq {
 		File bw = bedgraph_to_bigwig.bw
 	}
 }
-
-
-
