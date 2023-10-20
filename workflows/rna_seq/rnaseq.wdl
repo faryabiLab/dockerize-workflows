@@ -15,7 +15,7 @@ workflow rnaseq {
                 String sampleName       
                 String star_index
                 String chromNoScaffold
-		String blacklist
+		String? blacklist
 		String GeneAnnotationFile
 		String chromosome_sizes
         }
@@ -56,7 +56,7 @@ workflow rnaseq {
 				blacklist=blacklist,
 				sample_name=sample_out_dir+"/"+sampleName
 		}
-		String next = remove_blacklist.bam_noBlacklist
+		String? next = remove_blacklist.bam_noBlacklist
 	}
 	call filterTasks.sort_bam {
 		input:
