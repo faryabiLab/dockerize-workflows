@@ -17,15 +17,14 @@ task sam_to_bam {
 	runtime {
 		docker: "faryabilab/samtools:0.1.0"
 		cpu: "${cpu}"
-		#memory: "${mem}"
+		mem: "${mem}"
 	}
 }
 
 task remove_scaffolds {
 	input {
 		#### REQUIRED
-		String? bam
-		String? bam2
+		String bam
 		String chrom_no_scaff
 		String sample_name
 		####
@@ -34,11 +33,7 @@ task remove_scaffolds {
 		Int mem = 25
 	}
 	command {
-		if [ ! -z "${bam}" ]; then 
-			samtools view -@ ${cpu} -h -L ${chrom_no_scaff} ${bam} | samtools sort -@ ${cpu} -m "${mem}G" -O bam -o "${sample_name}.noScaffold.bam" -
-		else
-			samtools view -@ ${cpu} -h -L ${chrom_no_scaff} ${bam2} | samtools sort -@ ${cpu} -m "${mem}G" -O bam -o "${sample_name}.noScaffold.bam" -
-		fi
+		samtools view -@ ${cpu} -h -L ${chrom_no_scaff} ${bam} | samtools sort -@ ${cpu} -m "${mem}G" -O bam -o "${sample_name}.noScaffold.bam" -
 	}
 	output {
 		String bam_noScaffold = "${sample_name}.noScaffold.bam"
@@ -46,7 +41,7 @@ task remove_scaffolds {
 	runtime {
 		docker: "faryabilab/samtools:0.1.0"
 		cpu: "${cpu}"
-		#memory: "${mem}"
+		mem: "${mem}"
 	}
 }
 
@@ -81,17 +76,17 @@ task remove_duplicates {
 		# Picard docker image w/ samtools base
                 docker: "faryabilab/picard:0.1.0"
 		cpu: "${cpu}"
-		#memory: "${mem}"
+		mem: "${mem}"
         }
 }
 
 task remove_blacklist {
 	input {
 		#### REQUIRED
-		String bam
+		String? bam
 		String? bam2
-		String blacklist
-		String sample_name	
+		String? blacklist
+		String? sample_name	
 		####
 
 		Int cpu = 12
@@ -101,12 +96,12 @@ task remove_blacklist {
 		bedtools intersect -abam ${bam} -b ${blacklist} -v > "${sample_name}.noBlacklist.bam"	
         }
         output {
-		String bam_noBlacklist = "${sample_name}.noBlacklist.bam"
+		String? bam_noBlacklist = "${sample_name}.noBlacklist.bam"
         }
         runtime {
                 docker: "faryabilab/bedtools:0.1.0"
 		cpu: "${cpu}"
-		#memory: "${mem}"
+		mem: "${mem}"
         }
 }
 
@@ -127,7 +122,7 @@ task sort_bam {
         runtime {
                 docker: "faryabilab/samtools:0.1.0"
 		cpu: "${cpu}"
-		#memory: "${mem}"
+		mem: "${mem}"
         }
 }
 
@@ -147,8 +142,8 @@ task index_bam {
 	}
 	runtime {
 		docker: "faryabilab/samtools:0.1.0"
-		cpu: "{cpu}"
-		#memory: "${mem}"
+		cpu: "${cpu}"
+		mem: "${mem}"
 	}
 }
 
@@ -202,7 +197,7 @@ task size_filter_bam {
 	runtime {
 		docker: 'faryabilab/samtools:0.1.0'
 		cpu: "${cpu}"
-		#memory: "${mem}"
+		mem: "${mem}"
 	}
 }
 
@@ -227,5 +222,6 @@ task filter_discordant_pairs {
 	runtime {
 		docker: 'faryabilab/samtools:0.1.0'
 		cpu: "${cpu}"
+		mem: "${mem}"
 	}
 }

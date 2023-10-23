@@ -11,24 +11,24 @@ task STAR {
 		Boolean paired
 		####
 		
-		String outFilterType = "BySJout"
-		String readFilesCommand = "zcat"
-		String outSamAttributes = "Standard"
-		String outFilterIntronMotifs = "RemoveNoncanonicalUnannotated"
-		Int alignIntronMax = 100000
-		String outSamstrandField = "intronMotif"	
-		String outSAMunmapped = "Within"
-		Int chimSegmentMin = 25
-		Int chimJunctionOverhangMin = 25
-		String outSAMtype = "BAM Unsorted"
+		String outFilterType
+		String readFilesCommand
+		String outSamAttributes
+		String outFilterIntronMotifs
+		Int alignIntronMax
+		String outSamstrandField
+		String outSAMunmapped
+		Int chimSegmentMin
+		Int chimJunctionOverhangMin
+		String outSAMtype
 
-		Int cpu = 16
-		Int mem = 50
+		Int STAR_cpu
+		Int STAR_mem
 	}
 	command {
 		if [[ "~{paired}" == "true" ]]; then
 			STAR \
-			--runThreadN ${cpu} \
+			--runThreadN ${STAR_cpu} \
 			--genomeDir ${star_index} \
 			--readFilesIn ${fastq1_trimmed} ${fastq2_trimmed} \
 			--outFileNamePrefix ${sample_name} \
@@ -43,7 +43,7 @@ task STAR {
 			--outSAMtype ${outSAMtype}
 		else
 			STAR \
-			--runThreadN ${cpu} \
+			--runThreadN ${STAR_cpu} \
 			--genomeDir ${star_index} \
 			--readFilesIn ${fastq_trimmed_single} \
 			--outFileNamePrefix ${sample_name} \
@@ -58,10 +58,10 @@ task STAR {
 			--outSAMtype ${outSAMtype}
 		fi
 	}
-	output {File bam = "${sample_name}Aligned.out.bam"}
+	output {String bam = "${sample_name}Aligned.out.bam"}
 	runtime {
 		docker: 'faryabilab/star:0.10'
-		cpu: "${cpu}"
-		#memory: "${mem}"
+		cpu: 10
+		mem: 24
 	}
 }

@@ -20,7 +20,7 @@ task read_count {
 	runtime {
 		docker: 'faryabilab/samtools:0.1.0'
 		cpu: "${cpu}"
-		#memory: "${mem}"
+		mem: "${mem}"
 	}
 }
 
@@ -40,7 +40,7 @@ task calculate_factor {
 	runtime {
 		docker: 'faryabilab/bedtools:0.1.0'
                 cpu: "${cpu}"
-                #memory: "${mem}"
+                mem: "${mem}"
 	}
 }
 
@@ -66,7 +66,7 @@ task bam_to_bedgraph {
 	runtime {
 		docker: 'faryabilab/bedtools:0.1.0'
                 cpu: "${cpu}"
-                #memory: "${mem}"
+                mem: "${mem}"
 	}
 }
 
@@ -89,7 +89,7 @@ task bedgraph_to_bigwig {
         runtime {
                 docker: 'faryabilab/bedtools:0.1.0'
                 cpu: "${cpu}"
-                #memory: "${mem}"
+                mem: "${mem}"
         }
 }
 
