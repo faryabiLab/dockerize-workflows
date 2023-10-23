@@ -31,7 +31,7 @@ task count_reads_single {
 	runtime {
 		docker: "faryabilab/subread:0.1.0"
 		cpu: "${cpu}"
-		#memory: "${mem}"
+		mem: "${mem}"
 	}
 }
 
@@ -67,7 +67,7 @@ task count_reads_paired {
         runtime {
                 docker: "faryabilab/subread:0.1.0"
 		cpu: "${cpu}"
-		#memory: "${mem}"
+		mem: "${mem}"
         }
 }
 
@@ -95,6 +95,6 @@ task quantifyCoverage {
 	runtime {
 		docker: "faryabilab/bedtools:0.1.0"
 		cpu: "${cpu}"
-		#memory: "${mem}"
+		mem: "${mem}"
 	}
 }

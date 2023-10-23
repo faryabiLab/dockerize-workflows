@@ -13,9 +13,9 @@ task fastqc_trim {
 		Int stringency = 5
 		Float e = 0.1
 		Int length = 20
-		
-		Int? cpu = 8
-		Int? mem = 8
+
+		Int cpu = 8
+		Int mem = 8
 	}
 	command {
 		if [[ "${paired}" == "true" ]]; then
@@ -55,7 +55,7 @@ task fastqc_trim {
 	}
 	runtime {
 		docker: "faryabilab/trim_galore:0.10"
-		cpu: "${cpu}"
-		#memory: "${mem}"
+		cpu: 8
+		mem: 16
 	}
 }
