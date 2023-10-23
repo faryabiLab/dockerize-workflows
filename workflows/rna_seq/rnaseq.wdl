@@ -18,14 +18,39 @@ workflow rnaseq {
 		String? blacklist
 		String GeneAnnotationFile
 		String chromosome_sizes
-        }
-
+		# trim_galore
+		Int quality
+		Int stringency
+		Float e
+		Int length
+		# STAR
+		String outFilterType
+		String readFilesCommand
+		String outSamAttributes
+		String outFilterIntronMotifs 
+		Int alignIntronMax
+		String outSamstrandField
+		String outSAMunmapped
+		Int chimSegmentMin
+		Int chimJunctionOverhangMin
+		String outSAMtype
+		Int STAR_cpu
+		Int STAR_mem
+		# remove dups
+		String PicardRemoveDuplicates
+                String PicardValidationStringency
+                String PicardMetricsFile
+	}
 	call trimTasks.fastqc_trim {
 		input:
 			fastq_dir=fastq_dir,
 			sample_out_dir=sample_out_dir,
 			sampleName=sampleName,
-			paired=paired
+			paired=paired,
+			quality=quality,
+			stringency=stringency,
+			e=e,
+			length=length
 	}
 	call starTasks.STAR {
 		input:
@@ -33,8 +58,20 @@ workflow rnaseq {
 			fastq1_trimmed = fastqc_trim.out_fqc1,
 			fastq2_trimmed = fastqc_trim.out_fqc2,
 			star_index=star_index,
-			sample_name=sampleName,
-			paired=paired
+			sample_name=sample_out_dir + "/" + sampleName,
+			paired=paired,
+			outFilterType=outFilterType,
+			readFilesCommand=readFilesCommand,
+			outSamAttributes=outSamAttributes,
+			outFilterIntronMotifs=outFilterIntronMotifs,
+			alignIntronMax=alignIntronMax,
+			outSamstrandField=outSamstrandField,
+			outSAMunmapped=outSAMunmapped,
+			chimSegmentMin=chimSegmentMin,
+			chimJunctionOverhangMin=chimJunctionOverhangMin,
+			outSAMtype=outSAMtype,
+			STAR_cpu=STAR_cpu,
+			STAR_mem=STAR_mem
 	}
 		
 	call filterTasks.remove_scaffolds {
@@ -47,6 +84,9 @@ workflow rnaseq {
 		input:
 			bam=remove_scaffolds.bam_noScaffold,
 			sample_name=sample_out_dir+"/"+sampleName,
+			PicardRemoveDuplicates=PicardRemoveDuplicates,
+			PicardValidationStringency=PicardValidationStringency,
+			PicardMetricsFile=PicardMetricsFile
 	}
 	String next = remove_duplicates.bam_noDuplicate
 	if (defined(blacklist)) {
