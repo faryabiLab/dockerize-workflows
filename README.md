@@ -3,35 +3,54 @@ Genomic data processing pipelines written in WDL making use of Docker containers
 
 ## Setup
 #### Dependencies
-Ensure that the latest `cromwell` engine is installed from their [GitHub repository](https://github.com/broadinstitute/cromwell). \
+Ensure that the latest `cromwell` engine (.jar file) and womtools (.jar) is installed from their [GitHub repository](https://github.com/broadinstitute/cromwell). \
 Have [Docker](https://www.docker.com/products/personal/) installed on your machine.
-#### Workflows
-`git clone` this repository to your local machine. **Be aware** that workflows use relative imports for tasks and sample-level workflows that are dependent on the directory structure of this repository. If you choose to move a workflow and/or task files to another location, please make sure to change the imports within the workflow source files directly, if needed.
 #### Sample Sheet
 Each run of a workflow must be accompanied by a `samplesheet.tsv` - a single-column tab-separated file that specifies the prefixes ('sample names') of each `fastq` file to be processed. \
-**A note on fastq naming** - Ensure that your paired-end `fastq` files follow the naming convention `XYZ_R1.fastq.gz`, where `XYZ` represents this file's sample name. Single-end `fastq`s must be named as `XYZ.fastq.gz`.
+**A note on fastq naming** - Ensure that your paired-end `fastq` files follow the naming convention `XYZ_R1.fastq.gz` / `XYZ_R2.fastq.gz`, where `XYZ` represents this file's sample name. Single-end `fastq`s must be named as `XYZ.fastq.gz`.
 To make a sample sheet, simply run `make_samplesheet.sh` found in `utils/`: 
 * Paired-end: `./make_samplesheet.sh -p -d /path/to/fastq_dir`
-* Single-end: `./make_samplesheet.sh -d /path/to/fastq_dir` \
+* Single-end: `./make_samplesheet.sh -d /path/to/fastq_dir` 
 
 This will create a `samplesheet.tsv` in your current working directory.
 ## Cromwell Configuration
-Within the `cromwell_configs` directory is a Cromwell config file which instructs the engine to use Docker as backend. Right now, **the only option you should change** is `concurrent-job-limit`.
-* `concurrent-job-limit` - Default = 10, most amount of jobs that can be run at once.
+Within the `cromwell_configs` directory is a Cromwell config file which instructs the engine to use Docker as backend. The only option that can be tweaked in this file is the `concurrent_job_limit` variable: this controls the number of jobs that can be running at once (default = 10).
 #### Call-Caching
-A desirable feature for many workflows is the ability to identify steps, or "jobs", that have already been run and essentially "skip" that step, saving both time and computing resources. In this reporisoty, Cromwell is configured to use a local MySQL database (which runs from a Docker container) called `PipelineDatabase`, to store intermediate files to determine the steps that have been run. If you want to use a different SQL, or any, database, the `database` block must be edited accordingly, else, the config will attempt to log in to the MySQL server specified. 
+A desirable feature for many workflows is the ability to identify steps, or "jobs", that have already been run and essentially "skip" that step, saving both time and computing resources. In this reporisoty, Cromwell is configured to use a local MySQL database (which runs from a Docker container) called `PipelineDatabase`, to store intermediate files to determine the steps that have been run. If you want to use a different SQL, or any, database, the `database` block must be edited accordingly in the Cromwell configuration file, else, the config will attempt to log in to the MySQL server specified. By default, the `database` block is configured to work with a MySQL Docker container that can be initialized via the following command:
+```
+docker run \
+-p 52000:3306 \
+--name PipelineDatabase \
+-e MYSQL_ROOT_PASSWORD=@noah1234 \
+-e MYSQL_DATABASE=PipelineDatabase -e MYSQL_USER=pipeline \
+-e MYSQL_PASSWORD=Run@pipelines9061 \
+-d mysql/mysql-server:latest
+```
 ## Usage
-First, navigate to the workflow you want to use, located the in `./workflows` directory. Each subdirectory contains the batch and sample-level workflows, as well as the config file. The `*_inputs.config` file must be configured for the workflow to run properly. Many of these options will be parameters for the command-line tools used in the workflow, but the important ones are: 
-* `project_out_dir` - Main output directory, where by-sample directories will be created for by-cample output files.
-* `fastq_dir` - Path to one directiry with **all** Fastq files to be processed.
-* `sampleList` - Samplesheet with one column of sample names and no header. Can be created with utility script `utils/make_samplesheet.sh`. See Setup section for details.
-* `paired` - Boolean, `true` for paired-end experiemnts, `false` otherwise.
-* `ChromNoScaffold` - BED-style file with enire chromosome intervals to keep in the resulting BAM.
-* `ChromosomeSizes` - BEDtools-style chromosome sizes file.
-* `Blacklist` - A BED-style file containing regions to be removed from the resulting BAM, typically known problematic regions.
-Once the configuration is complete, one can run a workflow as such: 
+The `/workflows` directory houses all by-assay pipelines. In each subdirectory, there are several files (using RNA-seq as example):
+* `rnaseq.wdl` - The main workflow file that will be run.
+* `imports.zip` - A zipped directory of all imports needed for this pipeline.
+* `rnaseq_inputs.json` - A JSON file with all relative input options. \
+
+In the inputs JSON, you will find command-specific parameters (i.e. for trimming, alignment, etc.) as well as common inputs needed for every pipeline:
+* `paired` - A boolean value indicating whether the experiment was paired-end (`true`) or single-end (`false`).
+* `project_out_dir` - Directory where output will be (a directory is created here for every sample name).
+* `fastq_dir` - Path to dorectory with all `.fastq.gz` files.
+* `sampleList` - Path to your previously created `samplesheet.tsv`
+* `star_index`/`BWA_index` - Path to alignment index files.
+* `chromNoScaffold` - A Path to a 3-column BED file with the chromosome/contig regions you would like to keep in your output.
+* `GeneAnnotationFile` - Path to `.gtf` file.
+* `chromosome_sizes` - A standard BEDtools chromosome size file.
+* `blacklist` - A 3-column BED file containing areas to be removed from output.
+
+Once the configuration is complete, there are 2 options available to you to run your pipeline.
+1. Run in local mode: Cromwell can run "on-the-fly", without the need to configure a server. To do this, use the `run` subcommand as such:
 ```
 java -Dconfig.file=/path/to/cromwell_config -jar /path/to/cromwell.jar run batch_workflow.wdl -i workflow_input.json
+```
+2. Submit to a Cromwell server
+```
+==========WIP=========
 ```
 ## Scalability 
 Currently, the pipeline's scalable features are implemented as `cpu` and `mem` input options in `<workflow>_inputs.json`. Each memory/compute-heavy tasks is given its own version of the variable, with `cpu` representing cores and `mem` representing memory in gigabytes. \
