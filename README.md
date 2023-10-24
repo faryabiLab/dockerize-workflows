@@ -29,7 +29,7 @@ docker run \
 ## Usage
 The `/workflows` directory houses all by-assay pipelines. In each subdirectory, there are several files (using RNA-seq as example):
 * `rnaseq.wdl` - The main workflow file that will be run.
-* `imports.zip` - A zipped directory of all imports needed for this pipeline.
+* `imports.zip` - A zipped directory of all imports needed for this pipeline. This is important for running your pipeline successfully. 
 * `rnaseq_inputs.json` - A JSON file with all relative input options. \
 
 In the inputs JSON, you will find command-specific parameters (i.e. for trimming, alignment, etc.) as well as common inputs needed for every pipeline:
@@ -46,18 +46,9 @@ In the inputs JSON, you will find command-specific parameters (i.e. for trimming
 Once the configuration is complete, there are 2 options available to you to run your pipeline.
 1. Run in local mode: Cromwell can run "on-the-fly", without the need to configure a server. To do this, use the `run` subcommand as such:
 ```
-java -Dconfig.file=/path/to/cromwell_config -jar /path/to/cromwell.jar run batch_workflow.wdl -i workflow_input.json
+java -Dconfig.file=/path/to/cromwell_config -jar /path/to/cromwell.jar run batch_workflow.wdl -i workflow_input.json -p imports.zip
 ```
 2. Submit to a Cromwell server
 ```
 ==========WIP=========
 ```
-## Scalability 
-Currently, the pipeline's scalable features are implemented as `cpu` and `mem` input options in `<workflow>_inputs.json`. Each memory/compute-heavy tasks is given its own version of the variable, with `cpu` representing cores and `mem` representing memory in gigabytes. \
-The aforementioned `concurrent-job-limit` variable within the Cromwell config file sets the upper limit on how many jobs, or samples, that can be processed at once.
-
-
-
-
-
-
