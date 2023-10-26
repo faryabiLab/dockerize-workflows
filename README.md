@@ -27,6 +27,7 @@ docker run \
 -d mysql/mysql-server:latest
 ```
 ## Usage
+### Inputs
 The `/workflows` directory houses all by-assay pipelines. In each subdirectory, there are several files (using RNA-seq as example):
 * `rnaseq.wdl` - The main workflow file that will be run.
 * `imports.zip` - A zipped directory of all imports needed for this pipeline. This is important for running your pipeline successfully. 
@@ -42,13 +43,32 @@ In the inputs JSON, you will find command-specific parameters (i.e. for trimming
 * `GeneAnnotationFile` - Path to `.gtf` file.
 * `chromosome_sizes` - A standard BEDtools chromosome size file.
 * `blacklist` - A 3-column BED file containing areas to be removed from output.
-
+### Running a Workflow
 Once the configuration is complete, there are 2 options available to you to run your pipeline.
 1. Run in local mode: Cromwell can run "on-the-fly", without the need to configure a server. To do this, use the `run` subcommand as such:
 ```
-java -Dconfig.file=/path/to/cromwell_config -jar /path/to/cromwell.jar run batch_workflow.wdl -i workflow_input.json -p imports.zip
+java \
+  -Dconfig.file=/path/to/cromwell_config \
+  -jar /path/to/cromwell.jar run \
+  -i workflow_input.json \
+  -p imports.zip \
+  workflow.wdl
 ```
 2. Submit to a Cromwell server
+First, if a Cromwell server isn't already running, start one:
 ```
-==========WIP=========
+java -Dconfig.file=/path/to/cromwell_config -jar /path/to/cromwell.jar server
 ```
+Then, submit your workflow to the server via the `submit` command along with the host address, `imports.zip`, `inputs.json`, and your workflow's WDL file:
+```
+java \
+  -Dconfig.file=/path/to/cromwell_config \
+  -jar /path/to/cromwell.jar submit \
+  -h http://<host ip>:<port> \
+  -p imports.zip \
+  -i inputs.json \
+   workflow.wdl
+```
+
+
+
