@@ -44,8 +44,10 @@ In the inputs JSON, you will find command-specific parameters (i.e. for trimming
 * `chromosome_sizes` - A standard BEDtools chromosome size file.
 * `blacklist` - A 3-column BED file containing areas to be removed from output.
 ### Running a Workflow
-Once the configuration is complete, there are 2 options available to you to run your pipeline.
-1. Run in local mode: Cromwell can run "on-the-fly", without the need to configure a server. To do this, use the `run` subcommand as such:
+Once the configuration is complete, there are 2 options available to you to run your pipeline: 
+
+**1. Run in local mode**
+* Cromwell can run "on-the-fly", without the need to configure a server. To do this, use the `run` subcommand as such:
 ```
 java \
   -Dconfig.file=/path/to/cromwell_config \
@@ -54,12 +56,14 @@ java \
   -p imports.zip \
   workflow.wdl
 ```
-2. Submit to a Cromwell server
-First, if a Cromwell server isn't already running, start one:
+* This will startg a Cromwell instance, run your workflow, and then exit upon completion.
+
+**2. Submit to a Cromwell server**
+* First, if a Cromwell server isn't already running, start one:
 ```
 java -Dconfig.file=/path/to/cromwell_config -jar /path/to/cromwell.jar server
 ```
-Then, submit your workflow to the server via the `submit` command along with the host address, `imports.zip`, `inputs.json`, and your workflow's WDL file:
+* Then, submit your workflow to the server via the `submit` command along with the host address, `imports.zip`, `inputs.json`, and your workflow's WDL file:
 ```
 java \
   -Dconfig.file=/path/to/cromwell_config \
@@ -69,6 +73,6 @@ java \
   -i inputs.json \
    workflow.wdl
 ```
-
+Of course, you can find out more about Cromwell's capabilities in the [Official Cromwell Documentation](https://cromwell.readthedocs.io/en/stable/).
 
 
