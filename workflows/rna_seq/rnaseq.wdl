@@ -23,28 +23,7 @@ workflow RNAseq {
 		String blacklist
 		String GeneAnnotationFile
 		String chromosome_sizes
-		# trim_galore
-		Int quality = 15
-		Int stringency = 5
-		Float e = 0.1
-		Int length = 20
-		# STAR
-		String outFilterType = "BySJout"
-		String readFilesCommand = "zcat"
-		String outSamAttributes = "Standard"
-		String outFilterIntronMotifs = "RemoveNoncanonicalUnannotated"
-		Int alignIntronMax = 100000
-		String outSamstrandField = "intronMotif"	
-		String outSAMunmapped = "Within"
-		Int chimSegmentMin = 25
-		Int chimJunctionOverhangMin = 25
-		String outSAMtype = "BAM Unsorted"
-		Int STAR_cpu=10
-		Int STAR_mem=25
-		# remove duplicates
-		String PicardRemoveDuplicates = "true"
-		String PicardValidationStringency = "SILENT"
-		String PicardMetricsFile = "removeDuplicate_metrics.txt"
+		String? fastq_suffix
 	}	
 	Array[Array[String]] samples = read_tsv(sampleList)
 	scatter (sample in samples) {
@@ -56,10 +35,7 @@ workflow RNAseq {
 				sample_out_dir=sample_out_dir,
 				sampleName=sampleName,
 				paired=paired,
-				quality=quality,
-				stringency=stringency,
-				e=e,
-				length=length
+				fastq_suffix=fastq_suffix
 		}
 		call starTasks.STAR {
 			input:
@@ -68,19 +44,7 @@ workflow RNAseq {
 				fastq2_trimmed = fastqc_trim.out_fqc2,
 				star_index=star_index,
 				sample_name=sample_out_dir + "/" + sampleName,
-				paired=paired,
-				outFilterType=outFilterType,
-				readFilesCommand=readFilesCommand,
-				outSamAttributes=outSamAttributes,
-				outFilterIntronMotifs=outFilterIntronMotifs,
-				alignIntronMax=alignIntronMax,
-				outSamstrandField=outSamstrandField,
-				outSAMunmapped=outSAMunmapped,
-				chimSegmentMin=chimSegmentMin,
-				chimJunctionOverhangMin=chimJunctionOverhangMin,
-				outSAMtype=outSAMtype,
-				STAR_cpu=STAR_cpu,
-				STAR_mem=STAR_mem
+				paired=paired
 		}
 
 		call filterTasks.remove_scaffolds {
@@ -92,10 +56,7 @@ workflow RNAseq {
 		call filterTasks.remove_duplicates {
 			input:
 				bam=remove_scaffolds.bam_noScaffold,
-				sample_name=sample_out_dir+"/"+sampleName,
-				PicardRemoveDuplicates=PicardRemoveDuplicates,
-				PicardValidationStringency=PicardValidationStringency,
-				PicardMetricsFile=PicardMetricsFile
+				sample_name=sample_out_dir+"/"+sampleName
 		}
 		call filterTasks.remove_blacklist {
 			input:
