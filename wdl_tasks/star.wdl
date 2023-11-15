@@ -3,27 +3,26 @@ version 1.0
 task STAR {
 	input {
 		#### REQUIRED
-		String? fastq1_trimmed
-		String? fastq2_trimmed			
-		String? fastq_trimmed_single
+		File? fastq1_trimmed
+		File? fastq2_trimmed			
+		File? fastq_trimmed_single
 		String star_index
 		String sample_name
 		Boolean paired
 		####
-		
-		String outFilterType
-		String readFilesCommand
-		String outSamAttributes
-		String outFilterIntronMotifs
-		Int alignIntronMax
-		String outSamstrandField
-		String outSAMunmapped
-		Int chimSegmentMin
-		Int chimJunctionOverhangMin
-		String outSAMtype
+		String outFilterType = "BySJout"
+		String readFilesCommand = "zcat"
+		String outSamAttributes = "Standard"
+		String outFilterIntronMotifs = "RemoveNoncanonicalUnannotated"
+		Int alignIntronMax = 100000
+		String outSamstrandField = "intronMotif"
+		String outSAMunmapped = "Within"
+		Int chimSegmentMin = 25
+		Int chimJunctionOverhangMin = 25
+		String outSAMtype = "BAM Unsorted"
+		Int STAR_cpu=10
+		Int STAR_mem=25
 
-		Int STAR_cpu
-		Int STAR_mem
 	}
 	command {
 		if [[ "~{paired}" == "true" ]]; then
@@ -58,7 +57,7 @@ task STAR {
 			--outSAMtype ${outSAMtype}
 		fi
 	}
-	output {String bam = "${sample_name}Aligned.out.bam"}
+	output {File bam = "${sample_name}Aligned.out.bam"}
 	runtime {
 		docker: 'faryabilab/star:0.10'
 		cpu: 10

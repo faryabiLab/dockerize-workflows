@@ -4,7 +4,6 @@ task fastqc_trim {
 	input {
 		#### REQUIRED
 		String fastq_dir
-		String sample_out_dir
 		String sampleName
 		String? fastq_suffix
 		Boolean paired
@@ -30,7 +29,6 @@ task fastqc_trim {
 			-e ${e} \
 			--basename ${sampleName} \
 			--length ${length} \
-			-o ${sample_out_dir} \
 			"${fastq_dir}/${sampleName}_R1${fastq_suffix}.fastq.gz" \
 			"${fastq_dir}/${sampleName}_R2${fastq_suffix}.fastq.gz"
 		else
@@ -44,14 +42,13 @@ task fastqc_trim {
 			-e ${e} \
 			--basename ${sampleName} \
 			--length ${length} \
-			-o ${sample_out_dir} \
 			"${fastq_dir}/${sampleName}.fastq.gz"
 		fi
 	}
 	output {
-		String? out_fqc = "${sample_out_dir}/${sampleName}"+"_trimmed.fq.gz"
-		String? out_fqc1 = "${sample_out_dir}/${sampleName}"+"_val_1.fq.gz"
-		String? out_fqc2 = "${sample_out_dir}/${sampleName}"+"_val_2.fq.gz"
+		File? out_fqc = "${sampleName}"+"_trimmed.fq.gz"
+		File? out_fqc1 = "${sampleName}"+"_val_1.fq.gz"
+		File? out_fqc2 = "${sampleName}"+"_val_2.fq.gz"
 	}
 	runtime {
 		docker: "faryabilab/trim_galore:0.10"
