@@ -2,7 +2,7 @@ version 1.0
 
 task sam_to_bam {
 	input {
-		String sam
+		File sam
 		String sample_name
 
 		Int cpu = 12
@@ -12,7 +12,7 @@ task sam_to_bam {
 		samtools view -@ ${cpu} -h -b ${sam} > "${sample_name}.bam"
 	}
 	output {
-		String bam = "${sample_name}.bam"
+		File bam = "${sample_name}.bam"
 	}
 	runtime {
 		docker: "faryabilab/samtools:0.1.0"
@@ -24,7 +24,7 @@ task sam_to_bam {
 task remove_scaffolds {
 	input {
 		#### REQUIRED
-		String bam
+		File bam
 		String chrom_no_scaff
 		String sample_name
 		####
@@ -36,7 +36,7 @@ task remove_scaffolds {
 		samtools view -@ ${cpu} -h -L ${chrom_no_scaff} ${bam} | samtools sort -@ ${cpu} -m "${mem}G" -O bam -o "${sample_name}.noScaffold.bam" -
 	}
 	output {
-		String bam_noScaffold = "${sample_name}.noScaffold.bam"
+		File bam_noScaffold = "${sample_name}.noScaffold.bam"
 	}
 	runtime {
 		docker: "faryabilab/samtools:0.1.0"
@@ -48,7 +48,7 @@ task remove_scaffolds {
 task remove_duplicates {
 	input {
 		#### REQUIRED
-		String bam
+		File bam
 		String sample_name
 		####
 
@@ -70,7 +70,7 @@ task remove_duplicates {
 		VALIDATION_STRINGENCY=${PicardValidationStringency}
         }
         output {
- 		String bam_noDuplicate = "${sample_name}.noDuplicate.bam"
+ 		File bam_noDuplicate = "${sample_name}.noDuplicate.bam"
         }
         runtime {
 		# Picard docker image w/ samtools base
@@ -83,10 +83,9 @@ task remove_duplicates {
 task remove_blacklist {
 	input {
 		#### REQUIRED
-		String? bam
-		String? bam2
-		String? blacklist
-		String? sample_name	
+		File bam
+		String blacklist
+		String sample_name	
 		####
 
 		Int cpu = 12
@@ -96,7 +95,7 @@ task remove_blacklist {
 		bedtools intersect -abam ${bam} -b ${blacklist} -v > "${sample_name}.noBlacklist.bam"	
         }
         output {
-		String? bam_noBlacklist = "${sample_name}.noBlacklist.bam"
+		File bam_noBlacklist = "${sample_name}.noBlacklist.bam"
         }
         runtime {
                 docker: "faryabilab/bedtools:0.1.0"
@@ -107,7 +106,7 @@ task remove_blacklist {
 
 task sort_bam {
 	input {
-		String bam
+		File bam
 		String sample_name
 
 		Int cpu = 12
@@ -117,7 +116,7 @@ task sort_bam {
 		samtools sort -@ ${cpu} -m "${mem}G" ${bam} -o "${sample_name}.sorted.bam"
         }
         output {
-		String bam_sorted = "${sample_name}.sorted.bam"
+		File bam_sorted = "${sample_name}.sorted.bam"
         }
         runtime {
                 docker: "faryabilab/samtools:0.1.0"
@@ -128,7 +127,7 @@ task sort_bam {
 
 task index_bam {
 	input {
-		String bam
+		File bam
 		String sample_name
 		
 		Int cpu = 12
@@ -138,7 +137,7 @@ task index_bam {
 		samtools index -@ ${cpu} -b ${bam} "${sample_name}_index.bai"
 	}
 	output {
-		String bam_index = "${sample_name}_index.bai"
+		File bam_index = "${sample_name}_index.bai"
 	}
 	runtime {
 		docker: "faryabilab/samtools:0.1.0"
@@ -149,7 +148,7 @@ task index_bam {
 
 task size_filter_bam {
 	input {
-		String bam
+		File bam
 		String sample_name
 		
 		Int? threshold_low
@@ -191,8 +190,8 @@ task size_filter_bam {
 		fi
 	}
 	output {
-		String? low = "${sample_name}.lowThreshold_GreaterThan${threshold_low}bp.bam"
-		String? hi = "${sample_name}.hiThreshold_LessThan${threshold_hi}bp.bam"
+		File? low = "${sample_name}.lowThreshold_GreaterThan${threshold_low}bp.bam"
+		File? hi = "${sample_name}.hiThreshold_LessThan${threshold_hi}bp.bam"
 	}
 	runtime {
 		docker: 'faryabilab/samtools:0.1.0'
@@ -203,7 +202,7 @@ task size_filter_bam {
 
 task filter_discordant_pairs {
 	input {
-		String bam
+		File bam
 		String sample_name
 		Int cpu = 12
 		Int mem = 25
@@ -217,7 +216,7 @@ task filter_discordant_pairs {
 		${bam}
 	}
 	output {
-		String bam_pairedReads = "${sample_name}.pairedReads.bam"
+		File bam_pairedReads = "${sample_name}.pairedReads.bam"
 	}
 	runtime {
 		docker: 'faryabilab/samtools:0.1.0'

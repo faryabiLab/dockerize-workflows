@@ -3,7 +3,7 @@ version 1.0
 task count_reads_single {
 	input {
 		#### REQUIRED
-		String bam
+		File bam
 		String GeneAnnotationFile		
 		String sample_name
 		####
@@ -38,7 +38,7 @@ task count_reads_single {
 task count_reads_paired {
         input {
 		#### REQUIRED
-                String bam
+                File bam
 		String GeneAnnotationFile		
 		String sample_name
 		####
@@ -74,7 +74,7 @@ task count_reads_paired {
 task quantifyCoverage {
 	input {
 		#### REQUIRED
-		String bam
+		File bam
 		String peaks
 		String chromSizes
 		String sample_name

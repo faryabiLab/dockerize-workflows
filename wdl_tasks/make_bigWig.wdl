@@ -6,7 +6,7 @@ version 1.0
 
 task read_count {
 	input {
-		String? bam
+		File? bam
 		
 		Int cpu = 1
 		Int mem = 5
@@ -46,7 +46,7 @@ task calculate_factor {
 
 task bam_to_bedgraph {
 	input {
-		String? bam
+		File? bam
 		String chromosome_sizes
 		Float factor
 		String sample_name
@@ -72,7 +72,7 @@ task bam_to_bedgraph {
 
 task bedgraph_to_bigwig {
 	input {
-                String bedgraph
+                File bedgraph
 		String chromosome_sizes
                 String sample_name
 		
@@ -95,7 +95,7 @@ task bedgraph_to_bigwig {
 
 workflow makeBigWig {
 	input {
-		String? bam
+		File? bam
 		String chromosome_sizes
 		String sampleName
 	}
