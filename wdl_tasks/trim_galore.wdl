@@ -52,7 +52,7 @@ task fastqc_trim {
 	}
 	runtime {
 		docker: "faryabilab/trim_galore:0.10"
-		cpu: 8
-		mem: 16
+		cpu: "${cpu}"
+		mem: "${mem}"
 	}
 }
