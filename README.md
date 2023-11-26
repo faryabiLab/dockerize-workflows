@@ -13,6 +13,11 @@ To make a sample sheet, simply run `make_samplesheet.sh` found in `utils/`:
 * Single-end: `./make_samplesheet.sh -d /path/to/fastq_dir` 
 
 This will create a `samplesheet.tsv` in your current working directory.
+#### Options file
+Cromwell allows the user to pass in an `options` file via the `-o/--options` argument, which grants control over the pipeline's output locations. This file's format is that of standard JSON, and the keys made readily available in this repository are:
+* `final_workflow_outputs_dir` - Directory to which the final workflow outputs will be copied
+* `final_call_logs_dir` - Directory to which the final workflow logs will be copied
+There are more options available, you can find them in the Cromwell documentation.
 ## Cromwell Configuration
 Within the `cromwell_configs` directory is a Cromwell config file which instructs the engine to use Docker as backend. The only option that can be tweaked in this file is the `concurrent_job_limit` variable: this controls the number of jobs that can be running at once (default = 10).
 #### Call-Caching
@@ -53,6 +58,7 @@ java \
   -Dconfig.file=/path/to/cromwell_config \
   -jar /path/to/cromwell.jar run \
   -i workflow_input.json \
+  -o options.json \
   -p imports.zip \
   workflow.wdl
 ```
@@ -70,6 +76,7 @@ java \
   -jar /path/to/cromwell.jar submit \
   -h http://<host ip>:<port> \
   -p imports.zip \
+  -o options.json \
   -i inputs.json \
    workflow.wdl
 ```
