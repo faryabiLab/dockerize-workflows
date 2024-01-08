@@ -1,0 +1,10 @@
+{
+  "Quantify.project_out_dir": "/mnt/data0/noah/testing/dockerize-workflows/workflows/steps/quantify",
+  "Quantify.bam_dir": "/mnt/data0/noah/testing/dockerize-workflows/workflows/steps/peakCalling/bams/bamfiles",
+  "Quantify.regions": "/mnt/data0/noah/testing/dockerize-workflows/workflows/steps/quantify/H3K27ac_SOX9-KO_consensusPeaks.bed",
+  "Quantify.sampleList": "/mnt/data0/noah/testing/dockerize-workflows/workflows/steps/quantify/samplesheet.tsv",
+  "Quantify.ChromosomeSizes": "/mnt/data0/noah/references/hg19/Genes/ChromInfo.txt",
+
+  "Quantify."
+}
+
