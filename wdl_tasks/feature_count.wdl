@@ -85,7 +85,8 @@ task quantifyCoverage {
 	}
 	command {
 		bedtools coverage \
-		-a ${peaks} -b ${bam} \
+		-a ${peaks} \
+		-b ${bam} \
 		-g ${chromSizes} \
 		> "${sample_name}.coverage.counts"
 	}
