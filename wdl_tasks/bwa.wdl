@@ -4,7 +4,6 @@ task BWA {
 		#### REQUIRED
 		Boolean paired
 		String sampleName
-		String sample_out_dir
 		String? fastq1_trimmed
 		String? fastq2_trimmed
 		String? fastq_trimmed_single
@@ -57,7 +56,7 @@ task BWA {
 			~{if defined(OutputUnpairedReads) then "-a" else ""} \
 			"${BWAIndex}" \
 			"${fastq1_trimmed}" "${fastq2_trimmed}" \
-			> "${sample_out_dir}/${sampleName}.raw.sam"	
+			> "${sampleName}.raw.sam"	
 
 
 		else
@@ -76,13 +75,13 @@ task BWA {
 			-T ${ScoreCutoff} \
 			"${BWAIndex}" \
 			"${fastq_trimmed_single}" \
-			> "${sample_out_dir}/${sampleName}.raw.sam"
+			> "${sampleName}.raw.sam"
 
 		fi
 			
 	}
 	output {
-		String rawSam = "${sample_out_dir}/${sampleName}.raw.sam"
+		File rawSam = "${sampleName}.raw.sam"
 	}
 	runtime {
 		docker: 'faryabilab/bwa:0.1.0'
