@@ -96,13 +96,13 @@ workflow ChIPseq {
 				bam=sort_bam.bam_sorted,
 				chromosome_sizes=chromosome_sizes,
 				factor=calculate_factor.factor,
-				sample_name=sample_out_dir+"/"+sampleName
+				sample_name=sampleName
 		}
 		call bwTasks.bedgraph_to_bigwig {
 			input:
 				bedgraph=bam_to_bedgraph.bedgraph,
 				chromosome_sizes=chromosome_sizes,
-				sample_name=sample_out_dir+"/"+sampleName
+				sample_name=sampleName
 		}
 	}
 	output {
