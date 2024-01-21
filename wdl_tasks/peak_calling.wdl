@@ -4,27 +4,15 @@ task macs2 {
 	input {
 		#### REQUIRED
 		String sampleName
-		String sample_out_dir
 		String? bam
 		String? control_bam		
 		####		
 
-		String GenomeSize = 'hs'
-		Int Shift = 0		
-		Int ExtensionSize = 20
-		Int BandWidth = 200
-		Int MinFragSize = 20
-		String MFold = "5 50"		
-		Int Seed = 0 
-                Int SmallLocal = 1000
-                Int LargeLocal = 10000		
-		String ScaleTo = "small"
-		Float BroadCutoff = 0.1			
-		String BufferSize = 100000
-
 		Int? pcBam
 		String? FixBimodal
 		String? NoModel
+		Int? Shift
+		Int? ExtensionSize
 		String? SaveFragPileup
 		String? TagSize
 		String? Qvalue = 0.05
@@ -40,25 +28,16 @@ task macs2 {
 	}
 	command {
 		macs2 callpeak \
-		-t  ${bam} \
+		-t ${bam} \
 		~{if defined(Pvalue) then "-p "+ Pvalue else ""} \
 		~{if defined(Qvalue) then "-q "+ Qvalue else ""} \
 		~{if defined(control_bam) then "-c "+ control_bam else ""} \
-		-g ${GenomeSize} \
-		--outdir ${sample_out_dir} \
 		-n ${sampleName} \
-		--shift ${Shift} \
-		--extsize ${ExtensionSize} \
-		--bw ${BandWidth} \
-		--d-min ${MinFragSize} \
-		--mfold ${MFold} \
-		--seed ${Seed} \
-		--slocal ${SmallLocal} \
-		--llocal ${LargeLocal} \
-		--scale-to ${ScaleTo} \
-		--buffer-size ${BufferSize} \
-		--broad-cutoff ${BroadCutoff} \
-		--outdir ${sample_out_dir} \
+		~{if defined(Shift) then "--shift "+ Shift else ""} \
+		~{if defined(ExtensionSize) then "--extsize "+ ExtensionSize else ""} \
+		--bw 300 \
+		--seed 0 \
+		--keep-dup 1 \
 		${CallSummits} \
 		${FixBimodal} \
 		${NoModel} \
@@ -70,8 +49,8 @@ task macs2 {
 		${CutoffAnalysis}
 	}
 	output {
-		String narrowPeak = "${sample_out_dir}/${sampleName}_peaks.narrowPeak"
-		String summits = "${sample_out_dir}/${sampleName}_summits.bed"
+		File narrowPeak = "${sampleName}_peaks.narrowPeak"
+		File summits = "${sampleName}_summits.bed"
 	}
 	runtime {
 		docker: 'faryabilab/macs2:0.1.0'
@@ -83,7 +62,7 @@ task macs2 {
 task SEACR {
 	input {
 		String sampleName
-                String sample_out_dir
+                String? sample_out_dir
 
                 String bedgraph
 		String? control_bedgraph
@@ -100,14 +79,14 @@ task SEACR {
 	}
 	command {
 		bash "/tmp/SEACR-1.3/SEACR_1.3.sh" \
-		"${bedgraph}.${type}" \
+		"${bedgraph}" \
 		~{if defined(control_bedgraph) then control_bedgraph else top_peak_fraction} \
 		"${Normalization}" \
 		"${RunMode}" \
-		"${sample_out_dir}/${sampleName}.${type}"
+		"${sampleName}.${type}"
 	}
 	output {
-		String seacr_out = "${sample_out_dir}/${sampleName}.${type}.${RunMode}.bed"
+		File seacr_out = "${sampleName}.${type}.${RunMode}.bed"
 	}
 	runtime {
 		docker: 'faryabilab/seacr:0.1.0'
@@ -132,7 +111,7 @@ task bamToBedgraph {
 		> "${sampleName}.seacr.bg.${type}"
 	}
 	output {
-		String seacr_bg = "${sampleName}.seacr.bg"
+		File seacr_bg = "${sampleName}.seacr.bg.${type}"
 	}
 	runtime {
 		docker: "faryabilab/bedtools:0.1.0"
