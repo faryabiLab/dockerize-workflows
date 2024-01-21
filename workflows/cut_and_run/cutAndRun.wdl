@@ -11,7 +11,6 @@ workflow cut_and_run {
 	input {
 		File sampleList
 		String fastq_dir
-		String project_out_dir
 		Boolean paired 
 		String BWAIndex
 		String PeakCaller
@@ -26,11 +25,9 @@ workflow cut_and_run {
 	Array[Array[String]] samples = read_tsv(sampleList)
 	scatter (sample in samples) {
 		String sampleName=sample[0]
-		String sample_out_dir=project_out_dir+"/"+sampleName
 		call trimTasks.fastqc_trim {
 			input:
-				fastq_dir=fastq_dir,
-				sample_out_dir=sample_out_dir,
+				fastq_dir=fastq_dir,	
 				sampleName=sampleName,
 				fastq_suffix=FastqSuffix,
 				paired=paired
@@ -39,7 +36,6 @@ workflow cut_and_run {
 			input:
 				paired=paired,
 				sampleName=sampleName,
-				sample_out_dir=sample_out_dir,
 				fastq1_trimmed=fastqc_trim.out_fqc1,
 				fastq2_trimmed=fastqc_trim.out_fqc2,
 				fastq_trimmed_single=fastqc_trim.out_fqc,
@@ -48,39 +44,39 @@ workflow cut_and_run {
 		call filterTasks.sam_to_bam {
 			input:
 				sam=BWA.rawSam,
-				sample_name="${sample_out_dir}"+"/"+"${sampleName}"+".raw"
+				sample_name="${sampleName}"+".raw"
 		}
 		call filterTasks.remove_scaffolds {
 			input:
 				bam=sam_to_bam.bam,
 				chrom_no_scaff=ChromNoScaffold,
-				sample_name="${sample_out_dir}"+"/"+"${sampleName}"
+				sample_name="${sampleName}"
 		}
 		call filterTasks.remove_blacklist {
 			input:
 				bam=remove_scaffolds.bam_noScaffold,
 				blacklist=Blacklist,
-				sample_name="${sample_out_dir}"+"/"+"${sampleName}"
+				sample_name="${sampleName}"
 		}
 		call filterTasks.filter_discordant_pairs {
 			input:
 				bam=remove_blacklist.bam_noBlacklist,
-				sample_name="${sample_out_dir}"+"/"+"${sampleName}"
+				sample_name="${sampleName}"
 		}
 		call filterTasks.sort_bam {
 			input:
 				bam=filter_discordant_pairs.bam_pairedReads,
-				sample_name="${sample_out_dir}"+"/"+"${sampleName}"
+				sample_name="${sampleName}"
 		}
 		call filterTasks.remove_duplicates {
 			input:
 				bam=sort_bam.bam_sorted,
-				sample_name="${sample_out_dir}"+"/"+"${sampleName}"
+				sample_name="${sampleName}"
 		}
 		call filterTasks.size_filter_bam {
 			input:
 				bam=remove_duplicates.bam_noDuplicate,
-				sample_name="${sample_out_dir}"+"/"+"${sampleName}",
+				sample_name="${sampleName}",
 				threshold_hi=size_high,
 				threshold_low=size_low
 		}
@@ -88,7 +84,6 @@ workflow cut_and_run {
 			call pcTasks.macs2 as allReadsPeakCalling_MACS2 {
 				input:
 					sampleName=sampleName,
-					sample_out_dir=sample_out_dir,
 					bam=remove_duplicates.bam_noDuplicate,
 					control_bam=PeakCallingControl
 			}
@@ -96,7 +91,6 @@ workflow cut_and_run {
 				call pcTasks.macs2 as lowReadsPeakCalling_MACS2 {
 					input:
 						sampleName=sampleName,
-						sample_out_dir=sample_out_dir,
 						bam=size_filter_bam.hi,
 						control_bam=PeakCallingControl
 				}
@@ -105,7 +99,6 @@ workflow cut_and_run {
 				call pcTasks.macs2 as highReadsPeakCalling_MACS2 {
 					input:
 						sampleName=sampleName,
-						sample_out_dir=sample_out_dir,
 						bam=size_filter_bam.low,
 						control_bam=PeakCallingControl
 				}
@@ -116,13 +109,12 @@ workflow cut_and_run {
 			call pcTasks.bamToBedgraph as allReads_BAMtoBG{
 				input:
 					bam=remove_duplicates.bam_noDuplicate,
-					sampleName="${sample_out_dir}/${sampleName}",
+					sampleName="${sampleName}",
 					type="all"
 			}	
 			call pcTasks.SEACR as allReadsPeakCalling_SEACR{
 				input:
 					sampleName=sampleName,
-					sample_out_dir=sample_out_dir,
 					bedgraph=allReads_BAMtoBG.seacr_bg,
 					control_bedgraph=PeakCallingControl,
 					type="all"
@@ -131,13 +123,12 @@ workflow cut_and_run {
 				call pcTasks.bamToBedgraph as lowReads_BAMtoBG {
 					input:
 						bam=size_filter_bam.hi,
-						sampleName="${sample_out_dir}/${sampleName}",
+						sampleName="${sampleName}",
 						type="low"
 				}
 				call pcTasks.SEACR as lowReadsPeakCalling_SEACR {
 					input:
 						sampleName=sampleName,
-						sample_out_dir=sample_out_dir,
 						bedgraph=lowReads_BAMtoBG.seacr_bg,
 						control_bedgraph=PeakCallingControl,
 						type="low"
@@ -147,13 +138,12 @@ workflow cut_and_run {
 				call pcTasks.bamToBedgraph as highReads_BAMtoBG {
 					input:
 						bam=size_filter_bam.low,
-						sampleName="${sample_out_dir}/${sampleName}",
+						sampleName="${sampleName}",
 						type="high"
 				}
 				call pcTasks.SEACR as highReadsPeakCalling_SEACR {
 					input:
 						sampleName=sampleName,
-						sample_out_dir=sample_out_dir,
 						bedgraph=highReads_BAMtoBG.seacr_bg,
 						control_bedgraph=PeakCallingControl,
 						type="high"
@@ -164,14 +154,14 @@ workflow cut_and_run {
 			input:
 				bam=remove_duplicates.bam_noDuplicate,
 				chromosome_sizes=ChromosomeSizes,
-				sampleName="${sample_out_dir}"+"/"+"${sampleName}.AllReads"
+				sampleName="${sampleName}.AllReads"
 		}
 		if ("${size_high}" != "") {
 			call makeBWWorkflow.makeBigWig as BW_hiThresh {
 				input:
 					bam=size_filter_bam.hi,
 					chromosome_sizes=ChromosomeSizes,
-					sampleName="${sample_out_dir}"+"/"+"${sampleName}.HighThreshold"
+					sampleName="${sampleName}.HighThreshold"
 			}
 		}
 	}
