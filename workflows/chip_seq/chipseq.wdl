@@ -17,7 +17,6 @@ workflow ChIPseq {
 	input {
 		File sampleList
 		String fastq_dir
-		String project_out_dir
 		Boolean paired
 		String bwa_index
 		String chromNoScaffold
@@ -28,7 +27,6 @@ workflow ChIPseq {
 	Array[Array[String]] samples = read_tsv(sampleList)
 	scatter (sample in samples) {
 		String sampleName=sample[0]
-		String sample_out_dir=project_out_dir+"/"+sampleName
 		call trimTasks.fastqc_trim {
 			input:
 				fastq_dir=fastq_dir,
