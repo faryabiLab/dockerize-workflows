@@ -7,12 +7,6 @@ import "wdl_tasks/peak_calling.wdl" as pcTasks
 import "wdl_tasks/feature_count.wdl" as quantTasks
 import "wdl_tasks/make_bigWig.wdl" as bwTasks
 
-#####
-# The model for output file naming is as follows:
-# Each sample name will be a directory, and wthin each directory will be that sample's complete collection of files
-# from the entire run of the pipeline
-#####
-
 workflow ChIPseq {
 	input {
 		File sampleList
@@ -30,7 +24,6 @@ workflow ChIPseq {
 		call trimTasks.fastqc_trim {
 			input:
 				fastq_dir=fastq_dir,
-				sample_out_dir=sample_out_dir,
 				sampleName=sampleName,
 				paired=paired
 		}
@@ -38,7 +31,6 @@ workflow ChIPseq {
 			input:
 				paired=paired,
 				sampleName=sampleName,
-				sample_out_dir=sample_out_dir,
 				fastq1_trimmed=fastqc_trim.out_fqc1,
 				fastq2_trimmed=fastqc_trim.out_fqc2,
 				fastq_trimmed_single=fastqc_trim.out_fqc,
@@ -47,39 +39,38 @@ workflow ChIPseq {
 		call filterTasks.sam_to_bam {
 			input:
 				sam=BWA.rawSam,
-				sample_name="${sample_out_dir}/${sampleName}.raw"
+				sample_name="${sampleName}.raw"
 		}
 		call filterTasks.remove_scaffolds {
 			input:
 				bam=sam_to_bam.bam,
 				chrom_no_scaff=chromNoScaffold,
-				sample_name=sample_out_dir+"/"+sampleName
+				sample_name=sampleName
 		}
 		call filterTasks.remove_blacklist {
 			input:
 				bam=remove_scaffolds.bam_noScaffold,
 				blacklist=blacklist,
-				sample_name=sample_out_dir+"/"+sampleName
+				sample_name=sampleName
 		}
 		call filterTasks.sort_bam {
 			input:
 				bam=remove_blacklist.bam_noBlacklist,
-				sample_name=sample_out_dir+"/"+sampleName
+				sample_name=sampleName
 		}
 		call filterTasks.remove_duplicates {
 			input:
 				bam=sort_bam.bam_sorted,
-				sample_name=sample_out_dir+"/"+sampleName
+				sample_name=sampleName
 		}
 		call filterTasks.index_bam {
 			input:
 				bam=remove_duplicates.bam_noDuplicate,
-				sample_name=sample_out_dir+"/"+sampleName
+				sample_name=sampleName
 		}
 		call pcTasks.macs2 {
 			input:
 				sampleName=sampleName,
-				sample_out_dir=sample_out_dir,
 				bam=remove_duplicates.bam_noDuplicate,
 				control_bam=PeakcallingControl	
 		}
