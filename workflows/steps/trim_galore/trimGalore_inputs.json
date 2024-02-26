@@ -1,0 +1,13 @@
+{
+  "RNAseq.fastqc_trim.e": "Float (optional, default = 0.1)",
+  "RNAseq.fastqc_trim.stringency": "Int (optional, default = 5)",
+  "RNAseq.fastqc_trim.cpu": "Int (optional, default = 8)",
+  "RNAseq.fastqc_trim.quality": "Int (optional, default = 15)",
+  "RNAseq.fastq_dir": "String",
+  "RNAseq.fastq_suffix": "String? (optional)",
+  "RNAseq.fastqc_trim.length": "Int (optional, default = 20)",
+  "RNAseq.paired": "Boolean",
+  "RNAseq.sampleList": "String",
+  "RNAseq.fastqc_trim.mem": "Int (optional, default = 8)"
+}
+
