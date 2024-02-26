@@ -18,6 +18,8 @@ Cromwell allows the user to pass in an `options` file via the `-o/--options` arg
 * `final_workflow_outputs_dir` - Directory to which the final workflow outputs will be copied
 * `final_call_logs_dir` - Directory to which the final workflow logs will be copied
 There are more options available, you can find them in the Cromwell documentation.
+#### Docker Containers
+By default, the pipelines are configured to run each step within a specified docker container, all of which are hosted on the [Faryabi Lab Dockerhub](https://hub.docker.com/). To learn how to use different docker containers for running workflow steps, refer to the [Official Cromwell Documentation](https://cromwell.readthedocs.io/en/stable/).
 ## Cromwell Configuration
 Within the `cromwell_configs` directory is a Cromwell config file which instructs the engine to use Docker as backend. The only option that can be tweaked in this file is the `concurrent_job_limit` variable: this controls the number of jobs that can be running at once (default = 10).
 #### Call-Caching
@@ -80,6 +82,9 @@ java \
   -i inputs.json \
    workflow.wdl
 ```
+* Navigate to `0.0.0.0:8000` to access the GUI, where different aspects of the workflow can be monitored via the `REST` API.
+  * A useful tool is the timing diagram tool which displays a graphical representation of the workflow's progress, broken down by sample and job. It can be accessed with the `REST` API via `0.0.0.0:5200/api/workflows/v1/<workflow ID>/timing` \
+
 Of course, you can find out more about Cromwell's capabilities in the [Official Cromwell Documentation](https://cromwell.readthedocs.io/en/stable/).
 
 
