@@ -2,6 +2,10 @@
 Genomic data processing pipelines written in Workflow Definition Language (WDL), making use of Docker containers to ensure reproducability. The Docker containers used have been curated for usage in the Faryabi Lab processing pipelines, and can be found on [Dockerhub](https://hub.docker.com/u/faryabilab).
 
 ## Setup
+Clone this repository to your local machine
+```
+git clone https://github.com/faryabiLab/dockerize-workflows
+```
 #### Dependencies
 Ensure that the latest `cromwell` engine (.jar file) and womtools (.jar) is installed from their [GitHub repository](https://github.com/broadinstitute/cromwell). \
 Have [Docker](https://www.docker.com/products/personal/) installed on your machine.
