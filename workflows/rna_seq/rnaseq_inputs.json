@@ -1,6 +1,5 @@
 { 
   "RNAseq.paired": "Boolean",
-  "RNAseq.project_out_dir": "String",
   "RNAseq.fastq_dir": "String",
   "RNAseq.sampleList": "File",
   "RNAseq.star_index": "String",
