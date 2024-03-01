@@ -39,10 +39,11 @@ docker run \
 ```
 ## Usage
 ### Inputs
-The `/workflows` directory houses all by-assay pipelines. In each subdirectory, there are several files (using RNA-seq as example):
-* `rnaseq.wdl` - The main workflow file that will be run.
+The `/workflows` directory houses all by-assay pipelines. In each subdirectory, there are several files:
+* `*.wdl` - The main workflow file that will be run.
 * `imports.zip` - A zipped directory of all imports needed for this pipeline. This is important for running your pipeline successfully. 
-* `rnaseq_inputs.json` - A JSON file with all relative input options. \
+* `*_inputs.json` - A JSON file with all relative input options.
+* `options.json` - A JSON file with paths to output locations for workflow results and logs. 
 
 In the inputs JSON, you will find command-specific parameters (i.e. for trimming, alignment, etc.) as well as common inputs needed for every pipeline:
 * `paired` - A boolean value indicating whether the experiment was paired-end (`true`) or single-end (`false`).
