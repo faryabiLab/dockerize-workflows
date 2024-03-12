@@ -9,6 +9,8 @@ task BWA {
 		String? fastq_trimmed_single
 		String BWAIndex
 		####
+		
+		String? Dockerhub_Pull="faryabilab/bwa:0.1.0"
 
 		Int? subsequence_seed = 32
 		Int? seed_max_edit_distance = 2
@@ -84,7 +86,7 @@ task BWA {
 		File rawSam = "${sampleName}.raw.sam"
 	}
 	runtime {
-		docker: 'faryabilab/bwa:0.1.0'
+		docker: "${Dockerhub_Pull}"
 		cpu: "${cpu}"
 		mem: "${mem}"
 	}

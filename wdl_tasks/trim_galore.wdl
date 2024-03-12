@@ -8,6 +8,7 @@ task fastqc_trim {
 		String? fastq_suffix
 		Boolean paired
 		####
+		String? Dockerhub_Pull = "faryabilab/trim_galore:0.10"
 		Int quality = 15
 		Int stringency = 5
 		Float e = 0.1
@@ -52,7 +53,7 @@ task fastqc_trim {
 		File? out_fqc2 = "${sampleName}"+"_val_2.fq.gz"
 	}
 	runtime {
-		docker: "faryabilab/trim_galore:0.10"
+		docker: "${Dockerhub_Pull}"
 		cpu: "${cpu}"
 		mem: "${mem}"
 	}

@@ -6,7 +6,8 @@ task macs2 {
 		String sampleName
 		String? bam
 		String? control_bam		
-		####		
+		####
+		String? Dockerhub_Pull = "faryabilab/macs2:0.1.0"		
 
 		Int? pcBam
 		String? FixBimodal
@@ -53,7 +54,7 @@ task macs2 {
 		File summits = "${sampleName}_summits.bed"
 	}
 	runtime {
-		docker: 'faryabilab/macs2:0.1.0'
+		docker: ${Dockerhub_Pull}
 		cpu: "${cpu}"
 		mem: "${mem}"
 	}	
@@ -63,6 +64,7 @@ task SEACR {
 	input {
 		String sampleName
                 String? sample_out_dir
+		String? Dockerhub_Pull = "faryabilab/seacr:0.1.0"
 
                 String bedgraph
 		String? control_bedgraph
@@ -89,7 +91,7 @@ task SEACR {
 		File seacr_out = "${sampleName}.${type}.${RunMode}.bed"
 	}
 	runtime {
-		docker: 'faryabilab/seacr:0.1.0'
+		docker: ${Dockerhub_Pull}
 		cpu: "${cpu}"
 		mem: "${mem}"
 	}
@@ -100,6 +102,7 @@ task bamToBedgraph {
 		String? bam
 		String sampleName
 		String type
+		String? Dockerhub_Pull = "faryabilab/bedtools:0.1.0"
 
 		Int cpu = 12
 		Int mem = 25
@@ -114,7 +117,7 @@ task bamToBedgraph {
 		File seacr_bg = "${sampleName}.seacr.bg.${type}"
 	}
 	runtime {
-		docker: "faryabilab/bedtools:0.1.0"
+		docker: ${Dockerhub_Pull}
 		cpu: "${cpu}"
 		mem: "${mem}"
 	}
