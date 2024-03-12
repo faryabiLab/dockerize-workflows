@@ -4,7 +4,7 @@ task sam_to_bam {
 	input {
 		File sam
 		String sample_name
-
+		String? Dockerhub_Pull = "faryabilab/samtools:0.1.0"
 		Int cpu = 12
 		Int mem = 8
 	}
@@ -15,7 +15,7 @@ task sam_to_bam {
 		File bam = "${sample_name}.bam"
 	}
 	runtime {
-		docker: "faryabilab/samtools:0.1.0"
+		docker: "${Dockerhub_Pull}"
 		cpu: "${cpu}"
 		mem: "${mem}"
 	}
@@ -28,6 +28,7 @@ task remove_scaffolds {
 		String chrom_no_scaff
 		String sample_name
 		####
+		String? Dockerhub_Pull = "faryabilab/samtools:0.1.0"
 		
 		Int cpu = 12
 		Int mem = 25
@@ -39,7 +40,7 @@ task remove_scaffolds {
 		File bam_noScaffold = "${sample_name}.noScaffold.bam"
 	}
 	runtime {
-		docker: "faryabilab/samtools:0.1.0"
+		docker: "${Dockerhub_Pull}"
 		cpu: "${cpu}"
 		mem: "${mem}"
 	}
@@ -51,6 +52,7 @@ task remove_duplicates {
 		File bam
 		String sample_name
 		####
+		String? Dockerhub_Pull = "faryabilab/picard:0.1.0"
 
 		String PicardRemoveDuplicates = "true"
 		String PicardValidationStringency = "SILENT"
@@ -74,7 +76,7 @@ task remove_duplicates {
         }
         runtime {
 		# Picard docker image w/ samtools base
-                docker: "faryabilab/picard:0.1.0"
+                docker: "${Dockerhub_Pull}"
 		cpu: "${cpu}"
 		mem: "${mem}"
         }
@@ -87,6 +89,7 @@ task remove_blacklist {
 		String blacklist
 		String sample_name	
 		####
+		String? Dockerhub_Pull = "faryabilab/bedtools:0.1.0"
 
 		Int cpu = 12
 		Int mem = 25
@@ -98,7 +101,7 @@ task remove_blacklist {
 		File bam_noBlacklist = "${sample_name}.noBlacklist.bam"
         }
         runtime {
-                docker: "faryabilab/bedtools:0.1.0"
+                docker: "${Dockerhub_Pull}"
 		cpu: "${cpu}"
 		mem: "${mem}"
         }
@@ -108,6 +111,7 @@ task sort_bam {
 	input {
 		File bam
 		String sample_name
+		String? Dockerhub_Pull = "faryabilab/samtools:0.1.0"
 
 		Int cpu = 12
 		Int mem = 100
@@ -119,7 +123,7 @@ task sort_bam {
 		File bam_sorted = "${sample_name}.sorted.bam"
         }
         runtime {
-                docker: "faryabilab/samtools:0.1.0"
+                docker: "${Dockerhub_Pull}"
 		cpu: "${cpu}"
 		mem: "${mem}"
         }
@@ -129,6 +133,7 @@ task index_bam {
 	input {
 		File bam
 		String sample_name
+		String? Dockerhub_Pull = "faryabilab/samtools:0.1.0"
 		
 		Int cpu = 12
 		Int mem = 25
@@ -140,7 +145,7 @@ task index_bam {
 		File bam_index = "${sample_name}_index.bai"
 	}
 	runtime {
-		docker: "faryabilab/samtools:0.1.0"
+		docker: "${Dockerhub_Pull}"
 		cpu: "${cpu}"
 		mem: "${mem}"
 	}
@@ -150,6 +155,7 @@ task size_filter_bam {
 	input {
 		File bam
 		String sample_name
+		String? Dockerhub_Pull = "faryabilab/samtools:0.1.0"
 		
 		Int? threshold_low
 		Int? threshold_hi
@@ -194,7 +200,7 @@ task size_filter_bam {
 		File? hi = "${sample_name}.hiThreshold_LessThan${threshold_hi}bp.bam"
 	}
 	runtime {
-		docker: 'faryabilab/samtools:0.1.0'
+		docker: "${Dockerhub_Pull}"
 		cpu: "${cpu}"
 		mem: "${mem}"
 	}
@@ -204,6 +210,7 @@ task filter_discordant_pairs {
 	input {
 		File bam
 		String sample_name
+		String? Dockerhub_Pull = "faryabilab/samtools:0.1.0"
 		Int cpu = 12
 		Int mem = 25
 	}
@@ -219,7 +226,7 @@ task filter_discordant_pairs {
 		File bam_pairedReads = "${sample_name}.pairedReads.bam"
 	}
 	runtime {
-		docker: 'faryabilab/samtools:0.1.0'
+		docker: "${Dockerhub_Pull}"
 		cpu: "${cpu}"
 		mem: "${mem}"
 	}

@@ -7,7 +7,7 @@ version 1.0
 task read_count {
 	input {
 		File? bam
-		
+		String? Dockerhub_Pull = "faryabilab/samtools:0.1.0"	
 		Int cpu = 1
 		Int mem = 5
 	}	
@@ -18,7 +18,7 @@ task read_count {
 		Int count = read_int(stdout())
 	}
 	runtime {
-		docker: 'faryabilab/samtools:0.1.0'
+		docker: "${Dockerhub_Pull}"
 		cpu: "${cpu}"
 		mem: "${mem}"
 	}
@@ -27,6 +27,7 @@ task read_count {
 task calculate_factor {
 	input {
 		Int count
+		String? Dockerhub_Pull = "faryabilab/bedtools:0.1.0"
 
 		Int cpu = 1
 		Int mem = 5
@@ -38,7 +39,7 @@ task calculate_factor {
 		Float factor = read_float(stdout())
 	}
 	runtime {
-		docker: 'faryabilab/bedtools:0.1.0'
+		docker: "${Dockerhub_Pull}"
                 cpu: "${cpu}"
                 mem: "${mem}"
 	}
@@ -50,6 +51,7 @@ task bam_to_bedgraph {
 		String chromosome_sizes
 		Float factor
 		String sample_name
+		String? Dockerhub_Pull = "faryabilab/bedtools:0.1.0"
 		
 		Int cpu = 8
 		Int mem = 16
@@ -64,7 +66,7 @@ task bam_to_bedgraph {
 		File bedgraph = "${sample_name}.bg"
 	}
 	runtime {
-		docker: 'faryabilab/bedtools:0.1.0'
+		docker: "${Dockerhub_Pull}"
                 cpu: "${cpu}"
                 mem: "${mem}"
 	}
@@ -75,6 +77,7 @@ task bedgraph_to_bigwig {
                 File bedgraph
 		String chromosome_sizes
                 String sample_name
+		String? Dockerhub_Pull = "faryabilab/bedtools:0.1.0"
 		
 		Int cpu = 12
 		Int mem = 16
@@ -87,7 +90,7 @@ task bedgraph_to_bigwig {
                 File bw = "${sample_name}.bw"
         }
         runtime {
-                docker: 'faryabilab/bedtools:0.1.0'
+                docker: "${Dockerhub_Pull}"
                 cpu: "${cpu}"
                 mem: "${mem}"
         }

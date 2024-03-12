@@ -7,7 +7,9 @@ task count_reads_single {
 		String GeneAnnotationFile		
 		String sample_name
 		####
-
+		
+		String? Dockerhub_Pull = "faryabilab/bedtools:0.1.0"
+	
 		String AttributeType = "exon"
 		String GTFAttributeType = "gene_id"
 		String Stranded = "1"
@@ -79,6 +81,7 @@ task quantifyCoverage {
 		String chromSizes
 		String sample_name
 		####
+		String? Dockerhub_Pull = "faryabilab/bedtools:0.1.0"
 
 		Int cpu = 12
 		Int mem = 25
@@ -94,7 +97,7 @@ task quantifyCoverage {
 		File out_counts = "${sample_name}.coverage.counts"
 	}
 	runtime {
-		docker: "faryabilab/bedtools:0.1.0"
+		docker: "${Dockerhub_Pull}"
 		cpu: "${cpu}"
 		mem: "${mem}"
 	}

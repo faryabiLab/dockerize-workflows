@@ -10,6 +10,7 @@ task STAR {
 		String sample_name
 		Boolean paired
 		####
+		String? Dockerhub_Pull = "faryabilab/star:0.10"
 		String outFilterType = "BySJout"
 		String readFilesCommand = "zcat"
 		String outSamAttributes = "Standard"
@@ -59,7 +60,7 @@ task STAR {
 	}
 	output {File bam = "${sample_name}Aligned.out.bam"}
 	runtime {
-		docker: 'faryabilab/star:0.10'
+		docker: "${Dockerhub_Pull}"
 		cpu: "${STAR_cpu}"
 		mem: "${STAR_mem}"
 	}
