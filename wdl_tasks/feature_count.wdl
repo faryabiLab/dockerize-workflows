@@ -44,6 +44,7 @@ task count_reads_paired {
 		String GeneAnnotationFile		
 		String sample_name
 		####
+		String? Dockerhub_Pull = "faryabilab/subread:0.1.0"
 
 		String AttributeType = "exon"
 		String GTFAttributeType = "gene_id"
@@ -67,7 +68,7 @@ task count_reads_paired {
 		File gene_counts = "${sample_name}.counts"
         }
         runtime {
-                docker: "faryabilab/subread:0.1.0"
+                docker: "${Dockerhub_Pull}"
 		cpu: "${cpu}"
 		mem: "${mem}"
         }
