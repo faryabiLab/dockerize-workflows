@@ -1,23 +1,27 @@
-{ 
-  "RNAseq.paired": "Boolean",
+{
   "RNAseq.fastq_dir": "String",
-  "RNAseq.sampleList": "File",
-  "RNAseq.star_index": "String",
-  "RNAseq.chromNoScaffold": "String",
-  "RNAseq.GeneAnnotationFile": "String",
   "RNAseq.chromosome_sizes": "String",
   "RNAseq.blacklist": "String",
+  "RNAseq.chromNoScaffold": "String",
+  "RNAseq.star_index": "String",
   "RNAseq.fastq_suffix": "String? (optional)",
+  "RNAseq.GeneAnnotationFile": "String",
+  "RNAseq.paired": "Boolean",
+  "RNAseq.sampleList": "String",
 
   "RNAseq.fastqc_trim.e": "Float (optional, default = 0.1)",
   "RNAseq.fastqc_trim.stringency": "Int (optional, default = 5)",
+  "RNAseq.fastqc_trim.cpu": "Int (optional, default = 8)",
   "RNAseq.fastqc_trim.quality": "Int (optional, default = 15)",
   "RNAseq.fastqc_trim.length": "Int (optional, default = 20)",
-  
-  "RNAseq.STAR.outSAMunmapped": "String (optional, default = \"Within\")",
+  "RNAseq.fastqc_trim.Dockerhub_Pull": "String? (optional, default = \"faryabilab/trim_galore:0.10\")",
+  "RNAseq.fastqc_trim.mem": "Int (optional, default = 8)",
+
   "RNAseq.STAR.outSAMtype": "String (optional, default = \"BAM Unsorted\")",
   "RNAseq.STAR.STAR_mem": "Int (optional, default = 25)",
+  "RNAseq.STAR.outSAMunmapped": "String (optional, default = \"Within\")",
   "RNAseq.STAR.STAR_cpu": "Int (optional, default = 10)",
+  "RNAseq.STAR.Dockerhub_Pull": "String? (optional, default = \"faryabilab/star:0.10\")",
   "RNAseq.STAR.outFilterIntronMotifs": "String (optional, default = \"RemoveNoncanonicalUnannotated\")",
   "RNAseq.STAR.chimSegmentMin": "Int (optional, default = 25)",
   "RNAseq.STAR.chimJunctionOverhangMin": "Int (optional, default = 25)",
@@ -27,17 +31,57 @@
   "RNAseq.STAR.readFilesCommand": "String (optional, default = \"zcat\")",
   "RNAseq.STAR.outSamstrandField": "String (optional, default = \"intronMotif\")",
 
-  "RNAseq.remove_duplicates.PicardRemoveDuplicates": "String (optional, default = \"true\")",
-  "RNAseq.remove_duplicates.PicardValidationStringency": "String (optional, default = \"SILENT\")",
-  "RNAseq.remove_duplicates.PicardMetricsFile": "String (optional, default = \"removeDuplicate_metrics.txt\")",
-  
   "RNAseq.count_reads_single.GTFAttributeType": "String (optional, default = \"gene_id\")",
+  "RNAseq.count_reads_single.Dockerhub_Pull": "String? (optional, default = \"faryabilab/bedtools:0.1.0\")",
+  "RNAseq.count_reads_single.cpu": "Int (optional, default = 12)",
   "RNAseq.count_reads_single.Stranded": "String (optional, default = \"1\")",
   "RNAseq.count_reads_single.AttributeType": "String (optional, default = \"exon\")",
+  "RNAseq.count_reads_single.mem": "Int (optional, default = 25)",
 
+  "RNAseq.bam_to_bedgraph.mem": "Int (optional, default = 16)",
+  "RNAseq.bam_to_bedgraph.Dockerhub_Pull": "String? (optional, default = \"faryabilab/bedtools:0.1.0\")",
+  "RNAseq.bam_to_bedgraph.cpu": "Int (optional, default = 8)",
+
+  "RNAseq.remove_duplicates.Dockerhub_Pull": "String? (optional, default = \"faryabilab/picard:0.1.0\")",
+  "RNAseq.remove_duplicates.PicardRemoveDuplicates": "String (optional, default = \"true\")",
+  "RNAseq.remove_duplicates.mem": "Int (optional, default = 25)",
+  "RNAseq.remove_duplicates.PicardMetricsFile": "String (optional, default = \"removeDuplicate_metrics.txt\")",
+  "RNAseq.remove_duplicates.cpu": "Int (optional, default = 12)",
+  "RNAseq.remove_duplicates.PicardValidationStringency": "String (optional, default = \"SILENT\")",
+
+  "RNAseq.sort_bam.Dockerhub_Pull": "String? (optional, default = \"faryabilab/samtools:0.1.0\")",
+  "RNAseq.sort_bam.mem": "Int (optional, default = 100)",
+  "RNAseq.sort_bam.cpu": "Int (optional, default = 12)",
+
+  "RNAseq.index_bam.cpu": "Int (optional, default = 12)",
+  "RNAseq.index_bam.mem": "Int (optional, default = 25)",
+  "RNAseq.index_bam.Dockerhub_Pull": "String? (optional, default = \"faryabilab/samtools:0.1.0\")",
+
+  "RNAseq.calculate_factor.Dockerhub_Pull": "String? (optional, default = \"faryabilab/bedtools:0.1.0\")",
+  "RNAseq.calculate_factor.mem": "Int (optional, default = 5)",
+  "RNAseq.calculate_factor.cpu": "Int (optional, default = 1)",
+
+  "RNAseq.read_count.mem": "Int (optional, default = 5)",
+  "RNAseq.read_count.cpu": "Int (optional, default = 1)",
+  "RNAseq.read_count.Dockerhub_Pull": "String? (optional, default = \"faryabilab/samtools:0.1.0\")",
+
+  "RNAseq.bedgraph_to_bigwig.cpu": "Int (optional, default = 12)",
+  "RNAseq.bedgraph_to_bigwig.mem": "Int (optional, default = 16)",
+  "RNAseq.bedgraph_to_bigwig.Dockerhub_Pull": "String? (optional, default = \"faryabilab/bedtools:0.1.0\")",
+
+  "RNAseq.count_reads_paired.cpu": "Int (optional, default = 12)",
+  "RNAseq.count_reads_paired.AttributeType": "String (optional, default = \"exon\")",
   "RNAseq.count_reads_paired.GTFAttributeType": "String (optional, default = \"gene_id\")",
+  "RNAseq.count_reads_paired.mem": "Int (optional, default = 25)",
+  "RNAseq.count_reads_paired.Dockerhub_Pull": "String? (optional, default = \"faryabilab/subread:0.1.0\")",
   "RNAseq.count_reads_paired.Stranded": "String (optional, default = \"1\")",
-  "RNAseq.count_reads_paired.AttributeType": "String (optional, default = \"exon\")"
-  
-}
 
+  "RNAseq.remove_scaffolds.mem": "Int (optional, default = 25)",
+  "RNAseq.remove_scaffolds.cpu": "Int (optional, default = 12)",
+  "RNAseq.remove_scaffolds.Dockerhub_Pull": "String? (optional, default = \"faryabilab/samtools:0.1.0\")",
+
+  "RNAseq.remove_blacklist.mem": "Int (optional, default = 25)",
+  "RNAseq.remove_blacklist.Dockerhub_Pull": "String? (optional, default = \"faryabilab/bedtools:0.1.0\")",
+  "RNAseq.remove_blacklist.cpu": "Int (optional, default = 12)"
+
+}
