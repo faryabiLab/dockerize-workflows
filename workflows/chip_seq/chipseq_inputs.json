@@ -1,6 +1,5 @@
 {
   "ChIPseq.paired": "Boolean",
-  "ChIPseq.project_out_dir": "String",
   "ChIPseq.fastq_dir": "String",
   "ChIPseq.sampleList": "File",
   "ChIPseq.bwa_index": "String",
