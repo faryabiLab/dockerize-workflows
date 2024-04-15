@@ -54,7 +54,7 @@ task macs2 {
 		File summits = "${sampleName}_summits.bed"
 	}
 	runtime {
-		docker: ${Dockerhub_Pull}
+		docker: "${Dockerhub_Pull}"
 		cpu: "${cpu}"
 		mem: "${mem}"
 	}	
@@ -91,7 +91,7 @@ task SEACR {
 		File seacr_out = "${sampleName}.${type}.${RunMode}.bed"
 	}
 	runtime {
-		docker: ${Dockerhub_Pull}
+		docker: "${Dockerhub_Pull}"
 		cpu: "${cpu}"
 		mem: "${mem}"
 	}
@@ -117,7 +117,7 @@ task bamToBedgraph {
 		File seacr_bg = "${sampleName}.seacr.bg.${type}"
 	}
 	runtime {
-		docker: ${Dockerhub_Pull}
+		docker: "${Dockerhub_Pull}"
 		cpu: "${cpu}"
 		mem: "${mem}"
 	}
