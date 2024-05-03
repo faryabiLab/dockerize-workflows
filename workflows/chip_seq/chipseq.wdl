@@ -97,9 +97,9 @@ workflow ChIPseq {
 		}
 	}
 	output {
-		Array[String] finalBam = sort_bam.bam_sorted
-		Array[String] finalBamIndex = index_bam.bam_index
-		Array[String] peaks = macs2.narrowPeak
-		Array[String] bw = bedgraph_to_bigwig.bw
+		Array[File] finalBam = sort_bam.bam_sorted
+		Array[File] finalBamIndex = index_bam.bam_index
+		Array[File] peaks = macs2.narrowPeak
+		Array[File] bw = bedgraph_to_bigwig.bw
 	}
 }
