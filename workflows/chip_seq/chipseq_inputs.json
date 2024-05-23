@@ -1,13 +1,12 @@
 {
-<<<<<<< HEAD
-  "ChIPseq.paired": false,
-  "ChIPseq.fastq_dir": "/mnt/data0/noah/reviews/brent_natcomm/032524_items/R1C4/data/CUTLL1_H3K27ac/",
-  "ChIPseq.sampleList": "/mnt/data0/noah/reviews/brent_natcomm/032524_items/R1C4/process/dockerize-workflows/workflows/chip_seq/samplesheet.tsv",
-  "ChIPseq.bwa_index": "/mnt/data0/fdb/igenome/Homo_sapiens/Ensembl/GRCh37.75/Sequence/BWAIndex/genome.fa",
-  "ChIPseq.chromNoScaffold": "/mnt/data0/fdb/igenome/Homo_sapiens/Ensembl/GRCh37.75/Annotation/Genes/ChromNoPatch.bed",
-  "ChIPseq.chromosome_sizes": "/mnt/data0/fdb/igenome/Homo_sapiens/Ensembl/GRCh37.75/Annotation/Genes/ChromInfo_chr.txt",
-  "ChIPseq.blacklist": "/mnt/data0/fdb/igenome/Homo_sapiens/Ensembl/GRCh37.75/Annotation/blackList/newBlackList/hg19_blackList_170206.bed",
-=======
+  "ChIPseq.paired": "Boolean",
+  "ChIPseq.fastq_dir": "",
+  "ChIPseq.sampleList": "",
+  "ChIPseq.bwa_index": "",
+  "ChIPseq.chromNoScaffold": "",
+  "ChIPseq.chromosome_sizes": "",
+  "ChIPseq.blacklist": "",
+
   "ChIPseq.paired": "Boolean",
   "ChIPseq.fastq_dir": "String",
   "ChIPseq.sampleList": "File",
@@ -40,7 +39,6 @@
   "ChIPseq.remove_duplicates.PicardRemoveDuplicates": "String (optional, default = \"true\")",
   "ChIPseq.remove_duplicates.PicardValidationStringency": "String (optional, default = \"SILENT\")",
   "ChIPseq.remove_duplicates.PicardMetricsFile": "String (optional, default = \"removeDuplicate_metrics.txt\")",
->>>>>>> b10f0f624d18afeda210fa987cfc6da66ca375ee
 
   "ChIPseq.BWA.cpu": 16,
   "ChIPseq.BWA.mem": 24,
