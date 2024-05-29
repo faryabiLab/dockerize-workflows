@@ -1,0 +1,5 @@
+name: dockerized-pipeline-tests
+run-name: Running pipeline and verifying output
+
+on: [push]
+
