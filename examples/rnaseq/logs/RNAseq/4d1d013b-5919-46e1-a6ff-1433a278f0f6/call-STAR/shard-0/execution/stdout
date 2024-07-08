@@ -1,0 +1,7 @@
+	STAR --runThreadN 24 --genomeDir /mnt/data0/noah/references/hg38/STAR --readFilesIn /cromwell-executions/RNAseq/1c2ac84c-5dc5-4c27-a11c-494de98c0a33/call-STAR/shard-0/inputs/-166502635/SRR26459771_val_1.fq.gz /cromwell-executions/RNAseq/1c2ac84c-5dc5-4c27-a11c-494de98c0a33/call-STAR/shard-0/inputs/-166502635/SRR26459771_val_2.fq.gz --outFileNamePrefix SRR26459771 --readFilesCommand zcat --outSAMattributes Standard --outFilterIntronMotifs RemoveNoncanonicalUnannotated --outFilterType BySJout --alignIntronMax 100000 --outSAMstrandField intronMotif --outSAMunmapped Within --chimSegmentMin 25 --outSAMtype BAM Unsorted
+	STAR version: 2.7.10b   compiled: 2022-11-01T09:53:26-04:00 :/home/dobin/data/STAR/STARcode/STAR.master/source
+Jul 02 16:58:39 ..... started STAR run
+Jul 02 16:58:39 ..... loading genome
+Jul 02 16:59:43 ..... started mapping
+Jul 02 17:17:38 ..... finished mapping
+Jul 02 17:17:41 ..... finished successfully

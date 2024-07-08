@@ -1,0 +1,63 @@
+#!/bin/bash
+
+cd /cromwell-executions/RNAseq/4d1d013b-5919-46e1-a6ff-1433a278f0f6/call-fastqc_trim/shard-0/execution
+tmpDir=$(mkdir -p "/cromwell-executions/RNAseq/4d1d013b-5919-46e1-a6ff-1433a278f0f6/call-fastqc_trim/shard-0/tmp.b8ae3ad0" && echo "/cromwell-executions/RNAseq/4d1d013b-5919-46e1-a6ff-1433a278f0f6/call-fastqc_trim/shard-0/tmp.b8ae3ad0")
+chmod 777 "$tmpDir"
+export _JAVA_OPTIONS=-Djava.io.tmpdir="$tmpDir"
+export TMPDIR="$tmpDir"
+export HOME="$HOME"
+(
+cd /cromwell-executions/RNAseq/4d1d013b-5919-46e1-a6ff-1433a278f0f6/call-fastqc_trim/shard-0/execution
+
+)
+out4d1d013b="${tmpDir}/out.$$" err4d1d013b="${tmpDir}/err.$$"
+mkfifo "$out4d1d013b" "$err4d1d013b"
+trap 'rm "$out4d1d013b" "$err4d1d013b"' EXIT
+touch '/cromwell-executions/RNAseq/4d1d013b-5919-46e1-a6ff-1433a278f0f6/call-fastqc_trim/shard-0/execution/stdout' '/cromwell-executions/RNAseq/4d1d013b-5919-46e1-a6ff-1433a278f0f6/call-fastqc_trim/shard-0/execution/stderr'
+tee '/cromwell-executions/RNAseq/4d1d013b-5919-46e1-a6ff-1433a278f0f6/call-fastqc_trim/shard-0/execution/stdout' < "$out4d1d013b" &
+tee '/cromwell-executions/RNAseq/4d1d013b-5919-46e1-a6ff-1433a278f0f6/call-fastqc_trim/shard-0/execution/stderr' < "$err4d1d013b" >&2 &
+(
+cd /cromwell-executions/RNAseq/4d1d013b-5919-46e1-a6ff-1433a278f0f6/call-fastqc_trim/shard-0/execution
+
+
+if [[ "true" == "true" ]]; then
+	trim_galore \
+	-j 8 \
+	-q 15 \
+	--paired \
+	--fastqc \
+	--phred33 \
+	--gzip \
+	--stringency 5 \
+	-e 0.1 \
+	--basename SRR26459771 \
+	--length 20 \
+	"/mnt/data0/noah/data/sra/rna/SRR26459771/SRR26459771_R1.fastq.gz" \
+	"/mnt/data0/noah/data/sra/rna/SRR26459771/SRR26459771_R2.fastq.gz"
+else
+	trim_galore \
+	-j 8 \
+	-q 15 \
+	--fastqc \
+	--phred33 \
+	--gzip \
+	--stringency 5 \
+	-e 0.1 \
+	--basename SRR26459771 \
+	--length 20 \
+	"/mnt/data0/noah/data/sra/rna/SRR26459771/SRR26459771.fastq.gz"
+fi
+)  > "$out4d1d013b" 2> "$err4d1d013b"
+echo $? > /cromwell-executions/RNAseq/4d1d013b-5919-46e1-a6ff-1433a278f0f6/call-fastqc_trim/shard-0/execution/rc.tmp
+(
+# add a .file in every empty directory to facilitate directory delocalization on the cloud
+cd /cromwell-executions/RNAseq/4d1d013b-5919-46e1-a6ff-1433a278f0f6/call-fastqc_trim/shard-0/execution
+find . -type d -exec sh -c '[ -z "$(ls -A '"'"'{}'"'"')" ] && touch '"'"'{}'"'"'/.file' \;
+)
+(
+cd /cromwell-executions/RNAseq/4d1d013b-5919-46e1-a6ff-1433a278f0f6/call-fastqc_trim/shard-0/execution
+sync
+
+
+)
+mv /cromwell-executions/RNAseq/4d1d013b-5919-46e1-a6ff-1433a278f0f6/call-fastqc_trim/shard-0/execution/rc.tmp /cromwell-executions/RNAseq/4d1d013b-5919-46e1-a6ff-1433a278f0f6/call-fastqc_trim/shard-0/execution/rc

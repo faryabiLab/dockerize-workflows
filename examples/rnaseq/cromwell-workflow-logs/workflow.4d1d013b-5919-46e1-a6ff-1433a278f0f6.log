@@ -1,0 +1,44 @@
+2024-07-02 11:44:51,570 INFO  - MaterializeWorkflowDescriptorActor [UUID(4d1d013b)]: Parsing workflow as WDL 1.0
+2024-07-02 11:44:52,606 INFO  - MaterializeWorkflowDescriptorActor [UUID(4d1d013b)]: Call-to-Backend assignments: RNAseq.bedgraph_to_bigwig -> Docker, RNAseq.count_reads_paired -> Docker, RNAseq.sort_bam -> Docker, RNAseq.count_reads_single -> Docker, RNAseq.index_bam -> Docker, RNAseq.read_count -> Docker, RNAseq.remove_blacklist -> Docker, RNAseq.STAR -> Docker, RNAseq.calculate_factor -> Docker, RNAseq.bam_to_bedgraph -> Docker, RNAseq.fastqc_trim -> Docker, RNAseq.remove_scaffolds -> Docker, RNAseq.remove_duplicates -> Docker
+2024-07-02 11:44:59,148 INFO  - WorkflowExecutionActor-4d1d013b-5919-46e1-a6ff-1433a278f0f6 [UUID(4d1d013b)]: Starting RNAseq.fastqc_trim
+2024-07-02 11:45:02,345 INFO  - 4d1d013b-5919-46e1-a6ff-1433a278f0f6-EngineJobExecutionActor-RNAseq.fastqc_trim:0:1 [UUID(4d1d013b)]: Could not copy a suitable cache hit for 4d1d013b:RNAseq.fastqc_trim:0:1. No copy attempts were made.
+2024-07-02 11:45:02,448 INFO  - BackgroundConfigAsyncJobExecutionActor [UUID(4d1d013b)RNAseq.fastqc_trim:0:1]: `if [[ "true" == "true" ]]; then
+	trim_galore \
+	-j 8 \
+	-q 15 \
+	--paired \
+	--fastqc \
+	--phred33 \
+	--gzip \
+	--stringency 5 \
+	-e 0.1 \
+	--basename SRR26459771 \
+	--length 20 \
+	"/mnt/data0/noah/data/sra/rna/SRR26459771/SRR26459771_R1.fastq.gz" \
+	"/mnt/data0/noah/data/sra/rna/SRR26459771/SRR26459771_R2.fastq.gz"
+else
+	trim_galore \
+	-j 8 \
+	-q 15 \
+	--fastqc \
+	--phred33 \
+	--gzip \
+	--stringency 5 \
+	-e 0.1 \
+	--basename SRR26459771 \
+	--length 20 \
+	"/mnt/data0/noah/data/sra/rna/SRR26459771/SRR26459771.fastq.gz"
+fi`
+2024-07-02 11:45:02,492 INFO  - BackgroundConfigAsyncJobExecutionActor [UUID(4d1d013b)RNAseq.fastqc_trim:0:1]: executing: docker run \
+--rm -i -d \
+--user="$EUID" \
+--cpus=8 \
+--memory="8g" \
+--entrypoint /bin/bash \
+-v /mnt/data0/tester/dockerize-workflows/workflows/rna_seq/cromwell-executions/RNAseq/4d1d013b-5919-46e1-a6ff-1433a278f0f6/call-fastqc_trim/shard-0:/cromwell-executions/RNAseq/4d1d013b-5919-46e1-a6ff-1433a278f0f6/call-fastqc_trim/shard-0 \
+-v /mnt/data0/:/mnt/data0/ \
+faryabilab/trim_galore@sha256:14c7149789ec02eda9cd46c1e7c8d56e7444e8552d7347ba6c6473ee155d45e1 < /mnt/data0/tester/dockerize-workflows/workflows/rna_seq/cromwell-executions/RNAseq/4d1d013b-5919-46e1-a6ff-1433a278f0f6/call-fastqc_trim/shard-0/execution/script
+2024-07-02 11:45:05,950 INFO  - BackgroundConfigAsyncJobExecutionActor [UUID(4d1d013b)RNAseq.fastqc_trim:0:1]: job id: 51961
+2024-07-02 11:45:05,957 INFO  - BackgroundConfigAsyncJobExecutionActor [UUID(4d1d013b)RNAseq.fastqc_trim:0:1]: Status change from - to WaitingForReturnCode
+2024-07-02 11:51:34,880 INFO  - WorkflowExecutionActor-4d1d013b-5919-46e1-a6ff-1433a278f0f6 [UUID(4d1d013b)]: Aborting workflow
+2024-07-02 11:51:34,894 WARN  - BackgroundConfigAsyncJobExecutionActor [UUID(4d1d013b)RNAseq.fastqc_trim:0:1]: BackgroundConfigAsyncJobExecutionActor [UUID(4d1d013b):RNAseq.fastqc_trim:0:1] Failed to abort StandardAsyncJob(51961): Unable to find task kill_docker
