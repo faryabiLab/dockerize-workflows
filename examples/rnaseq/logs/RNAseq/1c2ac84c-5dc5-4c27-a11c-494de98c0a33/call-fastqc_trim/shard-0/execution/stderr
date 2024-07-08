@@ -1,0 +1,518 @@
+Path to Cutadapt set as: 'cutadapt' (default)
+Cutadapt seems to be working fine (tested command 'cutadapt --version')
+Cutadapt version: 3.5
+Cutadapt seems to be using Python 3! Proceeding with multi-core enabled Cutadapt using 8 cores
+Parallel gzip (pigz) detected. Proceeding with multicore (de)compression using 8 cores
+
+Proceeding with 'pigz -p 4' for decompression
+To decrease CPU usage of decompression, please install 'igzip' and run again
+
+Using user-specified basename (>>SRR26459771<<) instead of deriving the filename from the input file(s)
+
+
+AUTO-DETECTING ADAPTER TYPE
+===========================
+Attempting to auto-detect adapter type from the first 1 million sequences of the first file (>> /mnt/data0/noah/data/sra/rna/SRR26459771/SRR26459771_R1.fastq.gz <<)
+
+Found perfect matches for the following adapter sequences:
+Adapter type	Count	Sequence	Sequences analysed	Percentage
+Illumina	56457	AGATCGGAAGAGC	1000000	5.65
+Nextera	23	CTGTCTCTTATA	1000000	0.00
+smallRNA	7	TGGAATTCTCGG	1000000	0.00
+Using Illumina adapter for trimming (count: 56457). Second best hit was Nextera (count: 23)
+
+Writing report to 'SRR26459771_R1.fastq.gz_trimming_report.txt'
+
+SUMMARISING RUN PARAMETERS
+==========================
+Input filename: /mnt/data0/noah/data/sra/rna/SRR26459771/SRR26459771_R1.fastq.gz
+Trimming mode: paired-end
+Trim Galore version: 0.6.10
+Cutadapt version: 3.5
+Python version: 3.10.12
+Number of cores used for trimming: 8
+Quality Phred score cutoff: 15
+Quality encoding type selected: ASCII+33
+Adapter sequence: 'AGATCGGAAGAGC' (Illumina TruSeq, Sanger iPCR; auto-detected)
+Maximum trimming error rate: 0.1 (default)
+Minimum required adapter overlap (stringency): 5 bp
+Minimum required sequence length for both reads before a sequence pair gets removed: 20 bp
+Running FastQC on the data once trimming has completed
+Output file(s) will be GZIP compressed
+
+Cutadapt seems to be fairly up-to-date (version 3.5). Setting -j 8
+Writing final adapter and quality trimmed output to SRR26459771_R1_trimmed.fq.gz
+
+
+  >>> Now performing quality (cutoff '-q 15') and adapter trimming in a single pass for the adapter sequence: 'AGATCGGAAGAGC' from file /mnt/data0/noah/data/sra/rna/SRR26459771/SRR26459771_R1.fastq.gz <<< 
+10000000 sequences processed
+20000000 sequences processed
+30000000 sequences processed
+40000000 sequences processed
+50000000 sequences processed
+This is cutadapt 3.5 with Python 3.10.12
+Command line parameters: -j 8 -e 0.1 -q 15 -O 5 -a AGATCGGAAGAGC /mnt/data0/noah/data/sra/rna/SRR26459771/SRR26459771_R1.fastq.gz
+Processing reads on 8 cores in single-end mode ...
+Finished in 444.90 s (8 µs/read; 7.12 M reads/minute).
+
+=== Summary ===
+
+Total reads processed:              52,825,885
+Reads with adapters:                 4,156,871 (7.9%)
+Reads written (passing filters):    52,825,885 (100.0%)
+
+Total basepairs processed: 7,923,882,750 bp
+Quality-trimmed:               3,970,039 bp (0.1%)
+Total written (filtered):  7,788,266,007 bp (98.3%)
+
+=== Adapter 1 ===
+
+Sequence: AGATCGGAAGAGC; Type: regular 3'; Length: 13; Trimmed: 4156871 times
+
+Minimum overlap: 5
+No. of allowed errors:
+1-9 bp: 0; 10-13 bp: 1
+
+Bases preceding removed adapters:
+  A: 15.5%
+  C: 28.3%
+  G: 39.6%
+  T: 13.1%
+  none/other: 3.5%
+
+Overview of removed sequences
+length	count	expect	max.err	error counts
+5	159929	51587.8	0	159929
+6	122830	12896.9	0	122830
+7	119913	3224.2	0	119913
+8	124909	806.1	0	124909
+9	114558	201.5	0	113588 970
+10	114799	50.4	1	111322 3477
+11	119685	12.6	1	115124 4561
+12	114632	3.1	1	111072 3560
+13	109933	0.8	1	106430 3503
+14	112356	0.8	1	108034 4322
+15	108161	0.8	1	104663 3498
+16	109593	0.8	1	105155 4438
+17	107649	0.8	1	103285 4364
+18	100843	0.8	1	97782 3061
+19	97747	0.8	1	94652 3095
+20	99217	0.8	1	95859 3358
+21	97770	0.8	1	94426 3344
+22	91915	0.8	1	89165 2750
+23	92732	0.8	1	89546 3186
+24	89509	0.8	1	86011 3498
+25	85651	0.8	1	82887 2764
+26	84576	0.8	1	81914 2662
+27	82923	0.8	1	80152 2771
+28	81730	0.8	1	79000 2730
+29	76713	0.8	1	73798 2915
+30	73083	0.8	1	70939 2144
+31	69074	0.8	1	67082 1992
+32	69805	0.8	1	67626 2179
+33	64519	0.8	1	62319 2200
+34	66662	0.8	1	64215 2447
+35	73776	0.8	1	71936 1840
+36	42455	0.8	1	40855 1600
+37	57024	0.8	1	54721 2303
+38	53159	0.8	1	51484 1675
+39	49113	0.8	1	47667 1446
+40	45488	0.8	1	44084 1404
+41	44774	0.8	1	43433 1341
+42	45592	0.8	1	44079 1513
+43	41923	0.8	1	40377 1546
+44	33995	0.8	1	32851 1144
+45	59402	0.8	1	57947 1455
+46	11546	0.8	1	10947 599
+47	27144	0.8	1	26309 835
+48	36779	0.8	1	35561 1218
+49	25504	0.8	1	24754 750
+50	20434	0.8	1	19773 661
+51	26524	0.8	1	25657 867
+52	21035	0.8	1	20435 600
+53	17499	0.8	1	16968 531
+54	19968	0.8	1	19218 750
+55	20425	0.8	1	19812 613
+56	14964	0.8	1	14476 488
+57	17311	0.8	1	16787 524
+58	12653	0.8	1	12229 424
+59	16053	0.8	1	15517 536
+60	8825	0.8	1	8543 282
+61	6347	0.8	1	6069 278
+62	14440	0.8	1	13985 455
+63	9328	0.8	1	9020 308
+64	5877	0.8	1	5657 220
+65	6137	0.8	1	5860 277
+66	14938	0.8	1	14556 382
+67	4404	0.8	1	4166 238
+68	9167	0.8	1	8889 278
+69	4247	0.8	1	4072 175
+70	3280	0.8	1	3137 143
+71	528	0.8	1	443 85
+72	1138	0.8	1	1038 100
+73	2568	0.8	1	2410 158
+74	2921	0.8	1	2804 117
+75	2972	0.8	1	2823 149
+76	2717	0.8	1	2600 117
+77	2453	0.8	1	2316 137
+78	2367	0.8	1	2240 127
+79	2123	0.8	1	1996 127
+80	1981	0.8	1	1881 100
+81	1784	0.8	1	1668 116
+82	1674	0.8	1	1559 115
+83	1606	0.8	1	1499 107
+84	1424	0.8	1	1333 91
+85	1361	0.8	1	1241 120
+86	1210	0.8	1	1122 88
+87	1132	0.8	1	1049 83
+88	1025	0.8	1	919 106
+89	917	0.8	1	838 79
+90	972	0.8	1	904 68
+91	760	0.8	1	687 73
+92	857	0.8	1	780 77
+93	783	0.8	1	722 61
+94	696	0.8	1	647 49
+95	700	0.8	1	619 81
+96	651	0.8	1	589 62
+97	620	0.8	1	552 68
+98	535	0.8	1	476 59
+99	531	0.8	1	484 47
+100	534	0.8	1	475 59
+101	464	0.8	1	415 49
+102	512	0.8	1	438 74
+103	456	0.8	1	403 53
+104	465	0.8	1	406 59
+105	400	0.8	1	361 39
+106	402	0.8	1	351 51
+107	444	0.8	1	390 54
+108	415	0.8	1	354 61
+109	391	0.8	1	341 50
+110	413	0.8	1	327 86
+111	346	0.8	1	311 35
+112	411	0.8	1	364 47
+113	431	0.8	1	387 44
+114	383	0.8	1	332 51
+115	445	0.8	1	399 46
+116	426	0.8	1	360 66
+117	427	0.8	1	373 54
+118	486	0.8	1	450 36
+119	473	0.8	1	426 47
+120	575	0.8	1	510 65
+121	570	0.8	1	523 47
+122	544	0.8	1	507 37
+123	547	0.8	1	525 22
+124	698	0.8	1	654 44
+125	801	0.8	1	751 50
+126	829	0.8	1	768 61
+127	899	0.8	1	862 37
+128	1051	0.8	1	994 57
+129	1105	0.8	1	1069 36
+130	1152	0.8	1	1110 42
+131	1277	0.8	1	1203 74
+132	1691	0.8	1	1555 136
+133	1626	0.8	1	1575 51
+134	2088	0.8	1	2010 78
+135	2077	0.8	1	2024 53
+136	2575	0.8	1	2526 49
+137	2873	0.8	1	2803 70
+138	2951	0.8	1	2891 60
+139	2542	0.8	1	2482 60
+140	3121	0.8	1	3045 76
+141	6181	0.8	1	6005 176
+142	2431	0.8	1	2347 84
+143	2918	0.8	1	2842 76
+144	3341	0.8	1	3270 71
+145	3519	0.8	1	3425 94
+146	5791	0.8	1	5660 131
+147	11133	0.8	1	10854 279
+148	2653	0.8	1	2531 122
+149	6461	0.8	1	210 6251
+150	146175	0.8	1	842 145333
+
+RUN STATISTICS FOR INPUT FILE: /mnt/data0/noah/data/sra/rna/SRR26459771/SRR26459771_R1.fastq.gz
+=============================================
+52825885 sequences processed in total
+The length threshold of paired-end sequences gets evaluated later on (in the validation step)
+
+Writing report to 'SRR26459771_R2.fastq.gz_trimming_report.txt'
+
+SUMMARISING RUN PARAMETERS
+==========================
+Input filename: /mnt/data0/noah/data/sra/rna/SRR26459771/SRR26459771_R2.fastq.gz
+Trimming mode: paired-end
+Trim Galore version: 0.6.10
+Cutadapt version: 3.5
+Python version: 3.10.12
+Number of cores used for trimming: 8
+Quality Phred score cutoff: 15
+Quality encoding type selected: ASCII+33
+Adapter sequence: 'AGATCGGAAGAGC' (Illumina TruSeq, Sanger iPCR; auto-detected)
+Maximum trimming error rate: 0.1 (default)
+Minimum required adapter overlap (stringency): 5 bp
+Minimum required sequence length for both reads before a sequence pair gets removed: 20 bp
+Running FastQC on the data once trimming has completed
+Output file(s) will be GZIP compressed
+
+Cutadapt seems to be fairly up-to-date (version 3.5). Setting -j -j 8
+Writing final adapter and quality trimmed output to SRR26459771_R2_trimmed.fq.gz
+
+
+  >>> Now performing quality (cutoff '-q 15') and adapter trimming in a single pass for the adapter sequence: 'AGATCGGAAGAGC' from file /mnt/data0/noah/data/sra/rna/SRR26459771/SRR26459771_R2.fastq.gz <<< 
+10000000 sequences processed
+20000000 sequences processed
+30000000 sequences processed
+40000000 sequences processed
+50000000 sequences processed
+This is cutadapt 3.5 with Python 3.10.12
+Command line parameters: -j 8 -e 0.1 -q 15 -O 5 -a AGATCGGAAGAGC /mnt/data0/noah/data/sra/rna/SRR26459771/SRR26459771_R2.fastq.gz
+Processing reads on 8 cores in single-end mode ...
+Finished in 457.72 s (9 µs/read; 6.92 M reads/minute).
+
+=== Summary ===
+
+Total reads processed:              52,825,885
+Reads with adapters:                 4,040,654 (7.6%)
+Reads written (passing filters):    52,825,885 (100.0%)
+
+Total basepairs processed: 7,923,882,750 bp
+Quality-trimmed:               6,944,912 bp (0.1%)
+Total written (filtered):  7,806,930,204 bp (98.5%)
+
+=== Adapter 1 ===
+
+Sequence: AGATCGGAAGAGC; Type: regular 3'; Length: 13; Trimmed: 4040654 times
+
+Minimum overlap: 5
+No. of allowed errors:
+1-9 bp: 0; 10-13 bp: 1
+
+Bases preceding removed adapters:
+  A: 16.4%
+  C: 29.9%
+  G: 42.2%
+  T: 11.5%
+  none/other: 0.0%
+
+Overview of removed sequences
+length	count	expect	max.err	error counts
+5	171556	51587.8	0	171556
+6	127167	12896.9	0	127167
+7	124501	3224.2	0	124501
+8	130662	806.1	0	130662
+9	108221	201.5	0	107070 1151
+10	118076	50.4	1	113807 4269
+11	117582	12.6	1	113454 4128
+12	115784	3.1	1	112402 3382
+13	111153	0.8	1	107992 3161
+14	114034	0.8	1	110477 3557
+15	107134	0.8	1	104082 3052
+16	107122	0.8	1	104003 3119
+17	111628	0.8	1	108031 3597
+18	93482	0.8	1	91253 2229
+19	106183	0.8	1	102999 3184
+20	100957	0.8	1	98133 2824
+21	92447	0.8	1	90213 2234
+22	92640	0.8	1	90531 2109
+23	90625	0.8	1	88470 2155
+24	92753	0.8	1	90098 2655
+25	97681	0.8	1	95485 2196
+26	74588	0.8	1	72689 1899
+27	79684	0.8	1	77495 2189
+28	79508	0.8	1	77868 1640
+29	77127	0.8	1	75365 1762
+30	73752	0.8	1	72081 1671
+31	70791	0.8	1	69125 1666
+32	67500	0.8	1	65999 1501
+33	70582	0.8	1	68746 1836
+34	63234	0.8	1	61603 1631
+35	58536	0.8	1	57321 1215
+36	59830	0.8	1	58504 1326
+37	55706	0.8	1	54523 1183
+38	52144	0.8	1	51128 1016
+39	52685	0.8	1	51537 1148
+40	42315	0.8	1	41513 802
+41	44921	0.8	1	44027 894
+42	43497	0.8	1	42514 983
+43	39176	0.8	1	38368 808
+44	37588	0.8	1	36803 785
+45	35869	0.8	1	34948 921
+46	34537	0.8	1	33666 871
+47	30011	0.8	1	29399 612
+48	28910	0.8	1	28249 661
+49	28186	0.8	1	27514 672
+50	24644	0.8	1	24135 509
+51	23872	0.8	1	23327 545
+52	21834	0.8	1	21317 517
+53	20320	0.8	1	19870 450
+54	19649	0.8	1	19184 465
+55	16830	0.8	1	16434 396
+56	16389	0.8	1	15965 424
+57	16790	0.8	1	16331 459
+58	12462	0.8	1	12197 265
+59	12679	0.8	1	12398 281
+60	12509	0.8	1	12156 353
+61	10399	0.8	1	10126 273
+62	9918	0.8	1	9629 289
+63	12260	0.8	1	11889 371
+64	7455	0.8	1	7239 216
+65	6888	0.8	1	6672 216
+66	6510	0.8	1	6323 187
+67	6572	0.8	1	6366 206
+68	6307	0.8	1	6090 217
+69	5402	0.8	1	5235 167
+70	5105	0.8	1	4928 177
+71	4640	0.8	1	4450 190
+72	4569	0.8	1	4358 211
+73	6314	0.8	1	6082 232
+74	4549	0.8	1	4393 156
+75	3724	0.8	1	3590 134
+76	1346	0.8	1	1257 89
+77	1516	0.8	1	1431 85
+78	1991	0.8	1	1873 118
+79	1879	0.8	1	1767 112
+80	1800	0.8	1	1703 97
+81	1698	0.8	1	1601 97
+82	1652	0.8	1	1540 112
+83	1705	0.8	1	1584 121
+84	1551	0.8	1	1407 144
+85	1434	0.8	1	1339 95
+86	1243	0.8	1	1156 87
+87	1170	0.8	1	1065 105
+88	1030	0.8	1	931 99
+89	976	0.8	1	883 93
+90	1032	0.8	1	946 86
+91	861	0.8	1	758 103
+92	929	0.8	1	823 106
+93	889	0.8	1	790 99
+94	775	0.8	1	668 107
+95	791	0.8	1	708 83
+96	722	0.8	1	643 79
+97	647	0.8	1	582 65
+98	660	0.8	1	565 95
+99	676	0.8	1	578 98
+100	673	0.8	1	599 74
+101	558	0.8	1	487 71
+102	584	0.8	1	494 90
+103	513	0.8	1	436 77
+104	555	0.8	1	448 107
+105	481	0.8	1	416 65
+106	461	0.8	1	392 69
+107	499	0.8	1	420 79
+108	494	0.8	1	419 75
+109	444	0.8	1	379 65
+110	447	0.8	1	370 77
+111	441	0.8	1	384 57
+112	498	0.8	1	422 76
+113	536	0.8	1	482 54
+114	449	0.8	1	396 53
+115	471	0.8	1	426 45
+116	443	0.8	1	383 60
+117	447	0.8	1	392 55
+118	539	0.8	1	471 68
+119	539	0.8	1	461 78
+120	602	0.8	1	538 64
+121	608	0.8	1	552 56
+122	588	0.8	1	521 67
+123	600	0.8	1	544 56
+124	714	0.8	1	664 50
+125	835	0.8	1	785 50
+126	853	0.8	1	803 50
+127	963	0.8	1	882 81
+128	1052	0.8	1	1018 34
+129	1123	0.8	1	1079 44
+130	1181	0.8	1	1113 68
+131	1270	0.8	1	1217 53
+132	1602	0.8	1	1550 52
+133	1616	0.8	1	1581 35
+134	2067	0.8	1	2009 58
+135	2091	0.8	1	2018 73
+136	2592	0.8	1	2541 51
+137	2897	0.8	1	2823 74
+138	2974	0.8	1	2896 78
+139	2551	0.8	1	2486 65
+140	3154	0.8	1	3087 67
+141	6109	0.8	1	5996 113
+142	2458	0.8	1	2387 71
+143	2927	0.8	1	2866 61
+144	3305	0.8	1	3244 61
+145	3523	0.8	1	3448 75
+146	5822	0.8	1	5698 124
+147	11089	0.8	1	10822 267
+148	2581	0.8	1	2513 68
+149	246	0.8	1	198 48
+150	961	0.8	1	837 124
+
+RUN STATISTICS FOR INPUT FILE: /mnt/data0/noah/data/sra/rna/SRR26459771/SRR26459771_R2.fastq.gz
+=============================================
+52825885 sequences processed in total
+The length threshold of paired-end sequences gets evaluated later on (in the validation step)
+
+Validate paired-end files SRR26459771_R1_trimmed.fq.gz and SRR26459771_R2_trimmed.fq.gz
+Now renaming the output files
+
+ORIGINAL FILE 1: >>SRR26459771_R1_trimmed.fq.gz<<	RENAMING TO:>>SRR26459771_R1_trimmed.fq.gz<<
+ORIGINAL FILE 2: >>SRR26459771_R2_trimmed.fq.gz<<	RENAMING TO:>>SRR26459771_R2_trimmed.fq.gz<<
+file_1: SRR26459771_R1_trimmed.fq.gz, file_2: SRR26459771_R2_trimmed.fq.gz
+
+
+>>>>> Now validing the length of the 2 paired-end infiles: SRR26459771_R1_trimmed.fq.gz and SRR26459771_R2_trimmed.fq.gz <<<<<
+Renaming the output files (AGAIN).
+Writing validated paired-end Read 1 reads to SRR26459771_val_1.fq.gz
+Writing validated paired-end Read 2 reads to SRR26459771_val_2.fq.gz
+
+Total number of sequences analysed: 52825885
+
+Number of sequence pairs removed because at least one read was shorter than the length cutoff (20 bp): 216354 (0.41%)
+
+
+  >>> Now running FastQC on the validated data SRR26459771_val_1.fq.gz<<<
+
+Picked up _JAVA_OPTIONS: -Djava.io.tmpdir=/cromwell-executions/RNAseq/1c2ac84c-5dc5-4c27-a11c-494de98c0a33/call-fastqc_trim/shard-0/tmp.c851e5fe
+Started analysis of SRR26459771_val_1.fq.gz
+Approx 5% complete for SRR26459771_val_1.fq.gz
+Approx 10% complete for SRR26459771_val_1.fq.gz
+Approx 15% complete for SRR26459771_val_1.fq.gz
+Approx 20% complete for SRR26459771_val_1.fq.gz
+Approx 25% complete for SRR26459771_val_1.fq.gz
+Approx 30% complete for SRR26459771_val_1.fq.gz
+Approx 35% complete for SRR26459771_val_1.fq.gz
+Approx 40% complete for SRR26459771_val_1.fq.gz
+Approx 45% complete for SRR26459771_val_1.fq.gz
+Approx 50% complete for SRR26459771_val_1.fq.gz
+Approx 55% complete for SRR26459771_val_1.fq.gz
+Approx 60% complete for SRR26459771_val_1.fq.gz
+Approx 65% complete for SRR26459771_val_1.fq.gz
+Approx 70% complete for SRR26459771_val_1.fq.gz
+Approx 75% complete for SRR26459771_val_1.fq.gz
+Approx 80% complete for SRR26459771_val_1.fq.gz
+Approx 85% complete for SRR26459771_val_1.fq.gz
+Approx 90% complete for SRR26459771_val_1.fq.gz
+Approx 95% complete for SRR26459771_val_1.fq.gz
+
+  >>> Now running FastQC on the validated data SRR26459771_val_2.fq.gz<<<
+
+Picked up _JAVA_OPTIONS: -Djava.io.tmpdir=/cromwell-executions/RNAseq/1c2ac84c-5dc5-4c27-a11c-494de98c0a33/call-fastqc_trim/shard-0/tmp.c851e5fe
+Started analysis of SRR26459771_val_2.fq.gz
+Approx 5% complete for SRR26459771_val_2.fq.gz
+Approx 10% complete for SRR26459771_val_2.fq.gz
+Approx 15% complete for SRR26459771_val_2.fq.gz
+Approx 20% complete for SRR26459771_val_2.fq.gz
+Approx 25% complete for SRR26459771_val_2.fq.gz
+Approx 30% complete for SRR26459771_val_2.fq.gz
+Approx 35% complete for SRR26459771_val_2.fq.gz
+Approx 40% complete for SRR26459771_val_2.fq.gz
+Approx 45% complete for SRR26459771_val_2.fq.gz
+Approx 50% complete for SRR26459771_val_2.fq.gz
+Approx 55% complete for SRR26459771_val_2.fq.gz
+Approx 60% complete for SRR26459771_val_2.fq.gz
+Approx 65% complete for SRR26459771_val_2.fq.gz
+Approx 70% complete for SRR26459771_val_2.fq.gz
+Approx 75% complete for SRR26459771_val_2.fq.gz
+Approx 80% complete for SRR26459771_val_2.fq.gz
+Approx 85% complete for SRR26459771_val_2.fq.gz
+Approx 90% complete for SRR26459771_val_2.fq.gz
+Approx 95% complete for SRR26459771_val_2.fq.gz
+Deleting both intermediate output files SRR26459771_R1_trimmed.fq.gz and SRR26459771_R2_trimmed.fq.gz
+
+====================================================================================================
+
