@@ -1,3 +1,4 @@
+![image](https://github.com/user-attachments/assets/546e29be-0802-4272-843f-786062e37367)
 # Dockerized Genomic Processing Pipelines
 Genomic data processing pipelines written in Workflow Definition Language (WDL), making use of Docker containers to ensure reproducability. The Docker containers used have been curated for usage in the Faryabi Lab processing pipelines, and can be found on [Dockerhub](https://hub.docker.com/u/faryabilab).
 
