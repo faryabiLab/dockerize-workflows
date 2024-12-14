@@ -1,3 +1,4 @@
+![image](https://github.com/user-attachments/assets/546e29be-0802-4272-843f-786062e37367)
 # Dockerized Genomic Processing Pipelines
 Genomic data processing pipelines written in Workflow Definition Language (WDL), making use of Docker containers to ensure reproducability. The Docker containers used have been curated for usage in the Faryabi Lab processing pipelines, and can be found on [Dockerhub](https://hub.docker.com/u/faryabilab).
 
@@ -23,7 +24,7 @@ Cromwell allows the user to pass in an `options` file via the `-o/--options` arg
 * `final_call_logs_dir` - Directory to which the final workflow logs will be copied
 There are more options available, you can find them in the Cromwell documentation.
 #### Docker Containers
-By default, the pipelines are configured to run each step within a specified docker container, all of which are hosted on the [Faryabi Lab Dockerhub](https://hub.docker.com/). To learn how to use different docker containers for running workflow steps, refer to the [Official Cromwell Documentation](https://cromwell.readthedocs.io/en/stable/).
+By default, the pipelines are configured to run each step within a specified docker container, all of which are hosted on the [Faryabi Lab Dockerhub](https://hub.docker.com/). Workflow input files contain a `Dockerhub_Pull` variable for each step that can be used to point to another Docker container, although this could be risky.
 ## Cromwell Configuration
 Within the `cromwell_configs` directory is a Cromwell config file which instructs the engine to use Docker as backend. The only option that can be tweaked in this file is the `concurrent_job_limit` variable: this controls the number of jobs that can be running at once (default = 10).
 #### Call-Caching
