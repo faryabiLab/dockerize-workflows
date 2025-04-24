@@ -94,6 +94,6 @@ java \
 Of course, you can find out more about Cromwell's capabilities in the [Official Cromwell Documentation](https://cromwell.readthedocs.io/en/stable/).
 
 ### Outputs
-The workflow outputs can be found at the path provided to the `final_workflow_outputs_dir` key in the `options.json` file. 
-Note on bigWig normalization: bigWigs (track files) are normalized by Reads Per Million (RPM).
+The workflow outputs can be found at the path provided to the `final_workflow_outputs_dir` key in the `options.json` file. \
+**Note on bigWig normalization**: bigWigs (track files) are normalized by Reads Per Million (RPM).
 
