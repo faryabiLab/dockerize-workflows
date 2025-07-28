@@ -32,9 +32,11 @@ task remove_scaffolds {
 		
 		Int cpu = 12
 		Int mem = 25
+
+		Int mem_per_thread = floor(mem / cpu)
 	}
 	command {
-		samtools view -@ ${cpu} -h -L ${chrom_no_scaff} ${bam} | samtools sort -@ ${cpu} -m "${mem}G" -O bam -o "${sample_name}.noScaffold.bam" -
+		samtools view -@ ${cpu} -h -L ${chrom_no_scaff} ${bam} | samtools sort -@ ${cpu} -m "~{mem_per_thread}G" -O bam -o "${sample_name}.noScaffold.bam" -
 	}
 	output {
 		File bam_noScaffold = "${sample_name}.noScaffold.bam"
@@ -60,6 +62,7 @@ task remove_duplicates {
 
 		Int cpu = 12
 		Int mem = 25
+
         }
 	String metricsFile = "${sample_name}"+"_"+"${PicardMetricsFile}"
         command {
@@ -115,9 +118,11 @@ task sort_bam {
 
 		Int cpu = 12
 		Int mem = 100
+
+		Int mem_per_thread = floor(mem / cpu)
         }
         command {
-		samtools sort -@ ${cpu} -m "${mem}G" ${bam} -o "${sample_name}.sorted.bam"
+		samtools sort -@ ${cpu} -m "${mem_per_thread}G" ${bam} -o "${sample_name}.sorted.bam"
         }
         output {
 		File bam_sorted = "${sample_name}.sorted.bam"
@@ -161,7 +166,7 @@ task size_filter_bam {
 		Int? threshold_hi
 		
 		Int cpu = 12
-		Int mem = 25
+		Int mem = 5
 	}
 	command {
 		if [ ! -z "${threshold_low}" ] && [ ! -z "${threshold_hi}" ]; then
