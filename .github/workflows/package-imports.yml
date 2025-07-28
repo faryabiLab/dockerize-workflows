@@ -1,0 +1,38 @@
+name: Build WDL imports.zip
+
+on:
+  push:
+    paths:
+      - 'wdl_tasks/**'
+      - '.github/workflows/package-imports.yml'
+  workflow_dispatch:
+
+jobs:
+  build-zip:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Zip wdl_tasks -> imports.zip
+        run: |
+          test -d wdl_tasks || { echo "wdl_tasks/ not found"; exit 1; }
+          mkdir -p workflows/rna_seq
+          # -r recurse, -q quiet, -FS for deterministic-ish zip (strip extra)
+          zip -r -q -FS imports.zip wdl_tasks
+          mv imports.zip workflows/rna_seq/imports.zip
+
+      # Optional: upload as an artifact too
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: imports.zip
+          path: workflows/rna_seq/imports.zip
+
+      - name: Commit if changed
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: 'workflows/rna_seq/imports.zip'
+          message: 'CI: update imports.zip from wdl_tasks [skip ci]'
