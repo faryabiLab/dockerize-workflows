@@ -36,7 +36,7 @@ task BWA {
 		String? OutputUnpairedReads
 
 		Int cpu = 16
-		Int mem = 16	
+		Int mem = 32	
 	}
 	command {
 		if [[ "${paired}" == "true" ]]; then 
