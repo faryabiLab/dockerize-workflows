@@ -9,7 +9,7 @@ task STAR {
 		File? fastq1_trimmed
 		File? fastq2_trimmed			
 		File? fastq_trimmed_single
-		Directory star_index
+		File star_index
 		String sample_name
 		Boolean paired
 		####
@@ -29,10 +29,13 @@ task STAR {
 
 	}
 	command {
+		mkdir star_index
+		tar -xzf ~{star_index_tar} -C star_index
+		
 		if [[ "~{paired}" == "true" ]]; then
 			STAR \
 			--runThreadN ${STAR_cpu} \
-			--genomeDir ${star_index} \
+			--genomeDir star_index \
 			--readFilesIn ${fastq1_trimmed} ${fastq2_trimmed} \
 			--outFileNamePrefix ${sample_name} \
 			--readFilesCommand ${readFilesCommand} \
@@ -68,28 +71,4 @@ task STAR {
 		mem: "${STAR_mem}"
 	}
 }
-
-##########
-# Zip STAR index files for easy localization
-##########
-task prep_star_index
-{
-	input
-	{
-		File star_index_dir
-	}
-	command
-	{
-		tar -czf ${star_index_dir}
-	}
-	output 
-	{
-		File index_tar = "star_index.tar.gz"
-	}
-	runtime 
-	{
-		backend: "Local"
-	}
-}
-
 
