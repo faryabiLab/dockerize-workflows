@@ -9,7 +9,7 @@ task STAR {
 		File? fastq1_trimmed
 		File? fastq2_trimmed			
 		File? fastq_trimmed_single
-		File star_index
+		String star_index
 		String sample_name
 		Boolean paired
 		####
@@ -29,10 +29,6 @@ task STAR {
 
 	}
 	command {
-		
-		mkdir star_index
-		tar -xzf ~{star_index_tar} -C star_index
-		
 		if [[ "~{paired}" == "true" ]]; then
 			STAR \
 			--runThreadN ${STAR_cpu} \
