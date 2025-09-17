@@ -6,6 +6,7 @@ task fastqc_trim {
 		File? R2
 		File? SE
 		Boolean paired
+		String sampleName
 		String? Dockerhub_Pull = "faryabilab/trim_galore:0.10"
 		Int quality = 15
 		Int stringency = 5
