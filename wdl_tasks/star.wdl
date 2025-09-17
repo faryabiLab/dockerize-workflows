@@ -6,7 +6,7 @@ task STAR {
 		File? fastq1_trimmed
 		File? fastq2_trimmed			
 		File? fastq_trimmed_single
-		String star_index
+		Directory star_index
 		String sample_name
 		Boolean paired
 		####
