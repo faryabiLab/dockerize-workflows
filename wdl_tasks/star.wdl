@@ -1,4 +1,4 @@
-version 1.0
+version 1.1
 
 ##########
 # Align RNAseq fastq files with STAR
@@ -9,7 +9,7 @@ task STAR {
 		File? fastq1_trimmed
 		File? fastq2_trimmed			
 		File? fastq_trimmed_single
-		String star_index
+		Directory star_index
 		String sample_name
 		Boolean paired
 		####
@@ -76,7 +76,7 @@ task prep_star_index
 {
 	input
 	{
-		String star_index_dir
+		File star_index_dir
 	}
 	command
 	{

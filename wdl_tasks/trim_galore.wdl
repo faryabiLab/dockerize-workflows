@@ -1,4 +1,5 @@
-version 1.0
+version 1.1
+
 # auto-zipped
 task fastqc_trim {
 	input {
