@@ -88,9 +88,7 @@ task prep_star_index
 	}
 	runtime 
 	{
-		docker: "ubuntu:20.04"
-    		cpu: "1"
-    		mem: "4"
+		backend: "Local"
 	}
 }
 
