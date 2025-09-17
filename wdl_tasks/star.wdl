@@ -30,7 +30,7 @@ task STAR {
 	}
 	command {
 		mkdir star_index
-		tar -xzf ~{star_index_tar} -C star_index
+		tar -xzf ~{star_index} -C star_index
 		
 		if [[ "~{paired}" == "true" ]]; then
 			STAR \
@@ -50,7 +50,7 @@ task STAR {
 		else
 			STAR \
 			--runThreadN ${STAR_cpu} \
-			--genomeDir ${star_index} \
+			--genomeDir star_index \
 			--readFilesIn ${fastq_trimmed_single} \
 			--outFileNamePrefix ${sample_name} \
 			--readFilesCommand ${readFilesCommand} \
