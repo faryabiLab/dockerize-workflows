@@ -31,7 +31,7 @@ task STAR {
 	command {
 		
 		mkdir star_index
-        	tar -xzf ~{star_index_tar} -C star_index
+		tar -xzf ~{star_index_tar} -C star_index
 		
 		if [[ "~{paired}" == "true" ]]; then
 			STAR \
