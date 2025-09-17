@@ -4,7 +4,7 @@ task count_reads_single {
 	input {
 		#### REQUIRED
 		File bam
-		String GeneAnnotationFile		
+		File GeneAnnotationFile		
 		String sample_name
 		####
 		
@@ -41,7 +41,7 @@ task count_reads_paired {
         input {
 		#### REQUIRED
                 File bam
-		String GeneAnnotationFile		
+		File GeneAnnotationFile		
 		String sample_name
 		####
 		String? Dockerhub_Pull = "faryabilab/subread:0.1.0"
@@ -78,8 +78,8 @@ task quantifyCoverage {
 	input {
 		#### REQUIRED
 		File bam
-		String peaks
-		String chromSizes
+		File peaks
+		File chromSizes
 		String sample_name
 		####
 		String? Dockerhub_Pull = "faryabilab/bedtools:0.1.0"
