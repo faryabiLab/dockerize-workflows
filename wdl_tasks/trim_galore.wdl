@@ -29,7 +29,7 @@ task fastqc_trim {
 			-e ${e} \
 			--basename ${sampleName} \
 			--length ${length} \
-			"$R1" "$R2"
+			${R1} ${R2}
 		else
 			trim_galore \
 			-j ${cpu} \
@@ -41,7 +41,7 @@ task fastqc_trim {
 			-e ${e} \
 			--basename ${sampleName} \
 			--length ${length} \
-			"$SE"
+			${SE}
 		fi
 	}
 	output {
