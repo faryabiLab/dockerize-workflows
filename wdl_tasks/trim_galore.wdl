@@ -16,20 +16,7 @@ task fastqc_trim {
 		Int mem = 8
 	}
 	command {
-		# Decide naming convention of fastqs
-
 		if [[ "${paired}" == "true" ]]; then
-			if [[ -f "${fastq_dir}/${sampleName}_R1${fastq_suffix}.fastq.gz" ]]; then
-                                R1="${fastq_dir}/${sampleName}_R1${fastq_suffix}.fastq.gz"
-                                R2="${fastq_dir}/${sampleName}_R2${fastq_suffix}.fastq.gz"
-                        elif [[ -f "${fastq_dir}/${sampleName}_1${fastq_suffix}.fastq.gz" ]]; then
-                                R1="${fastq_dir}/${sampleName}_1${fastq_suffix}.fastq.gz"
-                                R2="${fastq_dir}/${sampleName}_2${fastq_suffix}.fastq.gz"
-                        else
-                                echo "ERROR: Cannot find FASTQ files for sample ${sampleName} with either _R1/_R2 or _1/_2 pattern" >&2
-                                exit 1
-			fi
-
 			trim_galore \
 			-j ${cpu} \
 			-q ${quality} \
