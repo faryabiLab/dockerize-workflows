@@ -48,7 +48,7 @@ task fastqc_trim {
 		File? out_fqc  = "${sampleName}_trimmed.fq.gz"
     		File? out_fqc1 = "${sampleName}_val_1.fq.gz"
     		File? out_fqc2 = "${sampleName}_val_2.fq.gz"
-    		File out_html  = "${sampleName}_trimmed_fastqc.html"
+    		File? out_html  = "${sampleName}_trimmed_fastqc.html"
 	}
 	runtime {
 		docker: "${Dockerhub_Pull}"
