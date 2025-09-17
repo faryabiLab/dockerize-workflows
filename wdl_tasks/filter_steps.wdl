@@ -89,7 +89,7 @@ task remove_blacklist {
 	input {
 		#### REQUIRED
 		File bam
-		String blacklist
+		String? blacklist
 		String sample_name	
 		####
 		String? Dockerhub_Pull = "faryabilab/bedtools:0.1.0"
