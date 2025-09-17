@@ -25,7 +25,7 @@ task remove_scaffolds {
 	input {
 		#### REQUIRED
 		File bam
-		String chrom_no_scaff
+		File chrom_no_scaff
 		String sample_name
 		####
 		String? Dockerhub_Pull = "faryabilab/samtools:0.1.0"
@@ -89,7 +89,7 @@ task remove_blacklist {
 	input {
 		#### REQUIRED
 		File bam
-		String? blacklist
+		File? blacklist
 		String sample_name	
 		####
 		String? Dockerhub_Pull = "faryabilab/bedtools:0.1.0"
