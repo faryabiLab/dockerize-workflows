@@ -1,12 +1,15 @@
 version 1.0
 
+##########
+# Align RNAseq fastq files with STAR
+##########
 task STAR {
 	input {
 		#### REQUIRED
 		File? fastq1_trimmed
 		File? fastq2_trimmed			
 		File? fastq_trimmed_single
-		Directory star_index
+		File star_index
 		String sample_name
 		Boolean paired
 		####
@@ -26,6 +29,10 @@ task STAR {
 
 	}
 	command {
+		
+		mkdir star_index
+        	tar -xzf ~{star_index_tar} -C star_index
+		
 		if [[ "~{paired}" == "true" ]]; then
 			STAR \
 			--runThreadN ${STAR_cpu} \
@@ -65,3 +72,30 @@ task STAR {
 		mem: "${STAR_mem}"
 	}
 }
+
+##########
+# Zip STAR index files for easy localization
+##########
+task prep_star_index
+{
+	input
+	{
+		String star_index_dir
+	}
+	command
+	{
+		tar -czf ${star_index_dir}
+	}
+	output 
+	{
+		File index_tar = "star_index.tar.gz"
+	}
+	runtime 
+	{
+		docker: "ubuntu:20.04"
+    		cpu: 1
+    		memory: "4G"
+	}
+}
+
+
