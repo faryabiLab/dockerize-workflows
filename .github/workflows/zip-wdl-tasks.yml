@@ -1,0 +1,38 @@
+name: Zip wdl_tasks into each workflow
+
+on:
+  push:
+    paths:
+      - "wdl_tasks/**"
+      - ".github/workflows/zip-wdl-tasks.yml"
+
+jobs:
+  zip:
+    runs-on: ubuntu-latest			# runner to run workflow on
+    steps:
+      - name: Checkout repo			# Step 1: Checkout repo
+        uses: actions/checkout@v4		# Action associated with checking out repo
+
+      - name: Create zip of wdl_tasks		# Step 2: Zip the wdl_tasks/ dir
+        run: |
+          zip -r imports.zip wdl_tasks		# Run zip command
+
+      - name: Copy zip into workflows/*/	# Step 3: Copy the .zip into the workflow dirs
+        run: |
+          for dir in workflows/*/ ; do		# Loop through all subdirs win workflows/ and copy
+            cp imports.zip "$dir"
+          done
+
+      - name: Commit and push updated zips	# Step 4: commit and push zips to persist
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add workflows/*/wdl_tasks.zip || true
+          if ! git diff --cached --quiet; then
+            git commit -m "Auto-update wdl_tasks.zip"
+            git push
+          else
+            echo "No changes to commit."
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
