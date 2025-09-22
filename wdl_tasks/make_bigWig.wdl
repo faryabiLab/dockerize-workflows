@@ -48,7 +48,7 @@ task calculate_factor {
 task bam_to_bedgraph {
 	input {
 		File? bam
-		String chromosome_sizes
+		File chromosome_sizes
 		Float factor
 		String sample_name
 		String? Dockerhub_Pull = "faryabilab/bedtools:0.1.0"
@@ -75,7 +75,7 @@ task bam_to_bedgraph {
 task bedgraph_to_bigwig {
 	input {
                 File bedgraph
-		String chromosome_sizes
+		File chromosome_sizes
                 String sample_name
 		String? Dockerhub_Pull = "faryabilab/bedtools:0.1.0"
 		
@@ -99,7 +99,7 @@ task bedgraph_to_bigwig {
 workflow makeBigWig {
 	input {
 		File? bam
-		String chromosome_sizes
+		File chromosome_sizes
 		String sampleName
 	}
 	call read_count {
