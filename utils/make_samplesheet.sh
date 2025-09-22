@@ -2,14 +2,41 @@
 if [[ -f "samplesheet.tsv" ]]; then
 	rm samplesheet.tsv
 fi
+
+USAGE="USAGE:  $0 <-p|--paired> -s|--pair-id-style <R|N> -d <fastq directory>"
+
 MODE="single"
-while true; do
+STYLE="R"
+
+if [[ $# -lt 2 ]]; then
+	echo ${USAGE}
+	exit 1
+fi
+
+while [[ $# -gt 0 ]]; do
 	case "$1" in
-		-p | --paired ) MODE="paired"; shift ;;
-		-d | --directory ) dir="$2"; shift ;;
-		* ) break ;;
+		-p | --paired ) 
+			MODE="paired"
+			shift 
+			;;
+		-d | --directory ) 
+			dir="$2"
+			shift 2
+			;;
+		-s | --pair-id-style )
+			STYLE="$2"
+			shift 2
+			;;
+		-* | --* ) 
+			echo ${USAGE}
+			exit 1
+			;;
 	esac
 done
+
+if [[ ${STYLE} == "N" ]]; then
+	STYLE=""
+fi
 
 if [[ ! -f "samplesheet.tsv" ]]; then
 	touch samplesheet.tsv
@@ -27,10 +54,10 @@ elif [[ $MODE == "paired" ]]; then
 	for i in $(ls ${dir}); do
 		i="${i##*/}"
 		echo $i
-		if [[ $i =~ "_R2" ]]; then
+		if [[ $i =~ "_${STYLE}2" ]]; then
 			continue
 		fi
-		i=${i%%_R1*}
+		i=${i%%_${STYLE}1*}
 		echo $i >> samplesheet.tsv
 	done
 fi
