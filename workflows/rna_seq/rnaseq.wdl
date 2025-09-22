@@ -12,6 +12,13 @@ import "wdl_tasks/make_bigWig.wdl" as bwTasks
 # from the entire run of the pipeline
 #####
 
+struct SampleRow
+{
+	String sample_id
+	File R1
+	File? R2
+}
+
 workflow RNAseq 
 {
 	input 
@@ -32,29 +39,19 @@ workflow RNAseq
 
 	scatter (sample in samples) 
 	{
-		String sampleName=sample[0]
-		
-		# Build paths as Strings (no optionals, no None/null here)
-   		File? R1a_path = fastq_dir + "/" + sampleName + "_R1" + select_first([fastq_suffix, ""]) + ".fastq.gz"
-    		File? R2a_path = fastq_dir + "/" + sampleName + "_R2" + select_first([fastq_suffix, ""]) + ".fastq.gz"
-    		File? R1b_path = fastq_dir + "/" + sampleName + "_1"  + select_first([fastq_suffix, ""]) + ".fastq.gz"
-    		File? R2b_path = fastq_dir + "/" + sampleName + "_2"  + select_first([fastq_suffix, ""]) + ".fastq.gz"
-    		File? SE_path  = fastq_dir + "/" + sampleName + ".fastq.gz"
-
-    		# Choose naming convention with select_first; still no None/null
-    		File? R1_choice = select_first([R1a_path, R1b_path])
-    		File? R2_choice = select_first([R2a_path, R2b_path])
-    		File? SE_choice = SE_path
-		
+		String sample_id = sample[0]
+		File R1 = sample[1]
+		File? R2 = if length(sample) > 2 && sample[2] != "" then sample[2] else ""
+	
 		if (paired) 
 		{
      			call trimTasks.fastqc_trim as trim_pe
 			{
        				input:
-          				R1 = R1_choice,
-          				R2 = R2_choice,
+          				R1 = R1,
+          				R2 = R2,
           				paired = paired,
-          				sampleName = sampleName
+          				sampleName = sample_id
       			}
     		}
 
@@ -63,9 +60,9 @@ workflow RNAseq
       			call trimTasks.fastqc_trim as trim_se
 			{
         			input:
-          				SE = SE_choice,
+          				SE = R1,
           				paired = paired,
-          				sampleName = sampleName
+          				sampleName = sample_id
       			}
     		}
 
@@ -80,7 +77,7 @@ workflow RNAseq
 				fastq1_trimmed = 	trimmed_r1,
 				fastq2_trimmed =	trimmed_r2,
 				star_index =		star_index,
-				sample_name =		sampleName,
+				sample_name =		sample_id,
 				paired =		paired
 		}
 
@@ -89,13 +86,13 @@ workflow RNAseq
 			input:
 				bam=STAR.bam,
 				chrom_no_scaff=chromNoScaffold,
-				sample_name=sampleName
+				sample_name=sample_id
 		}
 		call filterTasks.remove_duplicates 
 		{
 			input:
 				bam=remove_scaffolds.bam_noScaffold,
-				sample_name=sampleName
+				sample_name=sample_id
 		}
 		# Conditionally call remove_blacklist if blDefined = true
 		if (blDefined)
@@ -105,7 +102,7 @@ workflow RNAseq
                         	input:
                                 	bam=remove_duplicates.bam_noDuplicate,
                                 	blacklist=blacklist,
-                                	sample_name=sampleName
+                                	sample_name=sample_id
                 	}
 
 		}
@@ -113,13 +110,13 @@ workflow RNAseq
 		{
 			input:
 				bam=select_first([remove_blacklist.bam_noBlacklist, remove_scaffolds.bam_noScaffold]),
-				sample_name=sampleName
+				sample_name=sample_id
 		}
 		call filterTasks.index_bam 
 		{
 			input:
 				bam=sort_bam.bam_sorted,
-				sample_name=sampleName
+				sample_name=sample_id
 		}
 		if (paired) 
 		{
@@ -128,7 +125,7 @@ workflow RNAseq
 				input:
 					bam=sort_bam.bam_sorted,
 					GeneAnnotationFile=GeneAnnotationFile,
-					sample_name=sampleName
+					sample_name=sample_id
 			}
 		}
 		if (!paired) 
@@ -138,7 +135,7 @@ workflow RNAseq
 				input:
 					bam=sort_bam.bam_sorted,
 					GeneAnnotationFile=GeneAnnotationFile,
-					sample_name=sampleName
+					sample_name=sample_id
 			}
 		}
 		call bwTasks.read_count 
@@ -157,14 +154,14 @@ workflow RNAseq
 				bam=sort_bam.bam_sorted,
 				chromosome_sizes=chromosome_sizes,
 				factor=calculate_factor.factor,
-				sample_name=sampleName
+				sample_name=sample_id
 		}
 		call bwTasks.bedgraph_to_bigwig 
 		{
 			input:
 				bedgraph=bam_to_bedgraph.bedgraph,
 				chromosome_sizes=chromosome_sizes,
-				sample_name=sampleName
+				sample_name=sample_id
 		}	
         }	
 	output 
