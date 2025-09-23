@@ -2,6 +2,8 @@ name: Zip wdl_tasks into each workflow
 
 on:
   push:
+    branches: 
+      - main
     paths:
       - "wdl_tasks/**"
       - ".github/workflows/zip-wdl-tasks.yml"
