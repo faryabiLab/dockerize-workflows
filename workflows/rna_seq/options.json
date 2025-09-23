@@ -1,5 +1,5 @@
 {
-  "final_workflow_outputs_dir": "/mnt/data0/noah/pipeline_run/dockerize-workflows/workflows/rna_seq/outs",
+  "final_workflow_outputs_dir": "outputs", 
   "use_relative_output_paths": true,
-  "final_call_logs_dir": "/mnt/data0/noah/pipeline_run/dockerize-workflows/workflows/rna_seq/logs" 
+  "final_call_logs_dir": "logs" 
 }

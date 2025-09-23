@@ -1,12 +1,10 @@
 {
-  "RNAseq.fastq_dir": "/mnt/data0/tfriedr/B_cell_mouse/RNA",
-  "RNAseq.chromosome_sizes": "/mnt/data0/noah/references/Mus_musculus/GRCm38/Annotation/ChromSizes_ordered.tsv",
-  "RNAseq.blacklist": "/mnt/data0/noah/references/Mus_musculus/GRCm38/mm10-blacklist.v2.bed",
-  "RNAseq.chromNoScaffold": "/mnt/data0/noah/references/Mus_musculus/GRCm38/Annotation/Chrom_NoPatch_mm10.txt",
-  "RNAseq.star_index": "/mnt/data0/noah/references/Mus_musculus/GRCm38/Sequence/STAR",
-  "RNAseq.GeneAnnotationFile": "/mnt/data0/noah/references/Mus_musculus/GRCm38/Annotation/Genes/genes.gtf",
-  "RNAseq.paired": "false",
-  "RNAseq.sampleList": "/mnt/data0/noah/pipeline_run/dockerize-workflows/workflows/rna_seq/samplesheet.tsv",
+  "RNAseq.chromosome_sizes": "/dobby/noah/dev/dockerize-workflows/test_data/ChromSizes.txt",
+  "RNAseq.chromNoScaffold": "/dobby/noah/dev/dockerize-workflows/test_data/ChromNoPatch.txt",
+  "RNAseq.star_index": "/dobby/noah/dev/dockerize-workflows/workflows/rna_seq/index.tar.gz",
+  "RNAseq.GeneAnnotationFile": "/dobby/noah/dev/dockerize-workflows/test_data/Saccharomyces_cerevisiae.R64-1-1.gtf",
+  "RNAseq.paired": true,
+  "RNAseq.sampleList": "/dobby/noah/dev/dockerize-workflows/workflows/rna_seq/samplesheet.tsv",
   
   "RNAseq.STAR.STAR_mem": 50,
   "RNAseq.STAR.STAR_cpu": 12

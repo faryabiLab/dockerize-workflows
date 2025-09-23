@@ -45,9 +45,9 @@ fi
 if [[ $MODE == "single" ]]; then
 	echo "Making single-end samplesheet"
 	for i in $(ls ${dir}); do
-		i="${i##*/}"
-		i="${i%%.*}"
-		echo $i >> samplesheet.tsv
+		j="${i##*/}"
+		j="${j%%.*}"
+		echo "$j\t$(realpath ${i})" >> samplesheet.tsv
 	done
 elif [[ $MODE == "paired" ]]; then
 	echo "Making paired-end samplesheet"
@@ -55,9 +55,11 @@ elif [[ $MODE == "paired" ]]; then
 		i="${i##*/}"
 		echo $i
 		if [[ $i =~ "_${STYLE}2" ]]; then
+			R2="${i}"
 			continue
 		fi
+		R1="${i}"
 		i=${i%%_${STYLE}1*}
-		echo $i >> samplesheet.tsv
+		echo "$i\t$(realpath ${R1})\t$(realpath ${R2})" >> samplesheet.tsv
 	done
 fi
