@@ -1,5 +1,5 @@
 version 1.0
-## TEST
+## TESTT
 
 import "wdl_tasks/trim_galore.wdl" as trimTasks
 import "wdl_tasks/star.wdl" as starTasks
