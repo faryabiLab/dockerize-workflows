@@ -30,7 +30,7 @@ jobs:
       - name: Download WOMtool jar
         id: download_womtool
         run: |
-	  wget -q  https://github.com/broadinstitute/cromwell/releases/download/90/womtool-90.jar -O womtool.jar
+          wget -q  https://github.com/broadinstitute/cromwell/releases/download/90/womtool-90.jar -O womtool.jar
 
       - name: Find changed workflow dirs
         id: changed_dirs
