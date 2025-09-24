@@ -25,6 +25,7 @@ jobs:
         uses: actions/checkout@v4
       
       - name: Download WOMtool .jar
+	id: download_womtool
         run: |
 	  wget -q  https://github.com/broadinstitute/cromwell/releases/download/90/womtool-90.jar -O womtool.jar
 
