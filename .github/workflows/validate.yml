@@ -67,7 +67,6 @@ jobs:
           for d in ${{ steps.changed_dirs.outputs.dirs }}; do
             for w in $d/*.wdl; do
               echo "Validating $w"
-              java -jar womtool.jar validate "$w" \
-                --imports "$d/imports" || exit 1
+              java -jar womtool.jar validate "$w" || exit 1
             done
           done
