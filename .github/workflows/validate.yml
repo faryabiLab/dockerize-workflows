@@ -36,18 +36,23 @@ jobs:
       - name: Find changed workflow dirs
         id: changed_dirs
         run: |
-          # Compare with base ref (PRs) or previous commit (pushes)
-          base_ref=${{ github.base_ref || 'HEAD^' }}
+          if [ "${{ github.event_name }}" = "workflow_run" ]; then
+          base_ref=HEAD^
+          else
+            base_ref=${{ github.base_ref || 'HEAD^' }}
+          fi
 
           dirs=$(git diff --name-only $base_ref HEAD \
-            | grep -E 'workflows/.+(\.wdl$|imports\.zip$)' \
-            | xargs -r -n1 dirname \
-            | sort -u)
+          | grep -E 'workflows/.+(\.wdl$|imports\.zip$)' \
+          | xargs -r -n1 dirname \
+          | sort -u)
 
           if [ -n "$dirs" ]; then
-            echo "dirs=$dirs" >> $GITHUB_OUTPUT
-          else
-            echo "dirs=" >> $GITHUB_OUTPUT
+          {
+              echo "dirs<<EOF"
+              echo "$dirs"
+              echo "EOF"
+          } >> $GITHUB_OUTPUT
           fi
 
       - name: Unzip imports if present
