@@ -1,21 +1,15 @@
 name: Validate WDL scripts
 
 on:
-  workflow_run:
-    workflows: ["Build imports zips"] 
-    types:
-      - completed
   push:
     branches: 
       - main
       - dev-branch
     paths:
-      - "workflows/*/*.wdl"			# Workflow files
       - "workflows/*/imports.zip"		# imports (from zip workflow)
       - ".github/workflows/validate.yml"	# the workflow itself
   pull_request:
     paths:
-      - "workflows/*/*.wdl"
       - "workflows/*/imports.zip"
       - ".github/workflows/validate.yml"
 
