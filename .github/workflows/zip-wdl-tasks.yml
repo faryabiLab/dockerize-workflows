@@ -4,6 +4,7 @@ on:
   push:
     branches: 
       - main
+      - dev-branch                # Both branches 
     paths:
       - "wdl_tasks/**"
       - ".github/workflows/zip-wdl-tasks.yml"
