@@ -1,13 +1,21 @@
 name: Validate WDL scripts
 
 on:
+  # Trigger after the Zip workflow finishes (covers wdl_tasks changes)
   workflow_run:
     workflows: ["Build imports zips"]
     types: [completed]
+
+  # Trigger when workflow WDLs are edited directly
   push:
-    branches: [dev-branch]
+    branches: [main, dev-branch]
     paths:
-      - "workflows/*/imports.zip"
+      - "workflows/*/*.wdl"
+      - ".github/workflows/validate.yml"
+
+  pull_request:
+    paths:
+      - "workflows/*/*.wdl"
       - ".github/workflows/validate.yml"
 
 jobs:
