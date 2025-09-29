@@ -3,7 +3,7 @@ name: Build imports zips
 on:
   push:
     branches: 
-      - main
+      - master
       - dev-branch                # Both branches 
     paths:
       - "wdl_tasks/**"
