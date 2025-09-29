@@ -1,4 +1,4 @@
-name: Zip wdl_tasks into each workflow
+name: Build imports zips
 
 on:
   push:
