@@ -9,6 +9,10 @@ on:
       - "wdl_tasks/**"
       - ".github/workflows/zip-wdl-tasks.yml"
 
+permissions:
+      contents: write
+      actions: write
+
 jobs:
   zip:
     runs-on: ubuntu-latest			# runner to run workflow on
