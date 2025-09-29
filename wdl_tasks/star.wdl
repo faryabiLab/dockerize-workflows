@@ -1,5 +1,5 @@
 version 1.0
-# testing
+# testing again
 ##########
 # Align RNAseq fastq files with STAR
 ##########
