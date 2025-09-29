@@ -10,8 +10,8 @@ on:
       - ".github/workflows/zip-wdl-tasks.yml"
 
 permissions:
-      contents: write
-      actions: write
+  contents: write
+  actions: write
 
 jobs:
   zip:
