@@ -8,7 +8,7 @@ on:
 
   # Trigger when workflow WDLs are edited directly
   push:
-    branches: [main, dev-branch]
+    branches: [master, dev-branch]
     paths:
       - "workflows/*/*.wdl"
       - ".github/workflows/validate.yml"
