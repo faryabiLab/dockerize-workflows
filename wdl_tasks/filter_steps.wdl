@@ -1,5 +1,7 @@
 version 1.0
 
+# testing
+
 task sam_to_bam {
 	input {
 		File sam

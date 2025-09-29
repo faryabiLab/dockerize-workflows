@@ -1,23 +1,11 @@
 version 1.0
+## TESTT
 
 import "wdl_tasks/trim_galore.wdl" as trimTasks
 import "wdl_tasks/star.wdl" as starTasks
 import "wdl_tasks/filter_steps.wdl" as filterTasks
 import "wdl_tasks/feature_count.wdl" as quantifyTasks
 import "wdl_tasks/make_bigWig.wdl" as bwTasks
-
-#####
-# The model for output file naming is as follows:
-# Each sample name will be a directory, and wthin each directory will be that sample's complete collection of files
-# from the entire run of the pipeline
-#####
-
-struct SampleRow
-{
-	String sample_id
-	File R1
-	File? R2
-}
 
 workflow RNAseq 
 {

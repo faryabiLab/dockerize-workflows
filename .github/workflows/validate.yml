@@ -1,0 +1,71 @@
+name: Validate WDL scripts
+
+on:
+  # Trigger after the Zip workflow finishes (covers wdl_tasks changes)
+  workflow_run:
+    workflows: ["Build imports zips"]
+    types: [completed]
+
+  # Trigger when workflow WDLs are edited directly
+  push:
+    branches: [main, dev-branch]
+    paths:
+      - "workflows/*/*.wdl"
+      - ".github/workflows/validate.yml"
+
+  pull_request:
+    paths:
+      - "workflows/*/*.wdl"
+      - ".github/workflows/validate.yml"
+
+jobs:
+  validate:
+    name: Validate WDL workflow with WOMtool
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with: 
+          fetch-depth: 2
+ 
+      - name: Download WOMtool jar
+        id: download_womtool
+        run: |
+          wget -q  https://github.com/broadinstitute/cromwell/releases/download/90/womtool-90.jar -O womtool.jar
+
+      - name: Find changed workflow dirs
+        id: changed_dirs
+        run: |
+          # Compare with base ref (PRs) or previous commit (pushes)
+          base_ref=${{ github.base_ref || 'HEAD^' }}
+
+          dirs=$(git diff --name-only $base_ref HEAD \
+            | grep -E 'workflows/.+(\.wdl$|imports\.zip$)' \
+            | xargs -r -n1 dirname \
+            | sort -u)
+
+          if [ -n "$dirs" ]; then
+            echo "dirs=$dirs" >> $GITHUB_OUTPUT
+          else
+            echo "dirs=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Unzip imports if present
+        if: steps.changed_dirs.outputs.dirs != ''
+        run: |
+          for d in ${{ steps.changed_dirs.outputs.dirs }}; do
+            if [ -f "$d/imports.zip" ]; then
+              echo "Unzipping $d/imports.zip"
+              unzip -o "$d/imports.zip" -d "$d/imports"
+            fi
+          done
+
+      - name: Validate changed workflows
+        if: steps.changed_dirs.outputs.dirs != ''
+        run: |
+          for d in ${{ steps.changed_dirs.outputs.dirs }}; do
+            for w in $d/*.wdl; do
+              echo "Validating $w"
+              java -jar womtool.jar validate "$w" || exit 1
+            done
+          done
