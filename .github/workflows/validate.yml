@@ -72,9 +72,16 @@ jobs:
       - name: Validate changed workflows
         if: steps.changed_dirs.outputs.dirs != ''
         run: |
-          for d in ${{ steps.changed_dirs.outputs.dirs }}; do
-            for w in $d/*.wdl; do
+          # Normalize to space-separated list (convert any newlines to spaces)
+          DIRS="${{ steps.changed_dirs.outputs.dirs }}"
+          DIRS="${DIRS//$'\n'/ }"
+
+          for d in $DIRS; do
+            # Skip if no .wdl files
+            for w in "$d"/*.wdl; do
+              [ -e "$w" ] || continue
               echo "Validating $w"
               java -jar womtool.jar validate "$w" || exit 1
             done
           done
+        shell: bash
