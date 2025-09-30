@@ -58,13 +58,17 @@ jobs:
       - name: Unzip imports if present
         if: steps.changed_dirs.outputs.dirs != ''
         run: |
-          for d in ${{ steps.changed_dirs.outputs.dirs }}; do
+          # turn any newlines in the output into spaces
+          DIRS="${{ steps.changed_dirs.outputs.dirs }}"
+          DIRS="${DIRS//$'\n'/ }"
+
+          for d in $DIRS; do
             if [ -f "$d/imports.zip" ]; then
               echo "Unzipping $d/imports.zip"
               unzip -o "$d/imports.zip" -d "$d/imports"
             fi
           done
-
+          
       - name: Validate changed workflows
         if: steps.changed_dirs.outputs.dirs != ''
         run: |
