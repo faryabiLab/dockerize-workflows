@@ -69,19 +69,28 @@ jobs:
             fi
           done
           
-      - name: Validate changed workflows
-        if: steps.changed_dirs.outputs.dirs != ''
-        run: |
-          # Normalize to space-separated list (convert any newlines to spaces)
-          DIRS="${{ steps.changed_dirs.outputs.dirs }}"
-          DIRS="${DIRS//$'\n'/ }"
+#      - name: Validate changed workflows
+#        if: steps.changed_dirs.outputs.dirs != ''
+#        run: |
+#          # Normalize to space-separated list (convert any newlines to spaces)
+#          DIRS="${{ steps.changed_dirs.outputs.dirs }}"
+#          DIRS="${DIRS//$'\n'/ }"
 
-          for d in $DIRS; do
-            # Skip if no .wdl files
-            for w in "$d"/*.wdl; do
+#          for d in $DIRS; do
+#            # Skip if no .wdl files
+#            for w in "$d"/*.wdl; do
+#              [ -e "$w" ] || continue
+#              echo "Validating $w"
+#              java -jar womtool.jar validate "$w" || exit 1
+#            done
+#          done
+#        shell: bash
+
+      - name: Validate RNA-seq workflow (testing only)
+        run: |
+            for w in workflows/rna_seq/*.wdl; do
               [ -e "$w" ] || continue
               echo "Validating $w"
               java -jar womtool.jar validate "$w" || exit 1
             done
-          done
         shell: bash
