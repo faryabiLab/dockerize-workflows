@@ -15,6 +15,7 @@ task fastqc_trim {
 		Int stringency = 5
 		Float e = 0.1
 		Int length = 20
+		String? illumina = True
 
 		Int cpu = 8
 		Int mem = 8
@@ -29,6 +30,7 @@ task fastqc_trim {
 			--phred33 \
 			--gzip \
 			--stringency ${stringency} \
+			~{if illumina then "--illumina" else ""} \
 			-e ${e} \
 			--basename ${sampleName} \
 			--length ${length} \
@@ -41,6 +43,7 @@ task fastqc_trim {
 			--phred33 \
 			--gzip \
 			--stringency ${stringency} \
+			~{if illumina then "--illumina" else ""} \
 			-e ${e} \
 			--basename ${sampleName} \
 			--length ${length} \
