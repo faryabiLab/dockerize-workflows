@@ -6,10 +6,8 @@
   "RNAseq.GeneAnnotationFile": "",
   "RNAseq.blacklist": "",
   "RNAseq.fastq_suffix": "",
+  "RNAseq.star_index": "",
   
-  "RNAseq.trim_pe.R1": "",
-  "RNAseq.trim_pe.R2": "",
-  "RNAseq.trim_pe.SE": "",
   "RNAseq.trim_pe.quality": 15,
   "RNAseq.trim_pe.stringency": 5,
   "RNAseq.trim_pe.length": 20,
@@ -19,8 +17,6 @@
   "RNAseq.trim_pe.mem": 8,
   "RNAseq.trim_pe.Dockerhub_Pull": "faryabilab/trim_galore:0.10",
 
-  "RNAseq.trim_se.R1": "",
-  "RNAseq.trim_se.R2": "",
   "RNAseq.trim_se.quality": 15,
   "RNAseq.trim_se.stringency": 5,
   "RNAseq.trim_se.length": 20,
@@ -29,8 +25,7 @@
   "RNAseq.trim_se.cpu": 8,
   "RNAseq.trim_se.mem": 8,
   "RNAseq.trim_se.Dockerhub_Pull": "faryabilab/trim_galore:0.10",
-
-  "RNAseq.star_index": "",
+  
   "RNAseq.STAR.Dockerhub_Pull": "faryabilab/star:0.10",
   "RNAseq.STAR.STAR_cpu": 10,
   "RNAseq.STAR.STAR_mem": 25,
@@ -48,7 +43,6 @@
   "RNAseq.sort_bam.Dockerhub_Pull": "faryabilab/samtools:0.1.0",
   "RNAseq.sort_bam.cpu": 12,
   "RNAseq.sort_bam.mem": 100,
-  "RNAseq.sort_bam.mem_per_thread": "",
 
   "RNAseq.index_bam.Dockerhub_Pull": "faryabilab/samtools:0.1.0",
   "RNAseq.index_bam.cpu": 12,
@@ -67,7 +61,6 @@
   "RNAseq.remove_scaffolds.Dockerhub_Pull": "faryabilab/samtools:0.1.0",
   "RNAseq.remove_scaffolds.cpu": 12,
   "RNAseq.remove_scaffolds.mem": 25,
-  "RNAseq.remove_scaffolds.mem_per_thread": "",
 
   "RNAseq.remove_blacklist.Dockerhub_Pull": "faryabilab/bedtools:0.1.0",
   "RNAseq.remove_blacklist.cpu": 12,
