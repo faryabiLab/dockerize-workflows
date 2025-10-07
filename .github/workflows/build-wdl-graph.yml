@@ -28,6 +28,11 @@ jobs:
       - name: Install Graphviz
         run: sudo apt-get update && sudo apt-get install -y graphviz
 
+      - name: Download womtool
+        run: |
+          mkdir -p tools
+          curl -L -o tools/womtool.jar https://github.com/broadinstitute/cromwell/releases/download/90/womtool-90.jar
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
