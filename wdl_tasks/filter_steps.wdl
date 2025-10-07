@@ -50,7 +50,7 @@ task remove_scaffolds {
 	}
 }
 
-task remove_duplicates {
+task mark_duplicates {
 	input {
 		#### REQUIRED
 		File bam
@@ -58,7 +58,6 @@ task remove_duplicates {
 		####
 		String? Dockerhub_Pull = "faryabilab/picard:0.1.0"
 
-		String PicardRemoveDuplicates = "true"
 		String PicardValidationStringency = "SILENT"
 		String PicardMetricsFile = "removeDuplicate_metrics.txt"
 
@@ -73,11 +72,11 @@ task remove_duplicates {
 		O="${sample_name}.noDuplicate.bam" \
 		I=${bam} \
 		ASO=coordinate \
-		REMOVE_DUPLICATES=${PicardRemoveDuplicates} \
+		REMOVE_DUPLICATES=false \
 		VALIDATION_STRINGENCY=${PicardValidationStringency}
         }
         output {
- 		File bam_noDuplicate = "${sample_name}.noDuplicate.bam"
+ 		File bam_dupMarked = "${sample_name}.dupMarked.bam"
         }
         runtime {
 		# Picard docker image w/ samtools base
@@ -85,6 +84,27 @@ task remove_duplicates {
 		cpu: "${cpu}"
 		mem: "${mem}"
         }
+}
+
+task remove_duplicates_unmapped {
+	input {
+		File bam
+		String sample_name
+		String? Dockerhub_Pull = "faryabilab/samtools:0.1.0"
+		Int cpu = 12
+		Int mem = 25
+	}
+	command {
+		samtools view -b -F 516 ${bam} > "${sample_name}.noDuplicates.bam"
+	}
+	output {
+		File bam_noDuplicate = "${sample_name}.noDuplicate.bam"
+	}
+	runtime {
+		docker: "${Dockerhub_Pull}"
+		cpu: "${cpu}"
+		mem: "${mem}"
+	}
 }
 
 task remove_blacklist {

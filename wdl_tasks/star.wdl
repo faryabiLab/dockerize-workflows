@@ -14,15 +14,15 @@ task STAR {
 		Boolean paired
 		####
 		String? Dockerhub_Pull = "faryabilab/star:0.10"
-		String outFilterType = "BySJout"
-		String readFilesCommand = "zcat"
-		String outSamAttributes = "Standard"
-		String outFilterIntronMotifs = "RemoveNoncanonicalUnannotated"
-		Int alignIntronMax = 100000
-		String outSamstrandField = "intronMotif"
-		String outSAMunmapped = "Within"
-		Int chimSegmentMin = 25
-		Int chimJunctionOverhangMin = 25
+		String outFilterType = "BySJout" #
+		String readFilesCommand = "zcat" #
+		String outSamAttributes = "Standard" #
+		String outFilterIntronMotifs = "RemoveNoncanonicalUnannotated" #
+		Int alignIntronMax = 100000 #
+		String outSamstrandField = "intronMotif" #
+		String outSAMunmapped = "Within" #
+		Int chimSegmentMin = 25 #
+		Int chimJunctionOverhangMin = 25 #
 		String outSAMtype = "BAM Unsorted"
 		Int STAR_cpu=10
 		Int STAR_mem=25
