@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2 
 
       - name: Set up Java (for womtool)
         uses: actions/setup-java@v4
@@ -32,11 +34,6 @@ jobs:
         run: |
           mkdir -p tools
           curl -L -o tools/womtool.jar https://github.com/broadinstitute/cromwell/releases/download/90/womtool-90.jar
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 2 
 
       - name: Detect changed WDLs
         id: changed
