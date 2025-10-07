@@ -94,7 +94,7 @@ workflow RNAseq
 			call filterTasks.remove_blacklist
                 	{
                         	input:
-                                	bam=remove_duplicates.bam_noDuplicate,
+                                	bam=remove_duplicates_unmapped.bam_noDuplicate,
                                 	blacklist=blacklist,
                                 	sample_name=sample_id
                 	}
