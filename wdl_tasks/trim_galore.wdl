@@ -30,7 +30,7 @@ task fastqc_trim {
 			--phred33 \
 			--gzip \
 			--stringency ${stringency} \
-			~{if illumina then "illumina" else ""} \
+			~{if illumina then "--illumina" else ""} \
 			-e ${e} \
 			--basename ${sampleName} \
 			--length ${length} \
@@ -43,7 +43,7 @@ task fastqc_trim {
 			--phred33 \
 			--gzip \
 			--stringency ${stringency} \
-			~{if illumina then "illumina" else ""} \
+			~{if illumina then "--illumina" else ""} \
 			-e ${e} \
 			--basename ${sampleName} \
 			--length ${length} \
