@@ -42,15 +42,17 @@ The `/workflows` directory houses all by-assay pipelines. In each subdirectory, 
 * `options.json` - A JSON file with paths to output locations for workflow results and logs. 
 
 ### Input Parameters
-In the inputs JSON, you will find command-specific parameters (i.e. for trimming, alignment, etc.) as well as common inputs needed for every pipeline:
-* `paired` - A boolean value indicating whether the experiment was paired-end (`true`) or single-end (`false`).
-* `project_out_dir` - Directory where output will be (a directory is created here for every sample name).
-* `sampleList` - Path to your previously created `samplesheet.tsv`
-* `star_index`/`BWA_index` - Path to the zipped index directory.
-* `chromNoScaffold` - A Path to a 3-column BED file with the chromosome/contig regions you would like to keep in your output.
-* `GeneAnnotationFile` - Path to `.gtf` file.
-* `chromosome_sizes` - A standard BEDtools chromosome size file.
-* `blacklist` (Optional) - A 3-column BED file containing areas to be removed from output.
+Each workflow directory contains a `*_inputs.json` file with **all** of the available required input parameters and defaults shown.
+* Please note that passing a parameter as an empty String (`""`) is not the same as not using the parameter. If you choose to not pass an optional parameter (like `blacklist`), completely remove the line with the parameter's key. \
+
+All workflows have a set of common parameters:
+* `sampleList`: Path to the sample sheet you generated earlier.
+* `paired`: `true` or `false` depending if sample is paired.
+* `chromNoScaffold`: BED-like file with 3 columns <chrom, 1, size>.
+* `chromosome_sizes`: Bedtools chromosome sizes file.
+* `GeneAnnotationFile` (RNAseq only): Path to `.gtf`.
+* `blacklist` (Optional): Path to a file containing BED coordinates of blacklisted regions.
+
 ### Executing
 Once the configuration is complete, there are 2 options available to you to run your pipeline: 
 
