@@ -15,7 +15,7 @@ task fastqc_trim {
 		Int stringency = 5
 		Float e = 0.1
 		Int length = 20
-		Boolean? illumina = True
+		Boolean? illumina = true
 
 		Int cpu = 8
 		Int mem = 8
