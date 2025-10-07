@@ -12,7 +12,6 @@ workflow RNAseq
 	input 
 	{
 		String sampleList
-		String fastq_dir
 		Boolean paired       
                 File star_index
                 File chromNoScaffold
