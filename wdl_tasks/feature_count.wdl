@@ -56,8 +56,7 @@ task count_reads_paired {
         command {
 		featureCounts \
 		-T ${cpu} \
-		-p \ 
-		-t ${AttributeType} \
+		-p -t ${AttributeType} \
 		-g ${GTFAttributeType} \
 		-s ${Stranded} \
 		-a ${GeneAnnotationFile} \
