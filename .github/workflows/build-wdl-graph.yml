@@ -4,11 +4,9 @@ on:
   push:
     paths:
       - "workflows/**/*.wdl"
-      - ".github/workflows/build-wdl-graph.yml"
   pull_request:
     paths:
       - "workflows/**/*.wdl"
-      - ".github/workflows/build-wdl-graph.yml"
   workflow_dispatch:
 
 jobs:
