@@ -1,0 +1,82 @@
+digraph RNAseq {
+  #rankdir=LR;
+  compound=true;
+
+  # Links
+  SCATTER_0_VARIABLE_sample -> CALL_remove_duplicates_unmapped
+  CALL_read_count -> CALL_calculate_factor
+  SCATTER_0_VARIABLE_sample -> CALL_STAR
+  SCATTER_0_VARIABLE_sample -> CALL_bedgraph_to_bigwig
+  SCATTER_0_VARIABLE_sample -> CALL_count_reads_paired
+  CALL_trim_pe -> CALL_STAR
+  CALL_trim_se -> CALL_STAR
+  CALL_remove_duplicates_unmapped -> CALL_sort_bam
+  CALL_sort_bam -> CALL_index_bam
+  SCATTER_0_VARIABLE_sample -> CALL_remove_blacklist
+  CALL_remove_scaffolds -> CALL_mark_duplicates
+  CALL_remove_blacklist -> CALL_sort_bam
+  CALL_calculate_factor -> CALL_bam_to_bedgraph
+  CALL_mark_duplicates -> CALL_remove_duplicates_unmapped
+  CALL_bam_to_bedgraph -> CALL_bedgraph_to_bigwig
+  CALL_sort_bam -> CALL_read_count
+  SCATTER_0_VARIABLE_sample -> CALL_sort_bam
+  CALL_STAR -> CALL_remove_scaffolds
+  SCATTER_0_VARIABLE_sample -> CALL_remove_scaffolds
+  SCATTER_0_VARIABLE_sample -> CALL_mark_duplicates
+  SCATTER_0_VARIABLE_sample -> CALL_bam_to_bedgraph
+  CALL_remove_duplicates_unmapped -> CALL_remove_blacklist
+  CALL_sort_bam -> CALL_count_reads_paired
+  SCATTER_0_VARIABLE_sample -> CALL_index_bam
+  SCATTER_0_VARIABLE_sample -> CALL_trim_pe
+  SCATTER_0_VARIABLE_sample -> CALL_count_reads_single
+  CALL_sort_bam -> CALL_bam_to_bedgraph
+  CALL_sort_bam -> CALL_count_reads_single
+  SCATTER_0_VARIABLE_sample -> CALL_trim_se
+
+  # Nodes
+  subgraph cluster_0 {
+    style="filled,solid";
+    fillcolor=white;
+    SCATTER_0_VARIABLE_sample [shape="hexagon" label="scatter over Array[String] as sample"]
+    subgraph cluster_1 {
+      style="filled,dashed";
+      fillcolor=white;
+      CALL_trim_pe [label="call trim_pe"]
+      CONDITIONAL_1_EXPRESSION [shape="hexagon" label="if (paired)" style="dashed" ]
+    }
+    CALL_mark_duplicates [label="call mark_duplicates"]
+    CALL_calculate_factor [label="call calculate_factor"]
+    subgraph cluster_4 {
+      style="filled,dashed";
+      fillcolor=white;
+      CALL_trim_se [label="call trim_se"]
+      CONDITIONAL_4_EXPRESSION [shape="hexagon" label="if (!(paired))" style="dashed" ]
+    }
+    CALL_remove_scaffolds [label="call remove_scaffolds"]
+    CALL_sort_bam [label="call sort_bam"]
+    CALL_bedgraph_to_bigwig [label="call bedgraph_to_bigwig"]
+    CALL_bam_to_bedgraph [label="call bam_to_bedgraph"]
+    subgraph cluster_5 {
+      style="filled,dashed";
+      fillcolor=white;
+      CALL_remove_blacklist [label="call remove_blacklist"]
+      CONDITIONAL_5_EXPRESSION [shape="hexagon" label="if (blDefined)" style="dashed" ]
+    }
+    CALL_index_bam [label="call index_bam"]
+    CALL_read_count [label="call read_count"]
+    CALL_remove_duplicates_unmapped [label="call remove_duplicates_unmapped"]
+    subgraph cluster_2 {
+      style="filled,dashed";
+      fillcolor=white;
+      CALL_count_reads_single [label="call count_reads_single"]
+      CONDITIONAL_2_EXPRESSION [shape="hexagon" label="if (!(paired))" style="dashed" ]
+    }
+    subgraph cluster_3 {
+      style="filled,dashed";
+      fillcolor=white;
+      CALL_count_reads_paired [label="call count_reads_paired"]
+      CONDITIONAL_3_EXPRESSION [shape="hexagon" label="if (paired)" style="dashed" ]
+    }
+    CALL_STAR [label="call STAR"]
+  }
+}
