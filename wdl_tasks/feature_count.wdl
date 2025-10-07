@@ -55,7 +55,7 @@ task count_reads_paired {
         }
         command {
 		featureCounts \
-		-T ${cpu} \
+		-O -T ${cpu} \
 		-p -t ${AttributeType} \
 		-g ${GTFAttributeType} \
 		-s ${Stranded} \
