@@ -52,7 +52,7 @@ jobs:
             dot="${dir}/${base}.dot"
             png="${dir}/${base}.png"
             echo "Building graph for $wdl"
-            java -jar tools/womtool-90.jar graph "$wdl" > "$dot"
+            java -jar tools/womtool.jar graph "$wdl" > "$dot"
             dot -Tpng "$dot" -o "$png"
           done
 
