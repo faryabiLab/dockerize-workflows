@@ -95,7 +95,7 @@ task remove_duplicates_unmapped {
 		Int mem = 25
 	}
 	command {
-		samtools view -b -F 516 ${bam} > "${sample_name}.noDuplicates.bam"
+		samtools view -b -F 516 ${bam} > "${sample_name}.noDuplicate.bam"
 	}
 	output {
 		File bam_noDuplicate = "${sample_name}.noDuplicate.bam"
