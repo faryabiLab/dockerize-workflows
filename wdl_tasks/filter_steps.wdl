@@ -69,7 +69,7 @@ task mark_duplicates {
         command {
 		java -jar $PICARD MarkDuplicates \
 		M=${metricsFile} \
-		O="${sample_name}.noDuplicate.bam" \
+		O="${sample_name}.dupMarked.bam" \
 		I=${bam} \
 		ASO=coordinate \
 		REMOVE_DUPLICATES=false \
