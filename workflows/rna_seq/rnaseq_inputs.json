@@ -5,7 +5,6 @@
   "RNAseq.chromosome_sizes": "",
   "RNAseq.GeneAnnotationFile": "",
   "RNAseq.blacklist": "",
-  "RNAseq.fastq_suffix": "",
   "RNAseq.star_index": "",
   
   "RNAseq.trim_pe.quality": 15,
