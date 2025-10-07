@@ -76,10 +76,16 @@ workflow RNAseq
 				chrom_no_scaff=chromNoScaffold,
 				sample_name=sample_id
 		}
-		call filterTasks.remove_duplicates 
+		call filterTasks.mark_duplicates 
 		{
 			input:
 				bam=remove_scaffolds.bam_noScaffold,
+				sample_name=sample_id
+		}
+		call filterTasks.remove_duplicates_unmapped
+		{
+			input:
+				bam=mark_duplicates.bam_dupMarked,
 				sample_name=sample_id
 		}
 		# Conditionally call remove_blacklist if blDefined = true
@@ -97,7 +103,7 @@ workflow RNAseq
 		call filterTasks.sort_bam 
 		{
 			input:
-				bam=select_first([remove_blacklist.bam_noBlacklist, remove_scaffolds.bam_noScaffold]),
+				bam=select_first([remove_blacklist.bam_noBlacklist, remove_duplicates_unmapped.bam_noDuplicate]),
 				sample_name=sample_id
 		}
 		call filterTasks.index_bam 
