@@ -10,7 +10,7 @@ task BWA {
 		File? fastq_trimmed_single
 		File BWAIndex
 		####
-		
+
 		String? Dockerhub_Pull="faryabilab/bwa:0.1.0"
 
 		Int subsequence_seed = 32
@@ -41,15 +41,15 @@ task BWA {
 	}
 	command {
 		
-                mkdir bwa_index
-                tar -xzf ~{BWAIndex} -C bwa_index	
-                REF=$(ls bwa_index/*.fa bwa_index/*.fasta 2>/dev/null | head -n 1)
+		mkdir bwa_index
+		tar -xzf ~{BWAIndex} -C bwa_index	
+		REF=$(ls bwa_index/*.fa bwa_index/*.fasta 2>/dev/null | head -n 1)
 
 		if [[ -z "$REF" ]]; then
     			echo "ERROR: No FASTA found in bwa_index/" >&2
     			exit 1
 		fi
-		
+
 		if [[ "${paired}" == "true" ]]; then 
 			bwa mem \
 			-t ${cpu} \
