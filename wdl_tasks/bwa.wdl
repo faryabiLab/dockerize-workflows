@@ -46,8 +46,8 @@ task BWA {
 		REF=$(ls bwa_index/*.fa bwa_index/*.fasta 2>/dev/null | head -n 1)
 
 		if [[ -z "$REF" ]]; then
-    			echo "ERROR: No FASTA found in bwa_index/" >&2
-    			exit 1
+			echo "ERROR: No FASTA found in bwa_index/" >&2
+			exit 1
 		fi
 
 		if [[ "${paired}" == "true" ]]; then 
