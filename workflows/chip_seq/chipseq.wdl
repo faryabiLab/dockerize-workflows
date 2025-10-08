@@ -62,9 +62,7 @@ workflow ChIPseq
 				fastq1_trimmed=trimmed_r1,
 				fastq2_trimmed=trimmed_r2,
 				fastq_trimmed_single=trimmed_single,
-				BWAIndex=select_first([
-        				glob("${bwa_index}/*.fa")[0],
-        				glob("${bwa_index}/*.fasta")[0]]),
+				BWAIndex=bwa_index,
 		}
 		call filterTasks.sam_to_bam 
 		{
