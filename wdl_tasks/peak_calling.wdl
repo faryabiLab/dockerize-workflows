@@ -60,7 +60,7 @@ task macs2 {
   runtime {
     docker: Dockerhub_Pull
     cpu: "${cpu}"
-    memory: "${mem}"
+    mem: "${mem}"
   }
 }
 
