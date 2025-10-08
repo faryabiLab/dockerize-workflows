@@ -1,0 +1,72 @@
+digraph ChIPseq {
+  #rankdir=LR;
+  compound=true;
+
+  # Links
+  CALL_BWA -> CALL_sam_to_bam
+  CALL_read_count -> CALL_calculate_factor
+  SCATTER_0_VARIABLE_sample -> CALL_BWA
+  SCATTER_0_VARIABLE_sample -> CALL_bedgraph_to_bigwig
+  CALL_sam_to_bam -> CALL_remove_scaffolds
+  CALL_remove_duplicates_unmapped -> CALL_sort_bam
+  CALL_trim_pe -> CALL_BWA
+  SCATTER_0_VARIABLE_sample -> CALL_trim_se
+  CALL_sort_bam -> CALL_index_bam
+  SCATTER_0_VARIABLE_sample -> CALL_remove_blacklist
+  CALL_remove_scaffolds -> CALL_mark_duplicates
+  CALL_trim_se -> CALL_BWA
+  CALL_calculate_factor -> CALL_bam_to_bedgraph
+  CALL_mark_duplicates -> CALL_remove_duplicates_unmapped
+  CALL_sort_bam -> CALL_macs2
+  SCATTER_0_VARIABLE_sample -> CALL_remove_duplicates_unmapped
+  CALL_bam_to_bedgraph -> CALL_bedgraph_to_bigwig
+  CALL_sort_bam -> CALL_read_count
+  SCATTER_0_VARIABLE_sample -> CALL_macs2
+  SCATTER_0_VARIABLE_sample -> CALL_sort_bam
+  SCATTER_0_VARIABLE_sample -> CALL_remove_scaffolds
+  SCATTER_0_VARIABLE_sample -> CALL_mark_duplicates
+  SCATTER_0_VARIABLE_sample -> CALL_bam_to_bedgraph
+  CALL_remove_duplicates_unmapped -> CALL_remove_blacklist
+  SCATTER_0_VARIABLE_sample -> CALL_index_bam
+  SCATTER_0_VARIABLE_sample -> CALL_trim_pe
+  CALL_sort_bam -> CALL_bam_to_bedgraph
+  SCATTER_0_VARIABLE_sample -> CALL_sam_to_bam
+  CALL_remove_blacklist -> CALL_sort_bam
+
+  # Nodes
+  subgraph cluster_0 {
+    style="filled,solid";
+    fillcolor=white;
+    SCATTER_0_VARIABLE_sample [shape="hexagon" label="scatter over Array[String] as sample"]
+    subgraph cluster_1 {
+      style="filled,dashed";
+      fillcolor=white;
+      CALL_trim_pe [label="call trim_pe"]
+      CONDITIONAL_1_EXPRESSION [shape="hexagon" label="if (paired)" style="dashed" ]
+    }
+    CALL_sam_to_bam [label="call sam_to_bam"]
+    CALL_mark_duplicates [label="call mark_duplicates"]
+    CALL_bam_to_bedgraph [label="call bam_to_bedgraph"]
+    CALL_BWA [label="call BWA"]
+    CALL_calculate_factor [label="call calculate_factor"]
+    subgraph cluster_3 {
+      style="filled,dashed";
+      fillcolor=white;
+      CALL_trim_se [label="call trim_se"]
+      CONDITIONAL_3_EXPRESSION [shape="hexagon" label="if (!(paired))" style="dashed" ]
+    }
+    CALL_remove_scaffolds [label="call remove_scaffolds"]
+    CALL_sort_bam [label="call sort_bam"]
+    CALL_bedgraph_to_bigwig [label="call bedgraph_to_bigwig"]
+    CALL_macs2 [label="call macs2"]
+    CALL_index_bam [label="call index_bam"]
+    CALL_read_count [label="call read_count"]
+    CALL_remove_duplicates_unmapped [label="call remove_duplicates_unmapped"]
+    subgraph cluster_2 {
+      style="filled,dashed";
+      fillcolor=white;
+      CALL_remove_blacklist [label="call remove_blacklist"]
+      CONDITIONAL_2_EXPRESSION [shape="hexagon" label="if (blDefined)" style="dashed" ]
+    }
+  }
+}
