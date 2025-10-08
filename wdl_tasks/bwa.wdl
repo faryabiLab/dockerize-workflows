@@ -65,8 +65,8 @@ task BWA {
 			-L ${ClippingPenality} \
 			-R "@RG\tID:${sampleName}\tSM:${sampleName}" \
 			-T ${ScoreCutoff} \
-			~{if defined(HardClipping) then "-H" else ""} \
-			~{if defined(OutputUnpairedReads) then "-a" else ""} \
+			~{if HardClipping then "-H" else ""} \
+			~{if OutputUnpairedReads then "-a" else ""} \
 			"$REF" \
 			"${fastq1_trimmed}" "${fastq2_trimmed}" \
 			> "${sampleName}.raw.sam"	
