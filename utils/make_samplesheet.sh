@@ -47,19 +47,23 @@ if [[ $MODE == "single" ]]; then
 	for i in $(ls ${dir}); do
 		j="${i##*/}"
 		j="${j%%.*}"
-		echo "$j\t$(realpath ${i})" >> samplesheet.tsv
+		echo -e "$j\t$(realpath ${i})\n" >> samplesheet.tsv
 	done
+
 elif [[ $MODE == "paired" ]]; then
-	echo "Making paired-end samplesheet"
-	for i in $(ls ${dir}); do
-		i="${i##*/}"
-		echo $i
-		if [[ $i =~ "_${STYLE}2" ]]; then
-			R2="${i}"
-			continue
-		fi
-		R1="${i}"
-		i=${i%%_${STYLE}1*}
-		echo "$i\t$(realpath ${R1})\t$(realpath ${R2})" >> samplesheet.tsv
-	done
+    for R1 in "${dir}"/*_"${STYLE}"1*.fastq.gz; do
+        # Derive basename without _R1/1
+        sample=$(basename "$R1")
+        sample=${sample%%_"${STYLE}"1*}
+
+        # Matching R2
+        R2="${dir}/${sample}_${STYLE}2.fastq.gz"
+
+        # Check that R2 exists
+        if [[ -f "$R2" ]]; then
+            echo -e "${sample}\t$(realpath "$R1")\t$(realpath "$R2")" >> samplesheet.tsv
+        else
+            echo "Warning: no R2 found for ${sample}" >&2
+        fi
+    done
 fi
