@@ -5,41 +5,45 @@ task BWA {
 		#### REQUIRED
 		Boolean paired
 		String sampleName
-		String? fastq1_trimmed
-		String? fastq2_trimmed
-		String? fastq_trimmed_single
-		String BWAIndex
+		File? fastq1_trimmed
+		File? fastq2_trimmed
+		File? fastq_trimmed_single
+		File BWAIndex
 		####
 		
 		String? Dockerhub_Pull="faryabilab/bwa:0.1.0"
 
-		Int? subsequence_seed = 32
-		Int? seed_max_edit_distance = 2
-		Int? read_trimming = 5
+		Int subsequence_seed = 32
+		Int seed_max_edit_distance = 2
+		Int read_trimming = 5
 		
-		Int? MaximumInsertSize = 500
-		Int? MaximumReadOccurences = 100000
-		Int? MaxAlignmentsForXATag = 3
-		Int? MaxAlignmentsForXATag_DiscordanantPairs = 10
+		Int MaximumInsertSize = 500
+		Int MaximumReadOccurences = 100000
+		Int MaxAlignmentsForXATag = 3
+		Int MaxAlignmentsForXATag_DiscordanantPairs = 10
 
-		Int? MinSeedLength = 19
-		Int? Bandwidth = 100
-		Int? ZDropoff = 100
-		Float? TriggerReSeed = 1.5
-		Int? DiscardMemOccurences = 10000
-		Int? MatchingScore = 1
-		Int? MismatchPenalty = 4		
-		Int? GapOpenPenalty = 6
-		Int? GapExtensionPenalty = 1
-		Int? ClippingPenality = 5
-		Int? ScoreCutoff = 30
-		String? HardClipping
-		String? OutputUnpairedReads
+		Int MinSeedLength = 19
+		Int Bandwidth = 100
+		Int ZDropoff = 100
+		Float TriggerReSeed = 1.5
+		Int DiscardMemOccurences = 10000
+		Int MatchingScore = 1
+		Int MismatchPenalty = 4		
+		Int GapOpenPenalty = 6
+		Int GapExtensionPenalty = 1
+		Int ClippingPenality = 5
+		Int ScoreCutoff = 30
+		String HardClipping
+		String OutputUnpairedReads
 
 		Int cpu = 16
 		Int mem = 32	
 	}
 	command {
+		
+		mkdir bwa_index
+                tar -xzf ~{BWAIndex} -C bwa_index
+
 		if [[ "${paired}" == "true" ]]; then 
 			bwa mem \
 			-t ${cpu} \
@@ -57,7 +61,7 @@ task BWA {
 			-T ${ScoreCutoff} \
 			~{if defined(HardClipping) then "-H" else ""} \
 			~{if defined(OutputUnpairedReads) then "-a" else ""} \
-			"${BWAIndex}" \
+			bwa_index \
 			"${fastq1_trimmed}" "${fastq2_trimmed}" \
 			> "${sampleName}.raw.sam"	
 
