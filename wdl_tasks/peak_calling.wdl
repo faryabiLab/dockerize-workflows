@@ -15,8 +15,8 @@ task macs2 {
 		Int? Shift
 		Int? ExtensionSize
 		String? SaveFragPileup
-		String? TagSize
-		String? Qvalue = 0.05
+		Int? TagSize
+		Float? Qvalue = 0.05
 		String? Pvalue
 		String? DownSample
 		String? NoLambda
