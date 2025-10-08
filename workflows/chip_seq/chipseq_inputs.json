@@ -44,8 +44,8 @@
   "ChIPseq.BWA.ZDropoff": 100,
   "ChIPseq.BWA.read_trimming": 5,
   "ChIPseq.BWA.ClippingPenality": 5,
-  "ChIPseq.BWA.HardClipping": "",
-  "ChIPseq.BWA.OutputUnpairedReads": "",
+  "ChIPseq.BWA.HardClipping": false,
+  "ChIPseq.BWA.OutputUnpairedReads": false,
 
   "ChIPseq.sam_to_bam.Dockerhub_Pull": "faryabilab/samtools:0.1.0",
   "ChIPseq.sam_to_bam.cpu": 12,
