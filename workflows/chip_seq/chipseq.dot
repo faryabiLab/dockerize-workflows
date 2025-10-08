@@ -38,26 +38,19 @@ digraph ChIPseq {
     style="filled,solid";
     fillcolor=white;
     SCATTER_0_VARIABLE_sample [shape="hexagon" label="scatter over Array[String] as sample"]
+    CALL_sam_to_bam [label="call sam_to_bam"]
+    CALL_mark_duplicates [label="call mark_duplicates"]
     subgraph cluster_1 {
       style="filled,dashed";
       fillcolor=white;
-      CALL_trim_pe [label="call trim_pe"]
-      CONDITIONAL_1_EXPRESSION [shape="hexagon" label="if (paired)" style="dashed" ]
+      CALL_trim_se [label="call trim_se"]
+      CONDITIONAL_1_EXPRESSION [shape="hexagon" label="if (!(paired))" style="dashed" ]
     }
-    CALL_sam_to_bam [label="call sam_to_bam"]
-    CALL_mark_duplicates [label="call mark_duplicates"]
     CALL_bam_to_bedgraph [label="call bam_to_bedgraph"]
     CALL_BWA [label="call BWA"]
     CALL_calculate_factor [label="call calculate_factor"]
-    subgraph cluster_3 {
-      style="filled,dashed";
-      fillcolor=white;
-      CALL_trim_se [label="call trim_se"]
-      CONDITIONAL_3_EXPRESSION [shape="hexagon" label="if (!(paired))" style="dashed" ]
-    }
     CALL_remove_scaffolds [label="call remove_scaffolds"]
     CALL_sort_bam [label="call sort_bam"]
-    CALL_bedgraph_to_bigwig [label="call bedgraph_to_bigwig"]
     CALL_macs2 [label="call macs2"]
     CALL_index_bam [label="call index_bam"]
     CALL_read_count [label="call read_count"]
@@ -67,6 +60,13 @@ digraph ChIPseq {
       fillcolor=white;
       CALL_remove_blacklist [label="call remove_blacklist"]
       CONDITIONAL_2_EXPRESSION [shape="hexagon" label="if (blDefined)" style="dashed" ]
+    }
+    CALL_bedgraph_to_bigwig [label="call bedgraph_to_bigwig"]
+    subgraph cluster_3 {
+      style="filled,dashed";
+      fillcolor=white;
+      CALL_trim_pe [label="call trim_pe"]
+      CONDITIONAL_3_EXPRESSION [shape="hexagon" label="if (paired)" style="dashed" ]
     }
   }
 }
