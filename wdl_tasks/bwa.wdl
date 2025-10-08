@@ -42,8 +42,7 @@ task BWA {
 	command {
 		
 		mkdir bwa_index
-		tar -xzf ~{BWAIndex} -C bwa_index
-		
+		tar -xzf ~{BWAIndex} -C bwa_index	
 		REF=$(ls bwa_index/*.fa bwa_index/*.fasta 2>/dev/null | head -n 1)
 
 		if [[ -z "$REF" ]]; then
