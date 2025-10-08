@@ -42,7 +42,7 @@ task BWA {
 	command {
 		
 		mkdir bwa_index
-                tar -xzf ~{BWAIndex} -C bwa_index
+		tar -xzf ~{BWAIndex} -C bwa_index
 
 		if [[ "${paired}" == "true" ]]; then 
 			bwa mem \
