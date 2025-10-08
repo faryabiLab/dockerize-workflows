@@ -33,8 +33,8 @@ task BWA {
 		Int GapExtensionPenalty = 1
 		Int ClippingPenality = 5
 		Int ScoreCutoff = 30
-		String HardClipping
-		String OutputUnpairedReads
+		Boolean HardClipping
+		Boolean OutputUnpairedReads
 
 		Int cpu = 16
 		Int mem = 32	
@@ -67,7 +67,7 @@ task BWA {
 			-T ${ScoreCutoff} \
 			~{if defined(HardClipping) then "-H" else ""} \
 			~{if defined(OutputUnpairedReads) then "-a" else ""} \
-			"${REF}" \
+			"$REF" \
 			"${fastq1_trimmed}" "${fastq2_trimmed}" \
 			> "${sampleName}.raw.sam"	
 
@@ -86,7 +86,7 @@ task BWA {
 			-L ${ClippingPenality} \
 			-R "@RG\tID:${sampleName}\tSM:${sampleName}" \
 			-T ${ScoreCutoff} \
-			"${BWAIndex}" \
+			"$REF" \
 			"${fastq_trimmed_single}" \
 			> "${sampleName}.raw.sam"
 
