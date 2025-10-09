@@ -236,20 +236,20 @@ task sort_bam {
 
 task sort_bam_name {
         input {
-                File bam
-                String sample_name
-                String? Dockerhub_Pull = "faryabilab/samtools:0.1.0"
+		File bam
+		String sample_name
+		String? Dockerhub_Pull = "faryabilab/samtools:0.1.0"
 
-                Int cpu = 12
-                Int mem = 100
+		Int cpu = 12
+		Int mem = 100
 
-                Int mem_per_thread = floor(mem / cpu)
+		Int mem_per_thread = floor(mem / cpu)
         }
         command {
                 samtools sort -n -@ ${cpu} -m "${mem_per_thread}G" ${bam} -o "${sample_name}.sortedByName.bam"
         }
         output {
-                File bam_sorted = "${sample_name}.sortedByName.bam"
+                File bam_sortedByname = "${sample_name}.sortedByName.bam"
         }
         runtime {
                 docker: "${Dockerhub_Pull}"
