@@ -2,8 +2,8 @@
   "ChIPseq.sampleList": "/dobby/noah/dev/dockerize-workflows/workflows/chip_seq/samplesheet.tsv",
   "ChIPseq.paired": true,
   "ChIPseq.bwa_index": "/dobby/noah/dev/dockerize-workflows/workflows/chip_seq/index.tar.gz",
-  "ChIPseq.chromNoScaffold": "dobby/noah/dev/dockerize-workflows/benchmark/test_data/ChromNoPatch.txt",
-  "ChIPseq.chromosome_sizes": "dobby/noah/dev/dockerize-workflows/benchmark/test_data/ChromSizes.txt",
+  "ChIPseq.chromNoScaffold": "/dobby/noah/dev/dockerize-workflows/benchmark/test_data/ChromNoPatch.txt",
+  "ChIPseq.chromosome_sizes": "/dobby/noah/dev/dockerize-workflows/benchmark/test_data/ChromSizes.txt",
 
   "ChIPseq.trim_pe.Dockerhub_Pull": "faryabilab/trim_galore:0.10",
   "ChIPseq.trim_pe.cpu": 8,
