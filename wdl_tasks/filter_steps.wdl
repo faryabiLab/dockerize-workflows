@@ -23,6 +23,84 @@ task sam_to_bam {
 	}
 }
 
+task remove_unmapped {
+	input {
+		#### REQUIRED
+		File bam
+		String sample_name
+                ####
+                String? Dockerhub_Pull = "faryabilab/samtools:0.1.0"
+                Int cpu = 12
+                Int mem = 25
+
+		Int mem_per_thread = floor(mem / cpu)
+	}
+	command {
+		samtools view -F 4 -f 2 -@ ${cpu} -h ${bam} | samtools sort -@ ${cpu} -m "~{mem_per_thread}G" -O bam -o "${sample_name}.noUnmapped.bam" -
+	}
+	output {
+		File bam_noUnmapped = "${sample_name}.noUnmapped.bam"
+	}
+	runtime {
+                docker: "${Dockerhub_Pull}"
+                cpu: "${cpu}"
+                mem: "${mem}"
+        }
+}
+
+task remove_lowQuality {
+        input {
+                #### REQUIRED
+                File bam
+                String sample_name
+                ####
+                String? Dockerhub_Pull = "faryabilab/samtools:0.1.0"
+                Int cpu = 12
+                Int mem = 25
+
+		Int quality_thresh = 20
+
+                Int mem_per_thread = floor(mem / cpu)
+        }
+        command {
+                samtools view -q ${quality_thresh} -@ ${cpu} -h ${bam} | samtools sort -@ ${cpu} -m "~{mem_per_thread}G" -O bam -o "${sample_name}.noLowQuality.bam" -
+        }
+        output {
+                File bam_noLowQuality = "${sample_name}.noLowQuality.bam"
+        }
+        runtime {
+                docker: "${Dockerhub_Pull}"
+                cpu: "${cpu}"
+                mem: "${mem}"
+        }
+}
+
+task fix_mate {
+        input {
+                #### REQUIRED
+                File bam
+                String sample_name
+                ####
+                String? Dockerhub_Pull = "faryabilab/samtools:0.1.0"
+                Int cpu = 12
+                Int mem = 25
+
+                Int mem_per_thread = floor(mem / cpu)
+        }
+        command {
+                samtools fixmate -r -@ ${cpu} ${bam} - | samtools sort -@ ${cpu} -m "~{mem_per_thread}G" -O bam -o "${sample_name}.fix_mate.bam" -
+		rm tmp.${sample_name}_filter_srt.nmsrt.bam
+        }
+        output {
+                File bam_fixMate = "${sample_name}.fix_mate.bam"
+        }
+        runtime {
+                docker: "${Dockerhub_Pull}"
+                cpu: "${cpu}"
+                mem: "${mem}"
+        }
+}
+
 task remove_scaffolds {
 	input {
 		#### REQUIRED
@@ -153,6 +231,30 @@ task sort_bam {
                 docker: "${Dockerhub_Pull}"
 		cpu: "${cpu}"
 		mem: "${mem}"
+        }
+}
+
+task sort_bam_name {
+        input {
+                File bam
+                String sample_name
+                String? Dockerhub_Pull = "faryabilab/samtools:0.1.0"
+
+                Int cpu = 12
+                Int mem = 100
+
+                Int mem_per_thread = floor(mem / cpu)
+        }
+        command {
+                samtools sort -n -@ ${cpu} -m "${mem_per_thread}G" ${bam} -o "${sample_name}.sortedByName.bam"
+        }
+        output {
+                File bam_sorted = "${sample_name}.sortedByName.bam"
+        }
+        runtime {
+                docker: "${Dockerhub_Pull}"
+                cpu: "${cpu}"
+                mem: "${mem}"
         }
 }
 
