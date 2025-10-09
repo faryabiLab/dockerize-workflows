@@ -89,7 +89,6 @@ task fix_mate {
         }
         command {
 		samtools fixmate -r -@ ${cpu} ${bam} - | samtools sort -@ ${cpu} -m "~{mem_per_thread}G" -O bam -o "${sample_name}.fix_mate.bam" -
-		rm tmp.${sample_name}_filter_srt.nmsrt.bam
         }
         output {
                 File bam_fixMate = "${sample_name}.fix_mate.bam"
