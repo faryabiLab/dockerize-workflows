@@ -76,7 +76,7 @@ task remove_lowQuality {
 }
 
 task fix_mate {
-        input {
+	input {
                 #### REQUIRED
                 File bam
                 String sample_name
@@ -88,7 +88,7 @@ task fix_mate {
                 Int mem_per_thread = floor(mem / cpu)
         }
         command {
-                samtools fixmate -r -@ ${cpu} ${bam} - | samtools sort -@ ${cpu} -m "~{mem_per_thread}G" -O bam -o "${sample_name}.fix_mate.bam" -
+		samtools fixmate -r -@ ${cpu} ${bam} - | samtools sort -@ ${cpu} -m "~{mem_per_thread}G" -O bam -o "${sample_name}.fix_mate.bam" -
 		rm tmp.${sample_name}_filter_srt.nmsrt.bam
         }
         output {
