@@ -1,0 +1,5 @@
+cromwell-executions/
+cromwell-workflow-logs/
+outputs/
+logs/
+samplesheet.tsv
