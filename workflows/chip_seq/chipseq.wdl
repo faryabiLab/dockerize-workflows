@@ -70,10 +70,35 @@ workflow ChIPseq
 				sam=BWA.rawSam,
 				sample_name="${sample_id}.raw"
 		}
-		call filterTasks.remove_scaffolds 
+		call filterTasks.remove_unmapped
 		{
 			input:
 				bam=sam_to_bam.bam,
+				sample_name=sample_id
+		}
+		call filterTasks.remove_lowQuality
+		{
+			input:
+				bam=remove_unmapped.bam_noUnmapped,
+				sample_name=sample_id
+		}
+		call filterTasks.sort_bam_name
+		{
+			input:
+				bam=remove_lowQuality.bam_noLowQuality,
+				sample_name=sample_id
+		}
+		call filterTasks.fix_mate
+		{
+			input:
+				bam=sort_bam_name.bam_sortedByName,
+				sample_name=sample_id
+				
+		}
+		call filterTasks.remove_scaffolds 
+		{
+			input:
+				bam=fix_mate.bam_fixMate,
 				chrom_no_scaff=chromNoScaffold,
 				sample_name=sample_id
 		}
