@@ -1,0 +1,4 @@
+#plotCorrelation --outFileCorMatrix
+	'SRR1223287.sorted.bam'	'SRR1223287.filt.srt.nodup.noBlack.bam'
+'SRR1223287.sorted.bam'	1.0000	0.9958
+'SRR1223287.filt.srt.nodup.noBlack.bam'	0.9958	1.0000
