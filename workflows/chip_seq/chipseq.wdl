@@ -91,7 +91,7 @@ workflow ChIPseq
 		call filterTasks.fix_mate
 		{
 			input:
-				bam=sort_bam_name.bam_sortedByName,
+				bam=sort_bam_name.bam_sortedByname,
 				sample_name=sample_id
 				
 		}
