@@ -139,13 +139,7 @@ workflow ChIPseq
 			input:
 				bam=sort_bam.bam_sorted,
 				sample_name=sample_id
-		}
-		call pcTasks.macs2 {
-			input:
-				sampleName=sample_id,
-				bam=sort_bam.bam_sorted,
-				control_bam=PeakcallingControl	
-		}
+		}	
 		call bwTasks.read_count {
 			input:
 				bam=sort_bam.bam_sorted
