@@ -13,4 +13,4 @@ git clone https://github.com/faryabiLab/dockerize-workflows
 * [Docker](https://www.docker.com/products/personal/)
 
 #### Usage documentation available [here](docs/USAGE.md).
-
+#### Tips for troubleshooting common errors can be found [here](DEBUG.md).
