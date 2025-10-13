@@ -51,7 +51,9 @@ workflow RNAseq
           				sampleName = sample_id
       			}
     		}
-
+		
+		Array[File] qc_reports = select_first([trim_pe.out_html, trim_se.out_html])	
+		
 		File? trimmed_single = trim_se.out_fqc
 		File? trimmed_r1     = trim_pe.out_fqc1
 		File? trimmed_r2     = trim_pe.out_fqc2
@@ -158,6 +160,7 @@ workflow RNAseq
         }	
 	output 
 	{
+		Array[File?] qcReport = qc_reports
 		Array[File] finalBam = sort_bam.bam_sorted
 		Array[File] finalBamIndex = index_bam.bam_index
 		Array[File?] countsSingle = count_reads_single.gene_counts
