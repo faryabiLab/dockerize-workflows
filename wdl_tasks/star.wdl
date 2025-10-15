@@ -30,7 +30,7 @@ task STAR {
 	}
 	command {
 		mkdir star_index
-		tar -xzf ~{star_index} -C star_index
+		tar --use-compress-program=zstd -xvf ~{star_index} -C star_index
 		
 		if [[ "~{paired}" == "true" ]]; then
 			STAR \
