@@ -1,5 +1,7 @@
 version 1.0
 
+import "wdl_tasks/peak_calling.wdl" as peakcall
+
 workflow MACS2_PeakCalling {
     meta {
         description: "Boilerplate workflow for MACS2 peak calling"
@@ -30,7 +32,7 @@ workflow MACS2_PeakCalling {
         String sample_id = sample[0]	
         String bam = sample[1]     
 
-        call MACS2_CallPeaks {
+        call peakcall.MACS2_CallPeaks {
             input:
 		treatment_bam = bam,
 		sample_name = sample_id,
