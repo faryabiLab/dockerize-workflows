@@ -44,10 +44,9 @@ task MACS2_CallPeaks
     >>>
 
     output {
-        File narrowPeak = "macs2_out/~{sample_name}_peaks.narrowPeak"
-        File? summits = "macs2_out/~{sample_name}_summits.bed"
-        File xls = "macs2_out/~{sample_name}_peaks.xls"
-        File log = "macs2_out/run.log"
+        File narrowPeak = "${sample_name}_peaks.narrowPeak"
+        File? summits = "${sample_name}_summits.bed"
+        File xls = "${sample_name}_peaks.xls"
     }
 
     runtime {
