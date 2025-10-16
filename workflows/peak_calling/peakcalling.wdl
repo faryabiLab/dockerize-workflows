@@ -2,7 +2,7 @@ version 1.0
 
 import "wdl_tasks/peak_calling.wdl" as peakcall
 
-workflow MACS2_PeakCalling {
+workflow MACS2_CallPeaks {
     meta {
         description: "Boilerplate workflow for MACS2 peak calling"
     }
