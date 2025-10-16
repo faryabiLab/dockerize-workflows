@@ -7,14 +7,11 @@ workflow MACS2_PeakCalling {
 
     input {
         # Required inputs
-        String sample_name
-        File treatment_bam
-        File treatment_bam_index
+        String sampleList
         Boolean paired_end = false
 
         # Optional control BAM
         File? control_bam
-        File? control_bam_index
 
         # Parameters
         String genome_size = "hs"  # hs=human, mm=mouse, ce=worm, dm=fly
@@ -23,30 +20,33 @@ workflow MACS2_PeakCalling {
         String peak_type = "narrow"  # or "broad"
 
         # Runtime / Docker
-        String docker_image = "faryabilab/macs2:2.2.9.1"
         Int cpu = 4
-        Int memory_gb = 8
+        Int mem = 8
     }
+    
+    Array[Array[String]] samples = read_tsv(sampleList)
+    scatter (sample in samples){
 
-    call MACS2_CallPeaks {
-        input:
-            sample_name = sample_name,
-            treatment_bam = treatment_bam,
-            control_bam = control_bam,
-            genome_size = genome_size,
-            q_value = q_value,
-            call_summits = call_summits,
-            paired_end = paired_end,
-            peak_type = peak_type,
-            docker_image = docker_image,
-            cpu = cpu,
-            memory_gb = memory_gb
+        String sample_id = sample[0]	
+        String bam = sample[1]     
+
+        call MACS2_CallPeaks {
+            input:
+		treatment_bam = bam,
+		sample_name = sample_id,
+                control_bam = control_bam,
+                genome_size = genome_size,
+                q_value = q_value,
+                call_summits = call_summits,
+                paired_end = paired_end,
+                peak_type = peak_type,
+                cpu = cpu,
+                mem = mem
+        }
     }
-
     output {
         File narrowPeak = MACS2_CallPeaks.narrowPeak
-        File summits = MACS2_CallPeaks.summits
+        File? summits = MACS2_CallPeaks.summits
         File xls = MACS2_CallPeaks.xls
-        File log = MACS2_CallPeaks.log
     }
 }
