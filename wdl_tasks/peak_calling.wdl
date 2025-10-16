@@ -19,7 +19,6 @@ task MACS2_CallPeaks
 
     command <<<
         set -euo pipefail
-        mkdir -p macs2_out
 
         # Build optional flags safely
         FLAGS=""
@@ -37,10 +36,6 @@ task MACS2_CallPeaks
             --qvalue ~{q_value} \
             --outdir macs2_out \
             $FLAGS
-
-        echo "MACS2 version: $(macs2 --version)" > macs2_out/run.log
-        echo "Genome size: ~{genome_size}" >> macs2_out/run.log
-        echo "Q-value cutoff: ~{q_value}" >> macs2_out/run.log
     >>>
 
     output {
