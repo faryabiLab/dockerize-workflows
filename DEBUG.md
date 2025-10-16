@@ -32,3 +32,8 @@ If not such environment is activated (and you cannot activate a conda environmen
 && sudo apt-get install openjdk-17-jre`.
 
 If future version conflicts occur, mappings between class file versions and Java versions can be found [here](https://javaalmanac.io/bytecode/versions/).
+
+## Logging on an NFS
+This isn't so much a fatal error as it is a point of confusion. When running cromwell manually (i.e. `cromwell.jar run`), it's often desirable to redirect output to a file such as `nohup.out` instead of having `stdout`revieve the output, which relies on the terminal session staying alive.
+
+Logging on an NFS is fine, but due to automatic file handle recycling, this file may become unmounted during longer jobs. This will _not_ break the workflow, but workflow logging will be directed to a `.nfsXXXXXX` file instead of `nohup.out`. The workflow will continie executing as normal.
