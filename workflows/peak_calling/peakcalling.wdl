@@ -47,8 +47,8 @@ workflow MACS2_PeakCalling {
         }
     }
     output {
-        File narrowPeak = MACS2_CallPeaks.narrowPeak
-        File? summits = MACS2_CallPeaks.summits
-        File xls = MACS2_CallPeaks.xls
+        Array[File] narrowPeak = MACS2_CallPeaks.narrowPeak
+        Array[File?] summits = MACS2_CallPeaks.summits
+        Array[File] xls = MACS2_CallPeaks.xls
     }
 }
