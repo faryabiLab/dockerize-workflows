@@ -7,76 +7,142 @@ import "wdl_tasks/peak_calling.wdl" as pcTasks
 import "wdl_tasks/feature_count.wdl" as quantTasks
 import "wdl_tasks/make_bigWig.wdl" as bwTasks
 
-workflow ChIPseq {
-	input {
+workflow ChIPseq 
+{
+	input 
+	{
 		File sampleList
-		String fastq_dir
 		Boolean paired
-		String bwa_index
-		String chromNoScaffold
-		String blacklist
-		String chromosome_sizes
-		String? PeakcallingControl
+		File bwa_index
+		File chromNoScaffold
+		File chromosome_sizes
+		File? blacklist
+		File? PeakcallingControl
 	}
+
 	Array[Array[String]] samples = read_tsv(sampleList)
-	scatter (sample in samples) {
-		String sampleName=sample[0]
-		call trimTasks.fastqc_trim {
-			input:
-				fastq_dir=fastq_dir,
-				sampleName=sampleName,
-				paired=paired
-		}
-		call bwaTasks.BWA {
+	scatter (sample in samples) 
+	{
+		String sample_id = sample[0]
+		File R1 = sample[1]
+		File? R2 = if length(sample) > 2 && sample[2] != "" then sample[2] else ""
+	
+		if (paired) 
+		{
+     			call trimTasks.fastqc_trim as trim_pe
+			{
+       				input:
+          				R1 = R1,
+          				R2 = R2,
+          				paired = paired,
+          				sampleName = sample_id
+      			}
+    		}
+
+    		if (!paired) 
+		{
+      			call trimTasks.fastqc_trim as trim_se
+			{
+        			input:
+          				SE = R1,
+          				paired = paired,
+          				sampleName = sample_id
+      			}
+    		}
+
+		File? trimmed_single = trim_se.out_fqc
+		File? trimmed_r1     = trim_pe.out_fqc1
+		File? trimmed_r2     = trim_pe.out_fqc2
+	
+		call bwaTasks.BWA 
+		{
 			input:
 				paired=paired,
-				sampleName=sampleName,
-				fastq1_trimmed=fastqc_trim.out_fqc1,
-				fastq2_trimmed=fastqc_trim.out_fqc2,
-				fastq_trimmed_single=fastqc_trim.out_fqc,
+				sampleName=sample_id,
+				fastq1_trimmed=trimmed_r1,
+				fastq2_trimmed=trimmed_r2,
+				fastq_trimmed_single=trimmed_single,
 				BWAIndex=bwa_index,
 		}
-		call filterTasks.sam_to_bam {
+		call filterTasks.sam_to_bam 
+		{
 			input:
 				sam=BWA.rawSam,
-				sample_name="${sampleName}.raw"
+				sample_name="${sample_id}.raw"
 		}
-		call filterTasks.remove_scaffolds {
+		call filterTasks.remove_unmapped
+		{
 			input:
 				bam=sam_to_bam.bam,
-				chrom_no_scaff=chromNoScaffold,
-				sample_name=sampleName
+				sample_name=sample_id
 		}
-		call filterTasks.remove_blacklist {
+		call filterTasks.remove_lowQuality
+		{
+			input:
+				bam=remove_unmapped.bam_noUnmapped,
+				sample_name=sample_id
+		}
+		call filterTasks.sort_bam_name
+		{
+			input:
+				bam=remove_lowQuality.bam_noLowQuality,
+				sample_name=sample_id
+		}
+		call filterTasks.fix_mate
+		{
+			input:
+				bam=sort_bam_name.bam_sortedByname,
+				sample_name=sample_id
+				
+		}
+		call filterTasks.remove_scaffolds 
+		{
+			input:
+				bam=fix_mate.bam_fixMate,
+				chrom_no_scaff=chromNoScaffold,
+				sample_name=sample_id
+		}
+		call filterTasks.mark_duplicates 
+		{
 			input:
 				bam=remove_scaffolds.bam_noScaffold,
-				blacklist=blacklist,
-				sample_name=sampleName
+				sample_name=sample_id
 		}
-		call filterTasks.sort_bam {
+		call filterTasks.remove_duplicates_unmapped
+		{
 			input:
-				bam=remove_blacklist.bam_noBlacklist,
-				sample_name=sampleName
+				bam=mark_duplicates.bam_dupMarked,
+				sample_name=sample_id
 		}
-		call filterTasks.remove_duplicates {
+		
+		Boolean blDefined = defined(blacklist)
+		# Conditionally call remove_blacklist if blDefined = true
+		if (blDefined)
+		{
+			call filterTasks.remove_blacklist
+                	{
+                        	input:
+                                	bam=remove_duplicates_unmapped.bam_noDuplicate,
+                                	blacklist=blacklist,
+                                	sample_name=sample_id
+                	}
+
+		}
+		call filterTasks.sort_bam 
+		{
+			input:
+				bam=select_first([remove_blacklist.bam_noBlacklist, remove_duplicates_unmapped.bam_noDuplicate]),
+				sample_name=sample_id
+		}
+		call filterTasks.index_bam 
+		{
 			input:
 				bam=sort_bam.bam_sorted,
-				sample_name=sampleName
-		}
-		call filterTasks.index_bam {
-			input:
-				bam=remove_duplicates.bam_noDuplicate,
-				sample_name=sampleName
-		}
-		call pcTasks.macs2 {
-			input:
-				sampleName=sampleName,
-				bam=remove_duplicates.bam_noDuplicate,
-				control_bam=PeakcallingControl	
-		}
+				sample_name=sample_id
+		}	
 		call bwTasks.read_count {
 			input:
-				bam=remove_duplicates.bam_noDuplicate
+				bam=sort_bam.bam_sorted
 		}
 		call bwTasks.calculate_factor {
 			input:
@@ -87,19 +153,19 @@ workflow ChIPseq {
 				bam=sort_bam.bam_sorted,
 				chromosome_sizes=chromosome_sizes,
 				factor=calculate_factor.factor,
-				sample_name=sampleName
+				sample_name=sample_id
 		}
 		call bwTasks.bedgraph_to_bigwig {
 			input:
 				bedgraph=bam_to_bedgraph.bedgraph,
 				chromosome_sizes=chromosome_sizes,
-				sample_name=sampleName
+				sample_name=sample_id
 		}
 	}
 	output {
-		Array[String] finalBam = sort_bam.bam_sorted
-		Array[String] finalBamIndex = index_bam.bam_index
-		Array[String] peaks = macs2.narrowPeak
-		Array[String] bw = bedgraph_to_bigwig.bw
+		Array[File] finalBam = sort_bam.bam_sorted
+		Array[File] finalBamIndex = index_bam.bam_index
+		Array[File] peaks = macs2.narrowPeak
+		Array[File] bw = bedgraph_to_bigwig.bw
 	}
 }
