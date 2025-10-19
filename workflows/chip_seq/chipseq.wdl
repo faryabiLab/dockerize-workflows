@@ -165,7 +165,6 @@ workflow ChIPseq
 	output {
 		Array[File] finalBam = sort_bam.bam_sorted
 		Array[File] finalBamIndex = index_bam.bam_index
-		Array[File] peaks = macs2.narrowPeak
 		Array[File] bw = bedgraph_to_bigwig.bw
 	}
 }
