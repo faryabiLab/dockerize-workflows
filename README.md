@@ -12,7 +12,7 @@ git clone https://github.com/faryabiLab/dockerize-workflows
 ```
 #### Dependencies
 * [Cromwell WDL engine jarfile](https://github.com/broadinstitute/cromwell)
-* [JDK](https://www.oracle.com/java/technologies/downloads/)
+* [JDK](https://www.oracle.com/java/technologies/downloads/) 8+
 * [Docker](https://www.docker.com/products/personal/)
 
 #### Usage documentation available [here](docs/USAGE.md).
