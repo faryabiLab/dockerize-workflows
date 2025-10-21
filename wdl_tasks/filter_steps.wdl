@@ -170,9 +170,11 @@ task remove_duplicates_unmapped {
 		String? Dockerhub_Pull = "faryabilab/samtools:0.1.0"
 		Int cpu = 12
 		Int mem = 25
+
+		Int mem_per_thread = floor(mem / cpu)
 	}
 	command {
-		samtools view -b -F 516 ${bam} > "${sample_name}.noDuplicate.bam"
+		samtools view -@ ${cpu} -m "~{mem_per_thread}G" -b -F 516 ${bam} > "${sample_name}.noDuplicate.bam"
 	}
 	output {
 		File bam_noDuplicate = "${sample_name}.noDuplicate.bam"
