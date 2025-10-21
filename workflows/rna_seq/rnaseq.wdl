@@ -27,7 +27,7 @@ workflow RNAseq
 	{
 		String sample_id = sample[0]
 		File R1 = sample[1]
-		File? R2 = if length(sample) > 2 && sample[2] != "" then sample[2] else ""
+		File? R2 = if length(sample) > 2 && sample[2] != "" then sample[2] else "/dev/null"
 	
 		if (paired) 
 		{
