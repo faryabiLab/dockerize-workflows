@@ -1,59 +1,103 @@
 version 1.0
 
-task MACS2_CallPeaks 
-{
-    input 
-    {
-        String sample_name
-        File treatment_bam
-        File? control_bam
-        String genome_size
-        Float q_value
-        Boolean call_summits
-        Boolean paired_end
-        String peak_type
-        String DockerhubPull = "faryabilab/macs2:0.1.0"
-        Int cpu = 4
-        Int mem = 8
-     }
+###############################################
+# 1. Fragment size estimation task (optional)
+###############################################
+task EstimateFragSize {
+  input {
+    File bam
+    String sample_name
+  }
 
-    command <<<
-        set -euo pipefail
-        mkdir -p macs2_out
+  command <<<
+    set -euo pipefail
+    echo "Estimating fragment size for ~{sample_name}..."
 
-        # Build optional flags safely
-        FLAGS=""
-        if [[ "~{paired_end}" == "true" ]]; then FLAGS="$FLAGS --format BAMPE"; else FLAGS="$FLAGS --format BAM"; fi
-        if [[ "~{call_summits}" == "true" ]]; then FLAGS="$FLAGS --call-summits"; fi
-        if [[ "~{peak_type}" == "broad" ]]; then FLAGS="$FLAGS --broad"; fi
-        CONTROL_FLAG=""
-        if [[ -n "~{control_bam}" && "~{control_bam}" != "null" ]]; then CONTROL_FLAG="-c ~{control_bam}"; fi
+    # Try to estimate fragment size using HOMER or any other tool
+    FRAGSIZE=$(homer findPeaks -style factor -size given -input ~{bam} 2>/dev/null | grep 'fragment length' | awk '{print $NF}')
 
-        macs2 callpeak \
-            -t ~{treatment_bam} \
-            $CONTROL_FLAG \
-            -n ~{sample_name} \
-            -g ~{genome_size} \
-            --qvalue ~{q_value} \
-            --outdir macs2_out \
-            $FLAGS
+    if [ -z "$FRAGSIZE" ]; then
+      echo "WARNING: Could not estimate fragment size, defaulting to 200 bp."
+      FRAGSIZE=200
+    fi
 
-        echo "MACS2 version: $(macs2 --version)" > macs2_out/run.log
-        echo "Genome size: ~{genome_size}" >> macs2_out/run.log
-        echo "Q-value cutoff: ~{q_value}" >> macs2_out/run.log
-    >>>
+    echo $FRAGSIZE > fragsize.txt
+  >>>
 
-    output {
-        File narrowPeak = "macs2_out/~{sample_name}_peaks.narrowPeak"
-        File? summits = "macs2_out/~{sample_name}_summits.bed"
-        File xls = "macs2_out/~{sample_name}_peaks.xls"
-        File log = "macs2_out/run.log"
-    }
+  output {
+    Int estimated_fragment_size = read_int("fragsize.txt")
+  }
 
-    runtime {
-        docker: "${DockerhubPull}"
-        cpu: "${cpu}"
-        mem: "${mem}"
-    }
+  runtime {
+    docker: "faryabilab/homer:0.1.0"
+    cpu: 2
+    memory: "4G"
+  }
+}
+
+###############################################
+# 2. MACS2 peak calling task
+###############################################
+task MACS2_CallPeaks {
+  input {
+    # Required
+    File treatment_bam
+    String sample_name
+
+    # Optional control
+    File? control_bam
+
+    # Significance thresholds (mutually exclusive)
+    Float q_value = 0.05
+    Float? p_value
+
+    # Genome & peak calling parameters
+    String genome_size = "hs"  # hs=human, mm=mouse, ce=worm, dm=fly
+    Boolean call_summits = true
+    Boolean paired_end = false
+    String peak_type = "narrow"  # or "broad"
+
+    # Fragment size handling
+    Int? estimated_fragment_size
+    Int default_extsize = 200
+    Int shift = 0
+
+    # Runtime
+    Int cpu = 4
+    Int mem = 8
+  }
+
+  command <<<
+    set -euo pipefail
+
+    # Choose fragment size (estimated if available, else default)
+    FRAGSIZE=~{select_first([estimated_fragment_size, default_extsize])}
+    echo "Using fragment size: $FRAGSIZE bp"
+
+    echo "Running MACS2 peak calling..."
+    macs2 callpeak \
+      -t ~{treatment_bam} \
+      ~{if defined(control_bam) then ("-c " + control_bam) else ""} \
+      -n ~{sample_name} \
+      -g ~{genome_size} \
+      ~{if defined(p_value) then ("--pvalue " + p_value) else ("--qvalue " + q_value)} \
+      ~{if call_summits then "--call-summits" else ""} \
+      ~{if peak_type == "broad" then "--broad" else ""} \
+      ~{if paired_end then "--format BAMPE" else "--format BAM"} \
+      --shift ~{shift} \
+      --extsize $FRAGSIZE
+  >>>
+
+  output {
+    File narrowPeak = "${sample_name}_peaks.narrowPeak"
+    File? summits = "${sample_name}_summits.bed"
+    File xls = "${sample_name}_peaks.xls"
+  }
+
+  runtime {
+    docker: "faryabilab/macs2:0.1.0"
+    cpu: cpu
+    memory: "~{mem}G"
+  }
 }
 

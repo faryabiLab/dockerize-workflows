@@ -3,6 +3,7 @@ digraph ChIPseq {
   compound=true;
 
   # Links
+  SCATTER_0_VARIABLE_sample -> CALL_remove_duplicates_unmapped
   CALL_read_count -> CALL_calculate_factor
   SCATTER_0_VARIABLE_sample -> CALL_BWA
   SCATTER_0_VARIABLE_sample -> CALL_bedgraph_to_bigwig
@@ -19,11 +20,8 @@ digraph ChIPseq {
   CALL_sort_bam_name -> CALL_fix_mate
   CALL_BWA -> CALL_sam_to_bam
   CALL_remove_unmapped -> CALL_remove_lowQuality
-  CALL_sort_bam -> CALL_macs2
-  SCATTER_0_VARIABLE_sample -> CALL_remove_duplicates_unmapped
   CALL_bam_to_bedgraph -> CALL_bedgraph_to_bigwig
   CALL_sort_bam -> CALL_read_count
-  SCATTER_0_VARIABLE_sample -> CALL_macs2
   SCATTER_0_VARIABLE_sample -> CALL_sort_bam
   SCATTER_0_VARIABLE_sample -> CALL_remove_unmapped
   CALL_remove_lowQuality -> CALL_sort_bam_name
@@ -61,7 +59,6 @@ digraph ChIPseq {
     CALL_remove_duplicates_unmapped [label="call remove_duplicates_unmapped"]
     CALL_remove_scaffolds [label="call remove_scaffolds"]
     CALL_sort_bam [label="call sort_bam"]
-    CALL_macs2 [label="call macs2"]
     CALL_mark_duplicates [label="call mark_duplicates"]
     subgraph cluster_2 {
       style="filled,dashed";
