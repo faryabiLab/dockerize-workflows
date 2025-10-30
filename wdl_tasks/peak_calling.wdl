@@ -13,20 +13,14 @@ task EstimateFragSize {
     Int mem = 50
   }
 
-  command {
-    set -euo pipefail
-    echo "Estimating fragment size for ~{sample_name}..."
-
-    # Try to estimate fragment size using HOMER or any other tool
-    FRAGSIZE=$(homer findPeaks -style factor -size given -input ~{bam} 2>/dev/null | grep 'fragment length' | awk '{{print $NF}}')
-
-    if [ -z "$FRAGSIZE" ]; then
-      echo "WARNING: Could not estimate fragment size, defaulting to 200 bp."
-      FRAGSIZE=200
-    fi
-
-    echo $FRAGSIZE > fragsize.txt
-  }
+  command <<< 
+    bash <<'EOF'
+    FRAGSIZE=$(homer findPeaks -style factor -size given -input ~{bam} 2>/dev/null \
+        | grep 'fragment length' \
+        | awk '{print $NF}')
+    echo "Fragment size: $FRAGSIZE"
+    EOF
+  >>>
 
   output {
     Int estimated_fragment_size = read_int("fragsize.txt")
