@@ -67,6 +67,8 @@ task MACS2_CallPeaks {
     Int mem = 8
   }
 
+  String broad_flag = if (peak_type == "broad") then "--broad" else ""
+
   command {
     set -euo pipefail
 
@@ -82,7 +84,7 @@ task MACS2_CallPeaks {
       -g ~{genome_size} \
       ~{if defined(p_value) then ("--pvalue " + p_value) else ("--qvalue " + q_value)} \
       ~{if call_summits then "--call-summits" else ""} \
-      ~{if (peak_type == "broad") then "--broad" else ""} \
+      ~{broad_flag} \
       ~{if paired_end then "--format BAMPE" else "--format BAM"} \
       --shift ~{shift} \
       --extsize $FRAGSIZE
