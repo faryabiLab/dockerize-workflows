@@ -29,7 +29,7 @@ task EstimateFragSize {
   runtime {
     docker: "${Dockerhub_Pull}"
     cpu: "${cpu}"
-    memory: "${mem}"
+    mem: "${mem}"
   }
 }
 
@@ -99,7 +99,7 @@ task MACS2_CallPeaks {
   runtime {
     docker: "${Dockerhub_Pull}"
     cpu: "${cpu}"
-    memory: "${mem}"
+    mem: "${mem}"
   }
 }
 
