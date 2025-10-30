@@ -56,6 +56,7 @@ task MACS2_CallPeaks {
     Boolean call_summits = true
     Boolean paired_end = false
     String peak_type = "narrow"  # or "broad"
+    Int? Bandwidth = 300
 
     # Fragment size handling
     Int? estimated_fragment_size
@@ -74,6 +75,7 @@ task MACS2_CallPeaks {
 
     # Choose fragment size (estimated if available, else default)
     FRAGSIZE=~{select_first([estimated_fragment_size, default_extsize])}
+    HALF_FRAG=$((FRAGSIZE / 2))
     echo "Using fragment size: $FRAGSIZE bp"
 
     echo "Running MACS2 peak calling..."
@@ -85,9 +87,11 @@ task MACS2_CallPeaks {
       ~{if defined(p_value) then ("--pvalue " + p_value) else ("--qvalue " + q_value)} \
       ~{if call_summits then "--call-summits" else ""} \
       ~{broad_flag} \
+      ~{if defined(estimated_fragment_size) then "--nomodel" else ""} \
+      ~{if defined(estimated_fragment_size) then ("--shiftsize="+HALF_FRAG) else ""}
+      ~{if defined(estimated_fragment_size) then ("--bw="+Bandwidth)} \
       ~{if paired_end then "--format BAMPE" else "--format BAM"} \
-      --shift ~{shift} \
-      --extsize $FRAGSIZE
+      --keep-dup=1 \
   }
 
   output {
