@@ -7,9 +7,13 @@ task EstimateFragSize {
   input {
     File bam
     String sample_name
+
+    String Dockerhub_Pull = "faryabilab/homer:v1"
+    Int cpu = 12
+    Int mem = 50
   }
 
-  command <<<
+  command {
     set -euo pipefail
     echo "Estimating fragment size for ~{sample_name}..."
 
@@ -22,16 +26,16 @@ task EstimateFragSize {
     fi
 
     echo $FRAGSIZE > fragsize.txt
-  >>>
+  }
 
   output {
     Int estimated_fragment_size = read_int("fragsize.txt")
   }
 
   runtime {
-    docker: "faryabilab/homer:0.1.0"
-    cpu: 2
-    memory: "4G"
+    docker: "${Dockerhub_Pull}"
+    cpu: "${cpu}"
+    memory: "${mem}"
   }
 }
 
@@ -40,6 +44,8 @@ task EstimateFragSize {
 ###############################################
 task MACS2_CallPeaks {
   input {
+    String Dockerhub_Pull = "faryabilab/macs2:0.1.0"
+
     # Required
     File treatment_bam
     String sample_name
@@ -67,7 +73,7 @@ task MACS2_CallPeaks {
     Int mem = 8
   }
 
-  command <<<
+  command {
     set -euo pipefail
 
     # Choose fragment size (estimated if available, else default)
@@ -86,7 +92,7 @@ task MACS2_CallPeaks {
       ~{if paired_end then "--format BAMPE" else "--format BAM"} \
       --shift ~{shift} \
       --extsize $FRAGSIZE
-  >>>
+  }
 
   output {
     File narrowPeak = "${sample_name}_peaks.narrowPeak"
@@ -95,9 +101,9 @@ task MACS2_CallPeaks {
   }
 
   runtime {
-    docker: "faryabilab/macs2:0.1.0"
-    cpu: cpu
-    memory: "~{mem}G"
+    docker: "${Dockerhub_Pull}"
+    cpu: "${cpu}"
+    memory: "${mem}"
   }
 }
 
