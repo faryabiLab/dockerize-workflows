@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -euo pipefail
 
 USAGE="Usage: $0 -j <cromwell jar> -c <cromwell config> -h <http://ip:port> -p <imports.zip> -o <options.json> -i <inputs.json> -w <workflow.wdl>"
