@@ -73,8 +73,7 @@ task MACS2_CallPeaks {
     set -euo pipefail
 
     # Choose fragment size (estimated if available, else default)
-    FRAGSIZE=~{select_first([estimated_fragment_size, default_extsize])}
-    echo "Using fragment size: $FRAGSIZE bp"
+    FRAGSIZE=~{estimated_fragment_size}
 
     echo "Running MACS2 peak calling..."
     macs2 callpeak \
