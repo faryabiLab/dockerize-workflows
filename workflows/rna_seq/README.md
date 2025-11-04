@@ -104,6 +104,4 @@ Am empty parameters file can be found at `rnaseq_inputs.json`. Some shared param
   "RNAseq.read_count.Dockerhub_Pull": "faryabilab/samtools:0.1.0",
   "RNAseq.read_count.cpu": 1,
   "RNAseq.read_count.mem": 5
-}
-
 ```
