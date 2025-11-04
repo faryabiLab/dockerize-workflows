@@ -1,0 +1,23 @@
+digraph MACS2_CallPeaks {
+  #rankdir=LR;
+  compound=true;
+
+  # Links
+  SCATTER_0_VARIABLE_sample -> CALL_EstimateFragSize
+  SCATTER_0_VARIABLE_sample -> CALL_MACS2_CallPeaks
+  CALL_EstimateFragSize -> CALL_MACS2_CallPeaks
+
+  # Nodes
+  subgraph cluster_0 {
+    style="filled,solid";
+    fillcolor=white;
+    subgraph cluster_1 {
+      style="filled,dashed";
+      fillcolor=white;
+      CALL_EstimateFragSize [label="call EstimateFragSize"]
+      CONDITIONAL_1_EXPRESSION [shape="hexagon" label="if (HomerFragmentSizeEstimation)" style="dashed" ]
+    }
+    CALL_MACS2_CallPeaks [label="call MACS2_CallPeaks"]
+    SCATTER_0_VARIABLE_sample [shape="hexagon" label="scatter over Array[String] as sample"]
+  }
+}

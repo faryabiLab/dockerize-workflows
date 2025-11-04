@@ -15,7 +15,7 @@ Solution: Ensure the MySQL database Docker image is currently running.
 80420dd85e5a   mysql/mysql-server:latest   "/entrypoint.sh mysq…"   12 hours ago        Up 12 hours (healthy)   33060-33061/tcp, 0.0.0.0:52000->3306/tcp, [::]:52000->3306/tcp   PipelineDatabase
 ```
 3. If the database cannot conenct, this means you should not see this line in the output. Run `workflows/start_database.sh` to start the MySQL Docker image.
-4. Check periodically with `docker ps` until the `STATUS` column turns from `Up <uptime> (starting)` to `Up <uptime> (healthy)`.
+4. Check periodically with `docker ps` until the `STATUS` column turns from `Up <uptime> (starting)` to `Up <uptime> (healthy)` (takes ~30s).
 5. Restart your workflow.
 
 ## Java Runtime Version
@@ -26,7 +26,7 @@ Uncaught error from thread [cromwell-system-akka.dispatchers.engine-dispatcher-6
 ```
 In short, this is caused by running Cromwell with too old a Java version. In the above example, we tried to run the Cromwell engine jarfile with Java 8 (class file version 55.0, Java 8), but this version of Cromwell requires class file version 61.0 (Java 17). 
 
-Most likely, the root cause is having a conda environment loaded with an old Java version while running the workflow. If this is the case, simply deactivate with `conda deactivate` and try again. 
+Most likely, if you have run a workflow successfully in the past, the root cause is having a conda environment loaded with an old Java version while running the workflow. If this is the case, simply deactivate with `conda deactivate` and try again. 
 
 If not such environment is activated (and you cannot activate a conda environment that does have the correct Java version), update your Java with `sudo apt-get update
 && sudo apt-get install openjdk-17-jre`.
@@ -37,3 +37,13 @@ If future version conflicts occur, mappings between class file versions and Java
 This isn't so much a fatal error as it is a point of confusion. When running cromwell manually (i.e. `cromwell.jar run`), it's often desirable to redirect output to a file such as `nohup.out` instead of having `stdout`revieve the output, which relies on the terminal session staying alive.
 
 Logging on an NFS is fine, but due to automatic file handle recycling, this file may become unmounted during longer jobs. This will _not_ break the workflow, but workflow logging will be directed to a `.nfsXXXXXX` file instead of `nohup.out`. The workflow will continue executing as normal.
+
+## Cannot Copy Output Files 
+Example error message:
+```
+2025-10-30 15:14:47,97] [error] Cannot copy output files to given final_workflow_outputs_dir as multiple files will be copied to the same path:
+...
+```
+This arises when multiple output files have identical paths, obviously causing data version clashes. Cromwell throws this error to avoid any confusion on the user's part. 
+
+The solution is simply to edit the first column in your `samplesheet.tsv` (the 'sample names' column), to ensure that they are each unique. 

@@ -11,6 +11,7 @@ workflow MACS2_CallPeaks {
         # Required inputs
         String sampleList
         Boolean paired_end = false
+	Boolean HomerFragmentSizeEstimation = true
 
         # Optional control BAM
         File? control_bam
@@ -27,25 +28,38 @@ workflow MACS2_CallPeaks {
     }
     
     Array[Array[String]] samples = read_tsv(sampleList)
-    scatter (sample in samples){
+    
+    scatter (sample in samples) 
+    {
 
-        String sample_id = sample[0]	
-        String bam = sample[1]     
-
-        call peakcall.MACS2_CallPeaks {
-            input:
-		treatment_bam = bam,
-		sample_name = sample_id,
-                control_bam = control_bam,
-                genome_size = genome_size,
-                q_value = q_value,
-                call_summits = call_summits,
-                paired_end = paired_end,
-                peak_type = peak_type,
-                cpu = cpu,
-                mem = mem
-        }
+    	String sample_id = sample[0]	
+    	String bam = sample[1]     
+	
+	if (HomerFragmentSizeEstimation) {
+		call peakcall.EstimateFragSize {
+			input:
+				bam = bam,
+				sample_name = sample_id
+		}
+    	}
+	
+	call peakcall.MACS2_CallPeaks {
+		input:
+			treatment_bam = bam,
+			sample_name = sample_id,
+			control_bam = control_bam,
+			genome_size = genome_size,
+			q_value = q_value,
+			estimated_fragment_size = EstimateFragSize.estimated_fragment_size,
+			call_summits = call_summits,
+			paired_end = paired_end,
+			peak_type = peak_type,
+			cpu = cpu,
+			mem = mem
+	}
     }
+
+   
     output {
         Array[File] narrowPeak = MACS2_CallPeaks.narrowPeak
         Array[File?] summits = MACS2_CallPeaks.summits

@@ -7,21 +7,23 @@ task EstimateFragSize {
   input {
     File bam
     String sample_name
+
+    String Dockerhub_Pull = "faryabilab/homer:v1"
+    Int cpu = 12
+    Int mem = 50
   }
 
   command <<<
     set -euo pipefail
-    echo "Estimating fragment size for ~{sample_name}..."
 
-    # Try to estimate fragment size using HOMER or any other tool
-    FRAGSIZE=$(homer findPeaks -style factor -size given -input ~{bam} 2>/dev/null | grep 'fragment length' | awk '{print $NF}')
+    # Make tag directory
+    makeTagDirectory tagdir ~{bam} -format sam
 
-    if [ -z "$FRAGSIZE" ]; then
-      echo "WARNING: Could not estimate fragment size, defaulting to 200 bp."
-      FRAGSIZE=200
-    fi
+    # Extract fragment size from HOMER tagInfo.txt
+    FRAGSIZE=$(grep "fragmentLengthEstimate=" tagdir/tagInfo.txt | awk -F'=' '{print $2}')
 
-    echo $FRAGSIZE > fragsize.txt
+    # Write to file for Cromwell output
+    echo "$FRAGSIZE" > fragsize.txt
   >>>
 
   output {
@@ -29,9 +31,9 @@ task EstimateFragSize {
   }
 
   runtime {
-    docker: "faryabilab/homer:0.1.0"
-    cpu: 2
-    memory: "4G"
+    docker: "${Dockerhub_Pull}"
+    cpu: "${cpu}"
+    mem: "${mem}"
   }
 }
 
@@ -40,6 +42,8 @@ task EstimateFragSize {
 ###############################################
 task MACS2_CallPeaks {
   input {
+    String Dockerhub_Pull = "faryabilab/macs2:0.1.0"
+
     # Required
     File treatment_bam
     String sample_name
@@ -56,23 +60,20 @@ task MACS2_CallPeaks {
     Boolean call_summits = true
     Boolean paired_end = false
     String peak_type = "narrow"  # or "broad"
+    Int? Bandwidth = 300
 
     # Fragment size handling
     Int? estimated_fragment_size
-    Int default_extsize = 200
-    Int shift = 0
 
     # Runtime
     Int cpu = 4
     Int mem = 8
   }
 
-  command <<<
-    set -euo pipefail
+  String broad_flag = if (peak_type == "broad") then "--broad" else ""
 
-    # Choose fragment size (estimated if available, else default)
-    FRAGSIZE=~{select_first([estimated_fragment_size, default_extsize])}
-    echo "Using fragment size: $FRAGSIZE bp"
+  command {
+    set -euo pipefail
 
     echo "Running MACS2 peak calling..."
     macs2 callpeak \
@@ -82,11 +83,14 @@ task MACS2_CallPeaks {
       -g ~{genome_size} \
       ~{if defined(p_value) then ("--pvalue " + p_value) else ("--qvalue " + q_value)} \
       ~{if call_summits then "--call-summits" else ""} \
-      ~{if peak_type == "broad" then "--broad" else ""} \
+      ~{broad_flag} \
+      ~{if defined(estimated_fragment_size) then "--nomodel" else ""} \
+      ~{if defined(estimated_fragment_size) then ("--shift 0") else ""} \
+      ~{if defined(estimated_fragment_size) then ("--extsize "+estimated_fragment_size) else ""} \
+      ~{if defined(estimated_fragment_size) then ("--bw "+Bandwidth) else ""} \
       ~{if paired_end then "--format BAMPE" else "--format BAM"} \
-      --shift ~{shift} \
-      --extsize $FRAGSIZE
-  >>>
+      --keep-dup=1 \
+  }
 
   output {
     File narrowPeak = "${sample_name}_peaks.narrowPeak"
@@ -95,9 +99,9 @@ task MACS2_CallPeaks {
   }
 
   runtime {
-    docker: "faryabilab/macs2:0.1.0"
-    cpu: cpu
-    memory: "~{mem}G"
+    docker: "${Dockerhub_Pull}"
+    cpu: "${cpu}"
+    mem: "${mem}"
   }
 }
 

@@ -45,37 +45,37 @@ digraph ChIPseq {
     fillcolor=white;
     CALL_sort_bam_name [label="call sort_bam_name"]
     SCATTER_0_VARIABLE_sample [shape="hexagon" label="scatter over Array[String] as sample"]
-    CALL_sam_to_bam [label="call sam_to_bam"]
     subgraph cluster_1 {
       style="filled,dashed";
       fillcolor=white;
-      CALL_trim_se [label="call trim_se"]
-      CONDITIONAL_1_EXPRESSION [shape="hexagon" label="if (!(paired))" style="dashed" ]
+      CALL_trim_pe [label="call trim_pe"]
+      CONDITIONAL_1_EXPRESSION [shape="hexagon" label="if (paired)" style="dashed" ]
     }
+    CALL_sam_to_bam [label="call sam_to_bam"]
+    CALL_mark_duplicates [label="call mark_duplicates"]
     CALL_remove_lowQuality [label="call remove_lowQuality"]
     CALL_BWA [label="call BWA"]
     CALL_calculate_factor [label="call calculate_factor"]
     CALL_fix_mate [label="call fix_mate"]
-    CALL_remove_duplicates_unmapped [label="call remove_duplicates_unmapped"]
-    CALL_remove_scaffolds [label="call remove_scaffolds"]
-    CALL_sort_bam [label="call sort_bam"]
-    CALL_mark_duplicates [label="call mark_duplicates"]
-    subgraph cluster_2 {
+    subgraph cluster_3 {
       style="filled,dashed";
       fillcolor=white;
-      CALL_trim_pe [label="call trim_pe"]
-      CONDITIONAL_2_EXPRESSION [shape="hexagon" label="if (paired)" style="dashed" ]
+      CALL_trim_se [label="call trim_se"]
+      CONDITIONAL_3_EXPRESSION [shape="hexagon" label="if (!(paired))" style="dashed" ]
     }
+    CALL_remove_scaffolds [label="call remove_scaffolds"]
+    CALL_sort_bam [label="call sort_bam"]
+    CALL_bedgraph_to_bigwig [label="call bedgraph_to_bigwig"]
     CALL_bam_to_bedgraph [label="call bam_to_bedgraph"]
     CALL_remove_unmapped [label="call remove_unmapped"]
     CALL_index_bam [label="call index_bam"]
     CALL_read_count [label="call read_count"]
-    CALL_bedgraph_to_bigwig [label="call bedgraph_to_bigwig"]
-    subgraph cluster_3 {
+    CALL_remove_duplicates_unmapped [label="call remove_duplicates_unmapped"]
+    subgraph cluster_2 {
       style="filled,dashed";
       fillcolor=white;
       CALL_remove_blacklist [label="call remove_blacklist"]
-      CONDITIONAL_3_EXPRESSION [shape="hexagon" label="if (blDefined)" style="dashed" ]
+      CONDITIONAL_2_EXPRESSION [shape="hexagon" label="if (blDefined)" style="dashed" ]
     }
   }
 }
