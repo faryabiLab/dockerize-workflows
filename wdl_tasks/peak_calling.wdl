@@ -60,8 +60,6 @@ task MACS2_CallPeaks {
 
     # Fragment size handling
     Int? estimated_fragment_size
-    Int default_extsize = 200
-    Int shift = 0
 
     # Runtime
     Int cpu = 4
@@ -88,7 +86,7 @@ task MACS2_CallPeaks {
       ~{if call_summits then "--call-summits" else ""} \
       ~{broad_flag} \
       ~{if defined(estimated_fragment_size) then "--nomodel" else ""} \
-      ~{if defined(HALF_FRAG) then ("--shiftsize="+HALF_FRAG) else ""} \
+      ~{if defined(estimated_fragment_size) then ("--shiftsize="+HALF_FRAG) else ""} \
       ~{if defined(estimated_fragment_size) then ("--bw="+Bandwidth) else ""} \
       ~{if paired_end then "--format BAMPE" else "--format BAM"} \
       --keep-dup=1 \
