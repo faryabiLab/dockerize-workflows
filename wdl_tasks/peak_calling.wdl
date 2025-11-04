@@ -18,7 +18,7 @@ task EstimateFragSize {
     FRAGSIZE=$(homer findPeaks -style factor -size given -input ~{bam} 2>/dev/null \
         | grep 'fragment length' \
         | awk '{print $NF}')
-    echo "Fragment size: $FRAGSIZE"
+    echo "$FRAGSIZE" > fragsize.txt
     EOF
   >>>
 
