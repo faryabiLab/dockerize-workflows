@@ -41,7 +41,7 @@ digraph RNAseq {
     subgraph cluster_1 {
       style="filled,dashed";
       fillcolor=white;
-      CALL_trim_pe [label="call trim_pe"]
+      CALL_count_reads_paired [label="call count_reads_paired"]
       CONDITIONAL_1_EXPRESSION [shape="hexagon" label="if (paired)" style="dashed" ]
     }
     CALL_mark_duplicates [label="call mark_duplicates"]
@@ -54,7 +54,7 @@ digraph RNAseq {
     }
     CALL_remove_scaffolds [label="call remove_scaffolds"]
     CALL_sort_bam [label="call sort_bam"]
-    CALL_bedgraph_to_bigwig [label="call bedgraph_to_bigwig"]
+    CALL_STAR [label="call STAR"]
     CALL_bam_to_bedgraph [label="call bam_to_bedgraph"]
     subgraph cluster_5 {
       style="filled,dashed";
@@ -71,12 +71,12 @@ digraph RNAseq {
       CALL_count_reads_single [label="call count_reads_single"]
       CONDITIONAL_2_EXPRESSION [shape="hexagon" label="if (!(paired))" style="dashed" ]
     }
+    CALL_bedgraph_to_bigwig [label="call bedgraph_to_bigwig"]
     subgraph cluster_3 {
       style="filled,dashed";
       fillcolor=white;
-      CALL_count_reads_paired [label="call count_reads_paired"]
+      CALL_trim_pe [label="call trim_pe"]
       CONDITIONAL_3_EXPRESSION [shape="hexagon" label="if (paired)" style="dashed" ]
     }
-    CALL_STAR [label="call STAR"]
   }
 }
