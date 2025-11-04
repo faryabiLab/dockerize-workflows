@@ -1,0 +1,19 @@
+{
+  "MACS2_CallPeaks.cpu": 4,,
+  "MACS2_CallPeaks.MACS2_CallPeaks.Bandwidth": 300,
+  "MACS2_CallPeaks.EstimateFragSize.Dockerhub_Pull": "faryabilab/homer:v1",
+  "MACS2_CallPeaks.MACS2_CallPeaks.p_value": ,
+  "MACS2_CallPeaks.q_value": 0.05,
+  "MACS2_CallPeaks.sampleList": "",
+  "MACS2_CallPeaks.MACS2_CallPeaks.Dockerhub_Pull": "faryabilab/macs2:0.1.0",
+  "MACS2_CallPeaks.paired_end": false,
+  "MACS2_CallPeaks.call_summits": true,
+  "MACS2_CallPeaks.mem": 8,
+  "MACS2_CallPeaks.EstimateFragSize.mem": 50,
+  "MACS2_CallPeaks.peak_type": "narrow",
+  "MACS2_CallPeaks.control_bam": "",
+  "MACS2_CallPeaks.HomerFragmentSizeEstimation": true",
+  "MACS2_CallPeaks.EstimateFragSize.cpu": 12,
+  "MACS2_CallPeaks.genome_size": "hs"
+}
+
