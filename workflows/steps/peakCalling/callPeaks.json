@@ -1,8 +1,0 @@
-{
-  "Peakcalling.bam_dir": "/mnt/data0/noah/testing/dockerize-workflows/workflows/steps/peakCalling/bams",
-  "Peakcalling.project_out_dir": "/mnt/data0/noah/testing/dockerize-workflows/workflows/steps/peakCalling",
-  "Peakcalling.macs2.Qvalue": "0.005",
-  "Peakcalling.sampleList": "/mnt/data0/noah/testing/dockerize-workflows/workflows/steps/peakCalling/samplesheet.tsv",
-  "Peakcalling.PeakcallingControl": "/mnt/data0/yeqiao/data/hg19/240105_MB157_CnR_YZ/processed/s16_231228_MB157Cas9_IgG_neg_ctrl_S16/s16_231228_MB157Cas9_IgG_neg_ctrl_S16.filt.srt.nodup.noBlack.bam"
-}
-
