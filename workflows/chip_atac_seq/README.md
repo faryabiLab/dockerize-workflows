@@ -1,0 +1,120 @@
+# ChIP-seq
+![ChIP-seq Workflow Diagram](chipseq.png)
+Peak calling is _not_ included in this workflow.
+
+## Parameters
+**NOTE**: Any optional parameter that is not used must have its _entire key removed from the input JSON_, that is, the entire line must be blanked and removed. Any variable with `null` as the value is an optional parameter with no default value, and can be deleted from the inputs file if not being used.
+Am empty parameters file can be found at chipseq_inputs.json. Some shared parameters between tasks are:
+* `Dockerhub_Pull`: The path to the Docker image that will be pulled from Dockerhub and used to run the task.
+* `cpu`: # of cores to use for the job
+* `mem`: Memory in GB to use for the job (note: samtools uses per-core memory, and it is calculated during task runtime.)
+```
+  "ChIPseq.sampleList": "",              # Samplesheet made with ./make_samplesheet.tsv
+  "ChIPseq.paired": true,                # Is the sample paired? true=yes, false=no
+  "ChIPseq.bwa_index": "",               # Zipped BWA genome index made with ./zip_reference.sh
+  "ChIPseq.chromNoScaffold": "",         # 3-column BED file with cannonical Chromosomes to keep and their beginning and end coordinates
+  "ChIPseq.chromosome_sizes": "",        # 2-column file with cannonical chromosome sizes and their total sizes
+
+  "ChIPseq.trim_pe.Dockerhub_Pull": "faryabilab/trim_galore:0.10",
+  "ChIPseq.trim_pe.cpu": 8,
+  "ChIPseq.trim_pe.mem": 8,
+  "ChIPseq.trim_pe.illumina": true,
+  "ChIPseq.trim_pe.quality": 15,
+  "ChIPseq.trim_pe.length": 20,
+  "ChIPseq.trim_pe.stringency": 5,
+  "ChIPseq.trim_pe.e": 0.1,
+
+  "ChIPseq.trim_se.Dockerhub_Pull": "faryabilab/trim_galore:0.10",
+  "ChIPseq.trim_se.cpu": 8,
+  "ChIPseq.trim_se.mem": 8,
+  "ChIPseq.trim_se.illumina": true,
+  "ChIPseq.trim_se.quality": 15,
+  "ChIPseq.trim_se.length": 20,
+  "ChIPseq.trim_se.stringency": 5,
+  "ChIPseq.trim_se.e": 0.1,
+
+  "ChIPseq.BWA.Dockerhub_Pull": "faryabilab/bwa:0.1.0",
+  "ChIPseq.BWA.cpu": 16,
+  "ChIPseq.BWA.mem": 32,
+  "ChIPseq.BWA.ScoreCutoff": 30,
+  "ChIPseq.BWA.MatchingScore": 1,
+  "ChIPseq.BWA.MismatchPenalty": 4,
+  "ChIPseq.BWA.GapOpenPenalty": 6,
+  "ChIPseq.BWA.GapExtensionPenalty": 1,
+  "ChIPseq.BWA.MinSeedLength": 19,
+  "ChIPseq.BWA.subsequence_seed": 32,
+  "ChIPseq.BWA.seed_max_edit_distance": 2,
+  "ChIPseq.BWA.MaximumInsertSize": 500,
+  "ChIPseq.BWA.MaximumReadOccurences": 100000,
+  "ChIPseq.BWA.DiscardMemOccurences": 10000,
+  "ChIPseq.BWA.MaxAlignmentsForXATag": 3,
+  "ChIPseq.BWA.MaxAlignmentsForXATag_DiscordanantPairs": 10,
+  "ChIPseq.BWA.Bandwidth": 100,
+  "ChIPseq.BWA.TriggerReSeed": 1.5,
+  "ChIPseq.BWA.ZDropoff": 100,
+  "ChIPseq.BWA.read_trimming": 5,
+  "ChIPseq.BWA.ClippingPenality": 5,
+  "ChIPseq.BWA.HardClipping": false,
+  "ChIPseq.BWA.OutputUnpairedReads": false,
+
+  "ChIPseq.sam_to_bam.Dockerhub_Pull": "faryabilab/samtools:0.1.0",
+  "ChIPseq.sam_to_bam.cpu": 12,
+  "ChIPseq.sam_to_bam.mem": 8,
+
+  "ChIPseq.remove_scaffolds.Dockerhub_Pull": "faryabilab/samtools:0.1.0",
+  "ChIPseq.remove_scaffolds.cpu": 12,
+  "ChIPseq.remove_scaffolds.mem": 25,
+
+  "ChIPseq.mark_duplicates.Dockerhub_Pull": "faryabilab/picard:0.1.0",
+  "ChIPseq.mark_duplicates.cpu": 12,
+  "ChIPseq.mark_duplicates.mem": 25,
+  "ChIPseq.mark_duplicates.PicardMetricsFile": "removeDuplicate_metrics.txt",
+  "ChIPseq.mark_duplicates.PicardValidationStringency": "SILENT",
+
+  "ChIPseq.remove_duplicates_unmapped.Dockerhub_Pull": "faryabilab/samtools:0.1.0",
+  "ChIPseq.remove_duplicates_unmapped.cpu": 12,
+  "ChIPseq.remove_duplicates_unmapped.mem": 25,
+
+  "ChIPseq.remove_blacklist.Dockerhub_Pull": "faryabilab/bedtools:0.1.0",
+  "ChIPseq.remove_blacklist.cpu": 12,
+  "ChIPseq.remove_blacklist.mem": 25,
+
+  "ChIPseq.sort_bam.Dockerhub_Pull": "faryabilab/samtools:0.1.0",
+  "ChIPseq.sort_bam.cpu": 12,
+  "ChIPseq.sort_bam.mem": 100,
+
+  "ChIPseq.index_bam.Dockerhub_Pull": "faryabilab/samtools:0.1.0",
+  "ChIPseq.index_bam.cpu": 12,
+  "ChIPseq.index_bam.mem": 25,
+
+  "ChIPseq.macs2.Dockerhub_Pull": "faryabilab/macs2:0.1.0",
+  "ChIPseq.macs2.cpu": 12,
+  "ChIPseq.macs2.mem": 25,
+  "ChIPseq.macs2.p_value": null,
+  "ChIPseq.macs2.q_value": 0.05,
+  "ChIPseq.macs2.shift": null,
+  "ChIPseq.macs2.extension_size": null,
+  "ChIPseq.macs2.tag_size": null,
+  "ChIPseq.macs2.cutoff_analysis": null,
+  "ChIPseq.macs2.downsample": null,
+  "ChIPseq.macs2.call_summits": false,
+  "ChIPseq.macs2.fix_bimodal": false,
+  "ChIPseq.macs2.no_model": false,
+  "ChIPseq.macs2.no_lambda": false,
+  "ChIPseq.macs2.broad_peaks": false,
+  "ChIPseq.macs2.save_frag_pileup": false,
+
+  "ChIPseq.read_count.Dockerhub_Pull": "faryabilab/samtools:0.1.0",
+  "ChIPseq.read_count.cpu": 1,
+  "ChIPseq.read_count.mem": 5,
+  "ChIPseq.calculate_factor.Dockerhub_Pull": "faryabilab/bedtools:0.1.0",
+  "ChIPseq.calculate_factor.cpu": 1,
+  "ChIPseq.calculate_factor.mem": 5,
+  "ChIPseq.bam_to_bedgraph.Dockerhub_Pull": "faryabilab/bedtools:0.1.0",
+  "ChIPseq.bam_to_bedgraph.cpu": 8,
+  "ChIPseq.bam_to_bedgraph.mem": 16,
+
+  "ChIPseq.bedgraph_to_bigwig.Dockerhub_Pull": "faryabilab/bedtools:0.1.0",
+  "ChIPseq.bedgraph_to_bigwig.cpu": 12,
+  "ChIPseq.bedgraph_to_bigwig.mem": 16
+```
