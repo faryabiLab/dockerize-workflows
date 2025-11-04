@@ -86,7 +86,7 @@ task MACS2_CallPeaks {
       ~{broad_flag} \
       ~{if defined(estimated_fragment_size) then "--nomodel" else ""} \
       ~{if defined(estimated_fragment_size) then ("--shift 0") else ""} \
-      ~{if defined(estimated_fragment_size) then ("--extsize "+estimated_frag_size) else ""} \
+      ~{if defined(estimated_fragment_size) then ("--extsize "+estimated_fragment_size) else ""} \
       ~{if defined(estimated_fragment_size) then ("--bw "+Bandwidth) else ""} \
       ~{if paired_end then "--format BAMPE" else "--format BAM"} \
       --keep-dup=1 \
