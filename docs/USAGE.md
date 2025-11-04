@@ -89,6 +89,13 @@ java \
    workflow.wdl
 ```
 * Navigate to `0.0.0.0:8000` to access the GUI, where different aspects of the workflow can be monitored via the `REST` API.
-  * A useful tool is the timing diagram tool which displays a graphical representation of the workflow's progress, broken down by sample and job. It can be accessed with the `REST` API via `0.0.0.0:5200/api/workflows/v1/<workflow ID>/timing` \
+  * A useful tool is the timing diagram tool which displays a graphical representation of the workflow's progress, broken down by sample and job. It can be accessed with the `REST` API via `0.0.0.0:5200/api/workflows/v1/<workflow ID>/timing`
+#### Workflow ID
+To retrieve the workflow ID, pay attention to the `stdout` after submitting your workflow to the server:
+```
+[2025-11-04 12:55:11,52] [info] Slf4jLogger started
+[2025-11-04 12:55:12,97] [info] Workflow 962e1b6d-d461-400b-b282-a69ddc8c26cb submitted to http://128.91.213.123:8000
+```
+All endpoints exposed by the API can be seen at `http://<IP>:<port>/`
 
 Of course, you can find out more about Cromwell's capabilities in the [Official Cromwell Documentation](https://cromwell.readthedocs.io/en/stable/).
