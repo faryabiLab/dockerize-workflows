@@ -71,13 +71,9 @@ task MACS2_CallPeaks {
   }
 
   String broad_flag = if (peak_type == "broad") then "--broad" else ""
-  Int? HALF_FRAG = if defined(estimated_fragment_size) then (estimated_fragment_size / 2) else ""
 
   command {
     set -euo pipefail
-
-    # Choose fragment size (estimated if available, else default)
-    FRAGSIZE=~{estimated_fragment_size}
 
     echo "Running MACS2 peak calling..."
     macs2 callpeak \
@@ -89,8 +85,9 @@ task MACS2_CallPeaks {
       ~{if call_summits then "--call-summits" else ""} \
       ~{broad_flag} \
       ~{if defined(estimated_fragment_size) then "--nomodel" else ""} \
-      ~{if defined(estimated_fragment_size) then ("--shiftsize="+HALF_FRAG) else ""} \
-      ~{if defined(estimated_fragment_size) then ("--bw="+Bandwidth) else ""} \
+      ~{if defined(estimated_fragment_size) then ("--shift 0") else ""} \
+      ~{if defined(estimated_fragment_size) then ("--extsize "+estimated_frag_size) else ""} \
+      ~{if defined(estimated_fragment_size) then ("--bw "+Bandwidth) else ""} \
       ~{if paired_end then "--format BAMPE" else "--format BAM"} \
       --keep-dup=1 \
   }
