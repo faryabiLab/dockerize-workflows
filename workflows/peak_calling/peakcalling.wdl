@@ -36,21 +36,21 @@ workflow MACS2_CallPeaks {
     	String bam = sample[1]     
 	
 	if (HomerFragmentSizeEstimation) {
-		call peakcall.EstimateFragSize as FragmentSizeEstimator {
+		call peakcall.EstimateFragSize {
 			input:
 				bam = bam,
 				sample_name = sample_id
 		}
     	}
 	
-	call peakcall.MACS2_CallPeaks as PeakCaller {
+	call peakcall.MACS2_CallPeaks {
 		input:
 			treatment_bam = bam,
 			sample_name = sample_id,
 			control_bam = control_bam,
 			genome_size = genome_size,
 			q_value = q_value,
-			estimated_fragment_size = FragmentSizeEstimator.estimated_fragment_size,
+			estimated_fragment_size = EstimateFragSize.estimated_fragment_size,
 			call_summits = call_summits,
 			paired_end = paired_end,
 			peak_type = peak_type,
@@ -61,8 +61,8 @@ workflow MACS2_CallPeaks {
 
    
     output {
-        Array[File] narrowPeak = PeakCaller.narrowPeak
-        Array[File?] summits = PeakCaller.summits
-        Array[File] xls = PeakCaller.xls
+        Array[File] narrowPeak = MACS2_CallPeaks.narrowPeak
+        Array[File?] summits = MACS2_CallPeaks.summits
+        Array[File] xls = MACS2_CallPeaks.xls
     }
 }
