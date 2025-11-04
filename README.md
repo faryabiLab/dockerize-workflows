@@ -17,3 +17,4 @@ git clone https://github.com/faryabiLab/dockerize-workflows
 
 #### Usage documentation available [here](docs/USAGE.md).
 #### Tips for troubleshooting common errors can be found [here](docs/TROUBLESHOOTING.md).
+#### Development guide can be found [here](docs/DEV.md).
