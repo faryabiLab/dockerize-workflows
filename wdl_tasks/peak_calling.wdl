@@ -13,13 +13,17 @@ task EstimateFragSize {
     Int mem = 50
   }
 
-  command <<< 
-    bash <<'EOF'
-    FRAGSIZE=$(homer findPeaks -style factor -size given -input ~{bam} 2>/dev/null \
-        | grep 'fragment length' \
-        | awk '{print $NF}')
+  command <<<
+    set -euo pipefail
+
+    # Make tag directory
+    makeTagDirectory tagdir ~{bam} -format sam
+
+    # Extract fragment size from HOMER tagInfo.txt
+    FRAGSIZE=$(grep "fragmentLengthEstimate=" tagdir/tagInfo.txt | awk -F'=' '{print $2}')
+
+    # Write to file for Cromwell output
     echo "$FRAGSIZE" > fragsize.txt
-    EOF
   >>>
 
   output {
