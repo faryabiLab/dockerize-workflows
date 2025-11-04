@@ -1,4 +1,5 @@
 ## Sample Sheet
+### Fastq
 Every workflow run is accomapnied by a `samplesheet.tsv`. It is a 3-column tab-separated file containing a **sample name**, the **path to the associated fastq file**, and the **paired read file (i.e. R2)** if applicable.  \
 
 To make a sample sheet, use `utils/make_samplesheet.sh`:
@@ -8,6 +9,8 @@ To make a sample sheet, use `utils/make_samplesheet.sh`:
 
 This will create a `samplesheet.tsv` in your current working directory.
 
+### Bam
+Use `utils/make_bam_samplesheet.tsv` to make a samplesheet for bam files. This is used in the peak-calling workflow.
 ## Reference Genome
 The workflow input requires that the directory holding reference genome index files be zipped. This can be done with the script:
 ```
