@@ -160,7 +160,7 @@ workflow RNAseq
         }	
 	output 
 	{
-		Array[File?] qcReport = qc_reports
+		Array[Array[File?]] qcReport = qc_reports
 		Array[File] finalBam = sort_bam.bam_sorted
 		Array[File] finalBamIndex = index_bam.bam_index
 		Array[File?] countsSingle = count_reads_single.gene_counts
